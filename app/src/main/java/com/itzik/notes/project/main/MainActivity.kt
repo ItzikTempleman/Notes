@@ -3,13 +3,7 @@ package com.itzik.notes.project.main
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import com.itzik.notes.project.screens.NoteScreen
 import com.itzik.notes.theme.NotesTheme
 
 class MainActivity : ComponentActivity() {
@@ -17,7 +11,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             NotesTheme {
-
+                NoteScreen()
             }
         }
     }

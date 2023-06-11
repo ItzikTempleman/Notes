@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">Notes</string>
-    <string name="title">Subject</string>
+    <string name="content">Content</string>
 </resources>

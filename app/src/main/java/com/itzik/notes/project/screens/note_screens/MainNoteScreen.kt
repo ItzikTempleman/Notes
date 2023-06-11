@@ -3,11 +3,13 @@ package com.itzik.notes.project.screens.note_screens
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Card
+import androidx.compose.material.Text
+import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -29,7 +31,6 @@ fun NoteScreen() {
     ) {
         val (
             fontSizeBox,
-            headerTextField,
             contentTextField,
             addNoteBtn,
             saveNoteBtn
@@ -90,19 +91,22 @@ fun NoteScreen() {
         Card(
             shape = RoundedCornerShape(12.dp),
             modifier = Modifier
-                .padding(8.dp).fillMaxWidth()
-                .constrainAs(headerTextField) {
+                .padding(8.dp)
+                .fillMaxWidth()
+                .constrainAs(contentTextField) {
                     top.linkTo(fontSizeBox.bottom)
                 }
+                .fillMaxHeight()
         ) {
             TextField(
                 value = newChar,
                 onValueChange = {
                     newChar = it
                 },
+                textStyle = TextStyle.Default.copy(fontSize = fontSize.value.sp),
                 placeholder = {
                     Text(
-                        text = stringResource(id = R.string.title),
+                        text = stringResource(id = R.string.content),
                     )
                 },
                 colors = TextFieldDefaults.textFieldColors(

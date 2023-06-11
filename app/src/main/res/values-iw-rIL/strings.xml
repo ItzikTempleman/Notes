@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">פתקים</string>
-    <string name="title">הזן כותרת</string>
+    <string name="content">תוכן</string>
 </resources>

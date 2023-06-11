@@ -3,7 +3,6 @@ package com.itzik.notes.project.models.note
 import com.itzik.notes.project.models.user.User
 
 data class Note(
-    val noteTitle: String,
     val noteContent: String,
     val noteId: String,
     val user: User,

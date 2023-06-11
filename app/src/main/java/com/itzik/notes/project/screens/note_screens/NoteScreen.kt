@@ -1,5 +1,6 @@
 package com.itzik.notes.project.screens.note_screens
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,6 +22,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.itzik.notes.R
+import com.itzik.notes.project.models.note.Note
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 val fontSize = mutableStateOf(16)
 
@@ -69,8 +73,9 @@ fun NoteScreen() {
                 .constrainAs(doneBtn) {
                     top.linkTo(parent.top)
                     end.linkTo(parent.end)
-                }.clickable {
-
+                }
+                .clickable {
+                    saveNote(newChar)
                 },
             text = stringResource(id = R.string.done),
             color = colorResource(id = R.color.turquoise),
@@ -162,4 +167,14 @@ fun NoteScreen() {
         )
 
     }
+}
+
+fun saveNote(newChar: String) {
+    val time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
+    val note = Note(
+        noteContent=newChar,
+        timeStamp = time,
+        isMarked = false
+    )
+    Log.d("TAG", "note: $note")
 }

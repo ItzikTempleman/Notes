@@ -4,11 +4,11 @@ import com.itzik.notes.project.models.user.User
 
 data class Note(
     val noteContent: String,
-    val noteId: String,
-    val user: User,
+    val noteId: String?=null,
+    val user: User?=null,
     val timeStamp: String,
     val isMarked: Boolean,
-    val markedColor: MarkedColor
+    val markedColor: MarkedColor?=null
 )
 
 enum class MarkedColor {

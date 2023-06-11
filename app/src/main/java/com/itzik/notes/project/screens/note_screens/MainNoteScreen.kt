@@ -1,5 +1,7 @@
 package com.itzik.notes.project.screens.note_screens
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -10,6 +12,7 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -19,7 +22,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.itzik.notes.R
 
-val fontSize = mutableStateOf(12)
+val fontSize = mutableStateOf(16)
 
 
 @Composable
@@ -28,22 +31,60 @@ fun NoteScreen() {
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
+            .background(colorResource(id = R.color.white))
     ) {
         val (
+            backRow,
             fontSizeBox,
-            contentTextField,
-            addNoteBtn,
-            saveNoteBtn
+            doneBtn,
+            contentTextField
         ) = createRefs()
+
+        Row(
+            modifier = Modifier
+                .clickable {
+
+                }
+                .padding(4.dp)
+                .constrainAs(backRow) {
+                    start.linkTo(parent.start)
+                    top.linkTo(parent.top)
+                }
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.back),
+                contentDescription = "back",
+            )
+            Text(
+                text = stringResource(id = R.string.notes),
+                color = colorResource(id = R.color.turquoise),
+                fontSize = 18.sp
+            )
+        }
+
+
+        Text(
+            modifier = Modifier
+                .padding(8.dp)
+                .constrainAs(doneBtn) {
+                    top.linkTo(parent.top)
+                    end.linkTo(parent.end)
+                }.clickable {
+
+                },
+            text = stringResource(id = R.string.done),
+            color = colorResource(id = R.color.turquoise),
+            fontSize = 18.sp
+        )
 
         Card(
             shape = RoundedCornerShape(6.dp), elevation = 4.dp,
             modifier = Modifier
                 .width(100.dp)
                 .height(44.dp)
-                .padding(start = 8.dp, top = 8.dp)
+                .padding(4.dp)
                 .constrainAs(fontSizeBox) {
-                    top.linkTo(parent.top)
+                    top.linkTo(backRow.bottom)
                     start.linkTo(parent.start)
                 }
         ) {
@@ -56,7 +97,8 @@ fun NoteScreen() {
                         .width(30.dp)
                         .clickable {
                             fontSize.value--
-                            if (fontSize.value < 8) fontSize.value = 8
+                            if (fontSize.value % 2 != 0) fontSize.value--
+                            if (fontSize.value < 16) fontSize.value = 16
                         },
                     text = "A",
                     textAlign = TextAlign.Center,
@@ -78,7 +120,8 @@ fun NoteScreen() {
                         .width(30.dp)
                         .clickable {
                             fontSize.value++
-                            if (fontSize.value > 72) fontSize.value = 72
+                            if (fontSize.value % 2 != 0) fontSize.value++
+                            if (fontSize.value > 42) fontSize.value = 42
                         },
                     text = "A",
                     textAlign = TextAlign.Center,
@@ -88,38 +131,35 @@ fun NoteScreen() {
             }
         }
 
-        Card(
-            shape = RoundedCornerShape(12.dp),
+
+        TextField(
             modifier = Modifier
-                .padding(8.dp)
+                .padding(4.dp)
                 .fillMaxWidth()
                 .constrainAs(contentTextField) {
                     top.linkTo(fontSizeBox.bottom)
-                }
-                .fillMaxHeight()
-        ) {
-            TextField(
-                value = newChar,
-                onValueChange = {
-                    newChar = it
                 },
-                textStyle = TextStyle.Default.copy(fontSize = fontSize.value.sp),
-                placeholder = {
-                    Text(
-                        text = stringResource(id = R.string.content),
-                    )
-                },
-                colors = TextFieldDefaults.textFieldColors(
-                    cursorColor = colorResource(R.color.black),
-                    textColor = colorResource(R.color.black),
-                    disabledTextColor = colorResource(R.color.transparent),
-                    backgroundColor = colorResource(R.color.white),
-                    focusedIndicatorColor = colorResource(R.color.transparent),
-                    unfocusedIndicatorColor = colorResource(R.color.transparent),
-                    disabledIndicatorColor = colorResource(R.color.transparent),
-                    focusedLabelColor = colorResource(R.color.transparent)
+            value = newChar,
+            onValueChange = {
+                newChar = it
+            },
+            textStyle = TextStyle.Default.copy(fontSize = fontSize.value.sp),
+            placeholder = {
+                Text(
+                    text = stringResource(id = R.string.content),
                 )
+            },
+            colors = TextFieldDefaults.textFieldColors(
+                cursorColor = colorResource(R.color.turquoise),
+                textColor = colorResource(R.color.black),
+                disabledTextColor = colorResource(R.color.white),
+                backgroundColor = colorResource(R.color.white),
+                focusedIndicatorColor = colorResource(R.color.white),
+                unfocusedIndicatorColor = colorResource(R.color.white),
+                disabledIndicatorColor = colorResource(R.color.white),
+                focusedLabelColor = colorResource(R.color.white)
             )
-        }
+        )
+
     }
 }

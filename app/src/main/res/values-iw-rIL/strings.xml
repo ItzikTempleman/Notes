@@ -2,4 +2,6 @@
 <resources>
     <string name="app_name">פתקים</string>
     <string name="content">תוכן</string>
+    <string name="notes">פתקים</string>
+    <string name="done">סיום</string>
 </resources>

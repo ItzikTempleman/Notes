@@ -13,11 +13,11 @@ fun RootNavigationGraph(navController: NavHostController, noteViewModel: NoteVie
     NavHost(
         navController = navController,
         route= Graph.ROOT,
-        startDestination = Graph.NOTE_LIST_GRAPH
+        startDestination = Graph.HOME_GRAPH
     ){
         authNavGraph(navHostController=navController)
         composable(
-            route = Graph.NOTE_LIST_GRAPH
+            route = Graph.HOME_GRAPH
         ){
             NoteScreen(noteViewModel = noteViewModel, user =user )
         }
@@ -30,6 +30,5 @@ fun RootNavigationGraph(navController: NavHostController, noteViewModel: NoteVie
 object Graph {
     const val ROOT = "rootGraph"
     const val LOGIN_AND_REGISTRATION="loginAndRegistrationGraph"
-    const val NOTE_LIST_GRAPH = "noteListGraph"
-    const val NOTE_GRAPH = "noteGraph"
+    const val HOME_GRAPH = "noteGraph"
 }

@@ -5,13 +5,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 
 @Composable
-fun NoteNavContainer(
+fun HomeContainer(
     navHostController: NavHostController
 ){
     NavHost(
         navController = navHostController,
-            route = "NoteListScreen",
-        startDestination =
+        route = "homeGraph",
+        startDestination = Graph.HOME_GRAPH
+    ) {
 
-    )
+    }
 }

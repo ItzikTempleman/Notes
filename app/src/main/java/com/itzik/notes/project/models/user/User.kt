@@ -1,5 +1,9 @@
 package com.itzik.notes.project.models.user
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class User(
     val name: String,
     val familyName: String,
@@ -9,7 +13,7 @@ data class User(
     val password: String,
     val id: String,
     val gender: Gender
-)
+):Parcelable
 
 enum class Gender {
     MALE, FEMALE, OTHER

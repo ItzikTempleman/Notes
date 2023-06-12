@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.itzik.notes.R
 import com.itzik.notes.project.models.note.Note
+import com.itzik.notes.project.models.user.User
 import com.itzik.notes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
@@ -32,7 +33,7 @@ val fontSize = mutableStateOf(16)
 
 
 @Composable
-fun NoteScreen(noteViewModel: NoteViewModel) {
+fun NoteScreen(noteViewModel: NoteViewModel, user: User) {
     var newChar by remember { mutableStateOf("") }
 
     val coroutineScope = rememberCoroutineScope()
@@ -81,7 +82,7 @@ fun NoteScreen(noteViewModel: NoteViewModel) {
                 }
                 .clickable {
                     coroutineScope.launch {
-                        saveNote(newChar, noteViewModel)
+                        saveNote(newChar, noteViewModel, user)
                     }
                 },
             text = stringResource(id = R.string.done),
@@ -176,12 +177,13 @@ fun NoteScreen(noteViewModel: NoteViewModel) {
     }
 }
 
-suspend fun saveNote(newChar: String, noteViewModel: NoteViewModel) {
+suspend fun saveNote(newChar: String, noteViewModel: NoteViewModel, user: User) {
     val time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
     val note = Note(
         noteContent = newChar,
         timeStamp = time,
-        isMarked = false
+        isMarked = false,
+        user = user
     )
     Log.d("TAG", "note: $note")
     noteViewModel.saveNote(note)

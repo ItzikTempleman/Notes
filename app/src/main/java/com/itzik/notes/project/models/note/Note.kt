@@ -13,10 +13,9 @@ import kotlinx.parcelize.RawValue
 @Entity(tableName = NOTE_TABLE)
 data class Note(
     val noteContent: String,
-    @PrimaryKey
-    val id: String?=null,
-
-    val user: @RawValue User=User("","","","","","","",Gender.MALE),
+    @PrimaryKey(autoGenerate = true)
+    val id: Int=0,
+    val user: User,
     val timeStamp: String,
     val isMarked: Boolean,
     val markedColor: MarkedColor?=null

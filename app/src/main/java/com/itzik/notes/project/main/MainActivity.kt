@@ -9,13 +9,16 @@ import com.itzik.notes.project.models.user.User
 import com.itzik.notes.project.screens.note_screens.NoteScreen
 import com.itzik.notes.project.viewmodels.NoteViewModel
 import com.itzik.notes.theme.NotesTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private lateinit var noteViewModel: NoteViewModel
     private lateinit var user: User
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             noteViewModel = viewModel()
 

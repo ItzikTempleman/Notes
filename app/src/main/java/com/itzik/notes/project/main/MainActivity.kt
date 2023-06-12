@@ -4,9 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.rememberNavController
 import com.itzik.notes.project.models.user.Gender
 import com.itzik.notes.project.models.user.User
-import com.itzik.notes.project.screens.note_screens.NoteScreen
+import com.itzik.notes.project.navigation.RootNavigationGraph
 import com.itzik.notes.project.viewmodels.NoteViewModel
 import com.itzik.notes.theme.NotesTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,7 +31,8 @@ class MainActivity : ComponentActivity() {
             )
 
             NotesTheme {
-                NoteScreen(noteViewModel, user)
+                //NoteScreen(noteViewModel, user)
+                RootNavigationGraph(navController = rememberNavController(), noteViewModel, user)
             }
         }
     }

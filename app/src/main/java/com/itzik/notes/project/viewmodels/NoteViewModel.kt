@@ -7,7 +7,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class NoteViewModel @Inject constructor(private val repository: NoteRepository) : ViewModel() {
+class NoteViewModel
+@Inject constructor(
+    private val repository: NoteRepository
+    ) : ViewModel() {
 
     suspend fun getNote()=repository.getNote()
 

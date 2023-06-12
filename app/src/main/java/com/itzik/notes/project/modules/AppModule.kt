@@ -2,6 +2,8 @@ package com.itzik.notes.project.modules
 
 import android.content.Context
 import androidx.room.Room
+import com.itzik.notes.project.repositories.NoteRepository
+import com.itzik.notes.project.repositories.NoteRepositoryImp
 import com.itzik.notes.project.room_database.NoteDao
 import com.itzik.notes.project.room_database.NoteDatabase
 import com.itzik.notes.project.utils.Constants.NOTE_DATABASE
@@ -22,6 +24,10 @@ object AppModule {
 
 
     private val typeConverter= Converters()
+
+    @Provides
+    @Singleton
+    fun provideNoteRepository(noteDao: NoteDao): NoteRepository =NoteRepositoryImp(noteDao)
 
 
     @Provides

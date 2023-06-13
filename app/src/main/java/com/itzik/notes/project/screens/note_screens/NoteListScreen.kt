@@ -15,14 +15,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.navigation.NavHostController
 import com.itzik.notes.R
 import com.itzik.notes.project.models.note.Note
+import com.itzik.notes.project.models.user.User
+import com.itzik.notes.project.navigation.NoteMainScreen
+import com.itzik.notes.project.viewmodels.NoteViewModel
 
 @Composable
 fun NoteList(
+    user: User,
+    noteViewModel:NoteViewModel,
+    navHostController: NavHostController,
     noteList: MutableList<Note>,
     modifier: Modifier
 ) {
@@ -40,7 +46,7 @@ fun NoteList(
                 }
                 .padding(4.dp),
             onClick = {
-                createNewNote()
+                createNewNote(navHostController)
             }
         ) {
             Row(
@@ -73,8 +79,8 @@ fun NoteList(
         }
     }
 
-fun createNewNote() {
-
+fun createNewNote(navHostController: NavHostController) {
+    navHostController.navigate(NoteMainScreen.NoteScreen.route)
 }
 
 

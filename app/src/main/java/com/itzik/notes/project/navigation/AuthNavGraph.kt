@@ -17,7 +17,7 @@ fun NavGraphBuilder.authNavGraph(navHostController: NavHostController){
              LoginScreen(
                 login = {
                     navHostController.popBackStack()
-                    navHostController.navigate(Graph.NOTE_GRAPH)
+                    navHostController.navigate(Graph.HOME_GRAPH)
                 } ,
                  signUp = {
                      navHostController.navigate(AuthScreen.SignUp.route)
@@ -33,8 +33,11 @@ fun NavGraphBuilder.authNavGraph(navHostController: NavHostController){
 
 
 
+
+
+
 sealed class AuthScreen(val route: String) {
-    object Login : AuthScreen(route = "LOGIN")
-    object SignUp : AuthScreen(route = "SIGN_UP")
-    object Forgot : AuthScreen(route = "FORGOT")
+    object Login : AuthScreen(route = "login")
+    object SignUp : AuthScreen(route = "signup")
+    object Forgot : AuthScreen(route = "reset")
 }

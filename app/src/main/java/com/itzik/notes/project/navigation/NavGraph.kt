@@ -1,36 +1,38 @@
 package com.itzik.notes.project.navigation
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.itzik.notes.project.screens.splash_screen.AnimatedSplashScreen
 import com.itzik.notes.project.viewmodels.NoteViewModel
 
 @Composable
 fun SetupNavGraph(navController: NavHostController, noteViewModel: NoteViewModel) {
     NavHost(
         navController = navController,
-        startDestination = RootScreen.Splash.route
+        startDestination = Screen.Splash.route
     ) {
-        composable(route = RootScreen.Splash.route) {
-
-
+        composable(route = Screen.Splash.route) {
+            AnimatedSplashScreen(navController)
         }
-        composable(route = RootScreen.Home.route) {
-
+        composable(route = Screen.Home.route) {
+            Box(modifier = Modifier.fillMaxSize())
         }
     }
 }
 
 
-sealed class RootScreen(val route: String) {
-    object Splash : RootScreen(route = "splash")
-    object Home : RootScreen(route = "home")
+sealed class Screen(val route: String) {
+    object Splash : Screen(route = "splash")
+    object Home : Screen(route = "home")
 }
 
 
-object Graph {
-    const val ROOT = "rootGraph"
-    const val LOGIN_AND_REGISTRATION = "loginAndRegistrationGraph"
-    const val HOME_GRAPH = "noteGraph"
+object MainGraph {
+    const val AUTH = "authGraph"
+    const val HOME = "homeGraph"
 }

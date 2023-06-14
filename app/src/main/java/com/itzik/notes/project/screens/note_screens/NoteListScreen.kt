@@ -21,7 +21,7 @@ import androidx.navigation.NavHostController
 import com.itzik.notes.R
 import com.itzik.notes.project.models.note.Note
 import com.itzik.notes.project.models.user.User
-import com.itzik.notes.project.navigation.NoteMainScreen
+import com.itzik.notes.project.navigation.FrameScreen
 import com.itzik.notes.project.viewmodels.NoteViewModel
 
 @Composable
@@ -80,7 +80,7 @@ fun NoteList(
     }
 
 fun createNewNote(navHostController: NavHostController) {
-    navHostController.navigate(NoteMainScreen.NoteScreen.route)
+    navHostController.navigate(FrameScreen.NoteScreen.route)
 }
 
 

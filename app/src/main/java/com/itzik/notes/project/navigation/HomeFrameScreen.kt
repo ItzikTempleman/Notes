@@ -1,13 +1,13 @@
 package com.itzik.notes.project.navigation
 
-sealed class NoteMainScreen(
+sealed class FrameScreen(
     val route:String
 ){
-    object NotesScreen: NoteMainScreen(
+    object NotesScreen: FrameScreen(
         route = "listScreen"
     )
 
-    object  NoteScreen: NoteMainScreen(
+    object  NoteScreen: FrameScreen(
         route = "noteScreen"
     )
 }

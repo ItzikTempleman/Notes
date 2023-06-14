@@ -7,8 +7,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.itzik.notes.project.models.user.Gender
 import com.itzik.notes.project.models.user.User
-import com.itzik.notes.project.navigation.NoteMainScreen
-
 import com.itzik.notes.project.navigation.SetupNavGraph
 import com.itzik.notes.project.screens.note_screens.NoteScreen
 import com.itzik.notes.project.viewmodels.NoteViewModel
@@ -34,8 +32,8 @@ class MainActivity : ComponentActivity() {
             )
 
             NotesTheme {
-                NoteScreen(noteViewModel, user)
-               // SetupNavGraph(navController = rememberNavController(), noteViewModel)
+                //NoteScreen(noteViewModel, user)
+                SetupNavGraph(navController = rememberNavController(), noteViewModel)
             }
         }
     }

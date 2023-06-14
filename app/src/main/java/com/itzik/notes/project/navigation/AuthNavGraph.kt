@@ -4,11 +4,14 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.itzik.notes.project.navigation.MainGraph.AUTH
+import com.itzik.notes.project.navigation.MainGraph.HOME
 import com.itzik.notes.project.screens.login_screens.LoginScreen
+
 
 fun NavGraphBuilder.authNavGraph(navHostController: NavHostController){
     navigation(
-        route =  Graph.LOGIN_AND_REGISTRATION,
+        route =  AUTH,
         startDestination = AuthScreen.Login.route
     ){
         composable(
@@ -17,7 +20,7 @@ fun NavGraphBuilder.authNavGraph(navHostController: NavHostController){
              LoginScreen(
                 login = {
                     navHostController.popBackStack()
-                    navHostController.navigate(Graph.HOME_GRAPH)
+                    navHostController.navigate(HOME)
                 } ,
                  signUp = {
                      navHostController.navigate(AuthScreen.SignUp.route)

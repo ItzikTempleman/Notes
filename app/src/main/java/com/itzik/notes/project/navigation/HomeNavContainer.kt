@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.itzik.notes.project.models.note.Note
 import com.itzik.notes.project.models.user.User
+import com.itzik.notes.project.navigation.MainGraph.HOME
 import com.itzik.notes.project.screens.note_screens.NoteList
 import com.itzik.notes.project.viewmodels.NoteViewModel
 
@@ -22,10 +23,10 @@ fun HomeContainer(
     NavHost(
         navController = navHostController,
         route = "homeGraph",
-        startDestination = Graph.HOME_GRAPH
+        startDestination = HOME
     ) {
         composable(
-            route = NoteMainScreen.NotesScreen.route
+            route = FrameScreen.NotesScreen.route
         ) {
             NoteList(
                 navHostController=navHostController, noteViewModel = noteViewModel,

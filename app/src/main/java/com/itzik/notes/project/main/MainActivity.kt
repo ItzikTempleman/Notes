@@ -8,7 +8,6 @@ import androidx.navigation.compose.rememberNavController
 import com.itzik.notes.project.models.user.Gender
 import com.itzik.notes.project.models.user.User
 import com.itzik.notes.project.navigation.SetupNavGraph
-import com.itzik.notes.project.screens.note_screens.NoteScreen
 import com.itzik.notes.project.viewmodels.NoteViewModel
 import com.itzik.notes.theme.NotesTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,16 +23,16 @@ class MainActivity : ComponentActivity() {
         setContent {
             noteViewModel = viewModel()
 
-            user = User(
-                "Itzik", "Templeman",
-                "26/09/91", "0545408531",
-                "itzik.templeman@gmail.com", "Qwerty1024",
-                "203490495", Gender.MALE
-            )
+//            user = User(
+//                "Itzik", "Templeman",
+//                "26/09/91", "0545408531",
+//                "itzik.templeman@gmail.com", "Qwerty1024",
+//                "203490495", Gender.MALE
+//            )
 
             NotesTheme {
                 //NoteScreen(noteViewModel, user)
-                SetupNavGraph(navController = rememberNavController(), noteViewModel)
+                SetupNavGraph(navHostController = rememberNavController(), noteViewModel)
             }
         }
     }

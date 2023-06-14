@@ -4,8 +4,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.itzik.notes.project.navigation.MainGraph.AUTH
-import com.itzik.notes.project.navigation.MainGraph.HOME
+import com.itzik.notes.project.navigation.AppGraph.AUTH
+import com.itzik.notes.project.navigation.AppGraph.NOTES_HOME
 import com.itzik.notes.project.screens.login_screens.LoginScreen
 
 
@@ -20,7 +20,7 @@ fun NavGraphBuilder.authNavGraph(navHostController: NavHostController){
              LoginScreen(
                 login = {
                     navHostController.popBackStack()
-                    navHostController.navigate(HOME)
+                    navHostController.navigate(NOTES_HOME)
                 } ,
                  signUp = {
                      navHostController.navigate(AuthScreen.SignUp.route)
@@ -31,16 +31,4 @@ fun NavGraphBuilder.authNavGraph(navHostController: NavHostController){
              )
         }
     }
-}
-
-
-
-
-
-
-
-sealed class AuthScreen(val route: String) {
-    object Login : AuthScreen(route = "login")
-    object SignUp : AuthScreen(route = "signup")
-    object Forgot : AuthScreen(route = "reset")
 }

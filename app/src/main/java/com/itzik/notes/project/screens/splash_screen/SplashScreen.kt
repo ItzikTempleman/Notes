@@ -29,7 +29,7 @@ fun AnimatedSplashScreen(navHostController: NavHostController) {
         mutableStateOf(false)
     }
 
-    val alphaAnim = animateFloatAsState(
+    val alphaAim = animateFloatAsState(
         targetValue = if (startAnimation) 1f else 0f,
         animationSpec = tween(
             durationMillis = 3000
@@ -42,7 +42,7 @@ fun AnimatedSplashScreen(navHostController: NavHostController) {
         navHostController.popBackStack()
         navHostController.navigate(Screen.Home.route)
     }
-    Splash(alpha = alphaAnim.value)
+    Splash(alpha = alphaAim.value)
 }
 
 

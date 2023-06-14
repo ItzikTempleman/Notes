@@ -24,12 +24,13 @@ import com.itzik.notes.project.models.user.User
 import com.itzik.notes.project.navigation.FrameScreen
 import com.itzik.notes.project.viewmodels.NoteViewModel
 
+
+
+
 @Composable
 fun NoteList(
-    user: User,
     noteViewModel:NoteViewModel,
     navHostController: NavHostController,
-    noteList: MutableList<Note>,
     modifier: Modifier
 ) {
     ConstraintLayout(
@@ -71,10 +72,10 @@ fun NoteList(
                     .padding(4.dp)
             ) {
 
-                items(items = noteList, itemContent = {
-                    NoteItem(it, modifier)
-                }
-                )
+//                items(items = noteList, itemContent = {
+//                    NoteItem(it, modifier)
+//                }
+//                )
             }
         }
     }

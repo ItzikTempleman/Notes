@@ -20,9 +20,9 @@ import com.itzik.notes.project.viewmodels.NoteViewModel
 fun SetupNavGraph(navHostController: NavHostController, noteViewModel: NoteViewModel) {
     NavHost(
         navController = navHostController,
-        startDestination = Screen..route
+        startDestination = NoteHomeScreen.Splash.route
     ) {
-        composable(route = Screen.Splash.route) {
+        composable(route = NoteHomeScreen.Splash.route) {
             AnimatedSplashScreen(navHostController)
         }
 
@@ -34,10 +34,10 @@ fun SetupNavGraph(navHostController: NavHostController, noteViewModel: NoteViewM
 
         navigation(
             route = NOTES_HOME,
-            startDestination = AuthScreen.Login.route
+            startDestination = FrameScreen.NotesScreen.route
         ) {
             composable(
-                route = AuthScreen.Login.route
+                route = FrameScreen.NotesScreen.route
             ) {
 
             }
@@ -53,9 +53,9 @@ object AppGraph {
     const val NOTES_HOME = "notesHomeGraph"
 }
 
-sealed class Screen(val route: String) {
-    object Splash : Screen(route = "splash")
-    object Home : Screen(route = "home")
+sealed class NoteHomeScreen(val route: String) {
+    object Splash : NoteHomeScreen(route = "splash")
+    object Home : NoteHomeScreen(route = "home")
 }
 
 sealed class AuthScreen(val route: String) {

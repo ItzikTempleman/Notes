@@ -19,7 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.itzik.notes.project.navigation.Screen
+import com.itzik.notes.project.navigation.NoteHomeScreen
 import com.itzik.notes.theme.Purple700
 import kotlinx.coroutines.delay
 
@@ -40,7 +40,7 @@ fun AnimatedSplashScreen(navHostController: NavHostController) {
         startAnimation = true
         delay(4000)
         navHostController.popBackStack()
-        navHostController.navigate(Screen.Home.route)
+        navHostController.navigate(NoteHomeScreen.Home.route)
     }
     Splash(alpha = alphaAim.value)
 }

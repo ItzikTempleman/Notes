@@ -16,6 +16,11 @@ import com.itzik.notes.project.screens.note_screens.NoteScreen
 import com.itzik.notes.project.screens.splash_screen.AnimatedSplashScreen
 import com.itzik.notes.project.viewmodels.NoteViewModel
 
+
+
+const val HOME = "appGraph"
+
+
 @Composable
 fun SetupNavGraph(navHostController: NavHostController, noteViewModel: NoteViewModel, user: User) {
     NavHost(
@@ -55,7 +60,7 @@ fun SetupNavGraph(navHostController: NavHostController, noteViewModel: NoteViewM
 }
 
 
-const val HOME = "appGraph"
+
 
 
 sealed class AppGraph(val route: String) {

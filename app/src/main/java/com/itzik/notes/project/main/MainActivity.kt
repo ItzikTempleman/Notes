@@ -23,16 +23,16 @@ class MainActivity : ComponentActivity() {
         setContent {
             noteViewModel = viewModel()
 
-//            user = User(
-//                "Itzik", "Templeman",
-//                "26/09/91", "0545408531",
-//                "itzik.templeman@gmail.com", "Qwerty1024",
-//                "203490495", Gender.MALE
-//            )
+            user = User(
+                "Itzik", "Templeman",
+                "26/09/91", "0545408531",
+                "itzik.templeman@gmail.com", "Qwerty1024",
+                "203490495", Gender.MALE
+            )
 
             NotesTheme {
                 //NoteScreen(noteViewModel, user)
-                SetupNavGraph(navHostController = rememberNavController(), noteViewModel)
+                SetupNavGraph(navHostController = rememberNavController(), noteViewModel, user)
             }
         }
     }

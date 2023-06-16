@@ -42,7 +42,7 @@ fun AnimatedSplashScreen(navHostController: NavHostController, noteViewModel: No
         delay(3000)
         navHostController.popBackStack()
         if (doesUserExist.value)
-            navHostController.navigate(AppGraph.NotesScreen.route)
+            navHostController.navigate(AppGraph.Notes.route)
         else navHostController.navigate(AppGraph.Login.route)
     }
     SplashScreen(alpha = alphaAim.value)

@@ -16,63 +16,61 @@ import com.itzik.notes.project.screens.note_screens.NoteScreen
 import com.itzik.notes.project.screens.splash_screen.AnimatedSplashScreen
 import com.itzik.notes.project.viewmodels.NoteViewModel
 
-
-
-const val HOME = "appGraph"
-
+const val SPLASH_ROOT = "rootGraph"
+const val AUTH = "authGraph"
+const val HOME = "homeGraph"
 
 @Composable
 fun SetupNavGraph(navHostController: NavHostController, noteViewModel: NoteViewModel, user: User) {
     NavHost(
         navController = navHostController,
-        startDestination = HOME
+        startDestination = SPLASH_ROOT
     ) {
         navigation(
-            startDestination = AppGraph.Splash.route,
-            route = AppGraph.Notes.route
+            startDestination = RootSplashGraph.Splash.route,
+            route = SPLASH_ROOT
         ) {
-            composable(route = AppGraph.Splash.route) {
+            composable(route = RootSplashGraph.Splash.route) {
                 AnimatedSplashScreen(navHostController, noteViewModel)
             }
-
-            composable(route = AppGraph.Login.route) {
+        }
+        navigation(
+            startDestination = AuthGraph.Login.route,
+            route = AUTH
+        ) {
+            composable(route = AuthGraph.Login.route) {
                 LoginScreen(navHostController, noteViewModel)
             }
-
-            composable(route = AppGraph.SignUp.route) {
+            composable(route = AuthGraph.SignUp.route) {
                 RegistrationScreen(navHostController, noteViewModel)
             }
-            composable(route = AppGraph.Login.route) {
-                LoginScreen(navHostController, noteViewModel)
-            }
-            composable(route = AppGraph.Forgot.route) {
+            composable(route = AuthGraph.Forgot.route) {
                 ResetPasswordScreen(navHostController, noteViewModel)
             }
-
-            composable(route = AppGraph.Notes.route) {
+        }
+        navigation(
+            startDestination = HomeGraph.Notes.route,
+            route = HOME
+        ) {
+            composable(route = HomeGraph.Notes.route) {
                 NoteListScreen(modifier = Modifier, navHostController, noteViewModel)
             }
-            composable(route = AppGraph.Note.route) {
+            composable(route = HomeGraph.Note.route) {
                 NoteScreen(navHostController, noteViewModel, user)
             }
         }
     }
 }
-
-
-
-
-
-sealed class AppGraph(val route: String) {
-
-    object Splash : AppGraph(route = "splash")
-
-    object Login : AppGraph(route = "login")
-    object SignUp : AppGraph(route = "signup")
-    object Forgot : AppGraph(route = "reset")
-
-    object Notes : AppGraph(route = "noteList")
-    object Note : AppGraph(route = "note")
-
+sealed class RootSplashGraph(val route: String) {
+    object Splash : RootSplashGraph(route = "splash")
+}
+sealed class AuthGraph(val route: String) {
+    object Login : AuthGraph(route = "login")
+    object SignUp : AuthGraph(route = "signup")
+    object Forgot : AuthGraph(route = "reset")
+}
+sealed class HomeGraph(val route: String) {
+    object Notes : HomeGraph(route = "noteList")
+    object Note : HomeGraph(route = "note")
 }
 

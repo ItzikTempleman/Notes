@@ -5,9 +5,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Icon
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Password
@@ -23,7 +20,8 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.itzik.notes.R
-import com.itzik.notes.project.navigation.AppGraph
+import com.itzik.notes.project.navigation.AuthGraph
+import com.itzik.notes.project.navigation.HomeGraph
 import com.itzik.notes.project.viewmodels.NoteViewModel
 
 @Composable
@@ -105,7 +103,7 @@ fun LoginScreen(
                     top.linkTo(passwordText.bottom)
                 },
             onClick = {
-                navHostController.navigate(AppGraph.Notes.route)
+                navHostController.navigate(HomeGraph.Notes.route)
             },
         ){
             Text(text = "Sign in", color = Color.White)
@@ -117,7 +115,7 @@ fun LoginScreen(
             modifier = Modifier
                 .clickable {
 
-                    navHostController.navigate(AppGraph.SignUp.route)
+                    navHostController.navigate(AuthGraph.SignUp.route)
 
                 }
                 .constrainAs(registerButton) {
@@ -138,7 +136,7 @@ fun LoginScreen(
             modifier = Modifier
                 .clickable {
 
-                    navHostController.navigate(AppGraph.Forgot.route)
+                    navHostController.navigate(AuthGraph.Forgot.route)
 
                 }
                 .constrainAs(resetPasswordText) {

@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.itzik.notes.R
-import com.itzik.notes.project.navigation.AppGraph
+import com.itzik.notes.project.navigation.HomeGraph
 import com.itzik.notes.project.viewmodels.NoteViewModel
 
 
@@ -78,7 +78,7 @@ fun NoteListScreen(
     }
 
 fun createNewNote(navHostController: NavHostController) {
-    navHostController.navigate(AppGraph.Notes.route)
+    navHostController.navigate(HomeGraph.Notes.route)
 }
 
 

@@ -19,7 +19,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.itzik.notes.project.navigation.AppGraph
+import com.itzik.notes.project.navigation.AuthGraph
+import com.itzik.notes.project.navigation.HomeGraph
 import com.itzik.notes.project.viewmodels.NoteViewModel
 import com.itzik.notes.theme.Purple700
 import kotlinx.coroutines.delay
@@ -29,7 +30,7 @@ fun AnimatedSplashScreen(navHostController: NavHostController, noteViewModel: No
     var startAnimation by remember {
         mutableStateOf(false)
     }
-    val doesUserExist = mutableStateOf(true)
+    val doesUserExist = mutableStateOf(false)
     val alphaAim = animateFloatAsState(
         targetValue = if (startAnimation) 1f else 0f,
         animationSpec = tween(
@@ -42,8 +43,8 @@ fun AnimatedSplashScreen(navHostController: NavHostController, noteViewModel: No
         delay(3000)
         navHostController.popBackStack()
         if (doesUserExist.value)
-            navHostController.navigate(AppGraph.Notes.route)
-        else navHostController.navigate(AppGraph.Login.route)
+            navHostController.navigate(HomeGraph.Notes.route)
+        else navHostController.navigate(AuthGraph.Login.route)
     }
     SplashScreen(alpha = alphaAim.value)
 }

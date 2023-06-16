@@ -1,70 +1,73 @@
 package com.itzik.notes.project.navigation
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.BlendMode.Companion.Screen
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.itzik.notes.project.models.note.Note
 import com.itzik.notes.project.models.user.User
-import com.itzik.notes.project.navigation.AppGraph.AUTH
-import com.itzik.notes.project.navigation.AppGraph.NOTES_HOME
+
+import com.itzik.notes.project.screens.login_screens.LoginScreen
+import com.itzik.notes.project.screens.login_screens.RegistrationScreen
+import com.itzik.notes.project.screens.login_screens.ResetPasswordScreen
+import com.itzik.notes.project.screens.note_screens.NoteListScreen
+import com.itzik.notes.project.screens.note_screens.NoteScreen
 import com.itzik.notes.project.screens.splash_screen.AnimatedSplashScreen
 import com.itzik.notes.project.viewmodels.NoteViewModel
 
 @Composable
-fun SetupNavGraph(navHostController: NavHostController, noteViewModel: NoteViewModel) {
+fun SetupNavGraph(navHostController: NavHostController, noteViewModel: NoteViewModel, user: User) {
     NavHost(
         navController = navHostController,
-        startDestination = NoteHomeScreen.Splash.route
+        startDestination = HOME
     ) {
-        composable(route = NoteHomeScreen.Splash.route) {
-            AnimatedSplashScreen(navHostController)
-        }
-
-        authNavGraph(navHostController = navHostController)
-
-//        composable(route = Screen.Home.route) {
-//                NoteHomeScreen(noteViewModel =noteViewModel , navHostController = navHostController, modifier =Modifier.fillMaxSize() )
-//        }
-
         navigation(
-            route = NOTES_HOME,
-            startDestination = FrameScreen.NotesScreen.route
+            startDestination = AppGraph.Splash.route,
+            route = AppGraph.Notes.route
         ) {
-            composable(
-                route = FrameScreen.NotesScreen.route
-            ) {
+            composable(route = AppGraph.Splash.route) {
+                AnimatedSplashScreen(navHostController, noteViewModel)
+            }
 
+            composable(route = AppGraph.Login.route) {
+                LoginScreen(navHostController, noteViewModel)
+            }
+
+            composable(route = AppGraph.SignUp.route) {
+                RegistrationScreen(navHostController, noteViewModel)
+            }
+            composable(route = AppGraph.Login.route) {
+                LoginScreen(navHostController, noteViewModel)
+            }
+            composable(route = AppGraph.Forgot.route) {
+                ResetPasswordScreen(navHostController, noteViewModel)
+            }
+
+            composable(route = AppGraph.Notes.route) {
+                NoteListScreen(modifier = Modifier, navHostController, noteViewModel)
+            }
+            composable(route = AppGraph.Note.route) {
+                NoteScreen(navHostController, noteViewModel, user)
             }
         }
     }
 }
 
 
+const val HOME = "appGraph"
 
 
-object AppGraph {
-    const val AUTH = "authGraph"
-    const val NOTES_HOME = "notesHomeGraph"
+sealed class AppGraph(val route: String) {
+
+    object Splash : AppGraph(route = "splash")
+
+    object Login : AppGraph(route = "login")
+    object SignUp : AppGraph(route = "signup")
+    object Forgot : AppGraph(route = "reset")
+
+    object Notes : AppGraph(route = "noteList")
+    object Note : AppGraph(route = "note")
+
 }
 
-sealed class NoteHomeScreen(val route: String) {
-    object Splash : NoteHomeScreen(route = "splash")
-    object Home : NoteHomeScreen(route = "home")
-}
-
-sealed class AuthScreen(val route: String) {
-    object Login : AuthScreen(route = "login")
-    object SignUp : AuthScreen(route = "signup")
-    object Forgot : AuthScreen(route = "reset")
-}
-
-sealed class FrameScreen(val route:String) {
-    object NotesScreen: FrameScreen(route = "listScreen")
-    object NoteScreen: FrameScreen(route = "noteScreen")
-}

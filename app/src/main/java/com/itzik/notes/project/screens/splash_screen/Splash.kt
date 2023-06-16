@@ -19,16 +19,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.itzik.notes.project.navigation.NoteHomeScreen
+import com.itzik.notes.project.navigation.AppGraph
+import com.itzik.notes.project.viewmodels.NoteViewModel
 import com.itzik.notes.theme.Purple700
 import kotlinx.coroutines.delay
 
 @Composable
-fun AnimatedSplashScreen(navHostController: NavHostController) {
+fun AnimatedSplashScreen(navHostController: NavHostController, noteViewModel: NoteViewModel) {
     var startAnimation by remember {
         mutableStateOf(false)
     }
-
+    val doesUserExist = mutableStateOf(true)
     val alphaAim = animateFloatAsState(
         targetValue = if (startAnimation) 1f else 0f,
         animationSpec = tween(
@@ -38,16 +39,18 @@ fun AnimatedSplashScreen(navHostController: NavHostController) {
 
     LaunchedEffect(key1 = true) {
         startAnimation = true
-        delay(4000)
+        delay(3000)
         navHostController.popBackStack()
-        navHostController.navigate(NoteHomeScreen.Home.route)
+        if (doesUserExist.value)
+            navHostController.navigate(AppGraph.NotesScreen.route)
+        else navHostController.navigate(AppGraph.Login.route)
     }
-    Splash(alpha = alphaAim.value)
+    SplashScreen(alpha = alphaAim.value)
 }
 
 
 @Composable
-fun Splash(alpha: Float) {
+fun SplashScreen(alpha: Float) {
     Box(
         modifier = Modifier
             .background(if (isSystemInDarkTheme()) Color.Black else Purple700)
@@ -69,11 +72,11 @@ fun Splash(alpha: Float) {
 @Composable
 @Preview
 fun SplashScreenPreView() {
-    Splash(alpha = 1f)
+    SplashScreen(alpha = 1f)
 }
 
 @Composable
 @Preview(uiMode = UI_MODE_NIGHT_YES)
 fun SplashScreenDarkPreView() {
-    Splash(alpha = 1f)
+    SplashScreen(alpha = 1f)
 }

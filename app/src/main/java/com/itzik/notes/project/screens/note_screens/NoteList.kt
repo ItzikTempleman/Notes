@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -19,19 +18,15 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.itzik.notes.R
-import com.itzik.notes.project.models.note.Note
-import com.itzik.notes.project.models.user.User
-import com.itzik.notes.project.navigation.FrameScreen
+import com.itzik.notes.project.navigation.AppGraph
 import com.itzik.notes.project.viewmodels.NoteViewModel
 
 
-
-
 @Composable
-fun NoteList(
-    noteViewModel:NoteViewModel,
+fun NoteListScreen(
+    modifier: Modifier,
     navHostController: NavHostController,
-    modifier: Modifier
+    noteViewModel: NoteViewModel
 ) {
     ConstraintLayout(
         modifier = modifier.fillMaxSize()
@@ -66,7 +61,9 @@ fun NoteList(
         }
 
             LazyRow(
-                modifier = modifier.fillMaxWidth().constrainAs(noteListLazyRow) {
+                modifier = modifier
+                    .fillMaxWidth()
+                    .constrainAs(noteListLazyRow) {
                         top.linkTo(createNote.bottom)
                     }
                     .padding(4.dp)
@@ -81,7 +78,7 @@ fun NoteList(
     }
 
 fun createNewNote(navHostController: NavHostController) {
-    navHostController.navigate(FrameScreen.NoteScreen.route)
+    navHostController.navigate(AppGraph.Notes.route)
 }
 
 

@@ -18,9 +18,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.navigation.NavHostController
 import com.itzik.notes.R
 import com.itzik.notes.project.models.note.Note
 import com.itzik.notes.project.models.user.User
@@ -32,8 +34,14 @@ import java.time.format.DateTimeFormatter
 val fontSize = mutableStateOf(16)
 
 
+
+
 @Composable
-fun NoteScreen(noteViewModel: NoteViewModel, user: User) {
+fun NoteScreen(
+    navHostController: NavHostController,
+    noteViewModel: NoteViewModel,
+    user:User
+) {
     var newChar by remember { mutableStateOf("") }
 
     val coroutineScope = rememberCoroutineScope()

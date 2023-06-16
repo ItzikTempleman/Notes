@@ -1,13 +1,9 @@
 package com.itzik.notes.project.screens.note_screens
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.material.Button
-import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -15,6 +11,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.itzik.notes.R
@@ -33,31 +30,27 @@ fun NoteListScreen(
     ) {
         val (createNote, noteListLazyRow) = createRefs()
 
-        Button(
-            modifier = modifier
-                .background(colorResource(id = R.color.white))
-                .constrainAs(createNote) {
-                    top.linkTo(parent.top)
-                    end.linkTo(parent.end)
+        Row(
+            horizontalArrangement = Arrangement.End,
+            modifier = Modifier
+                .clickable {
+                    navHostController.navigate(HomeGraph.Note.route)
                 }
-                .padding(4.dp),
-            onClick = {
-                createNewNote(navHostController)
-            }
+                .padding(4.dp)
+                .constrainAs(createNote) {
+                    end.linkTo(parent.end)
+                    top.linkTo(parent.top)
+                }
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.add_note),
-                    contentDescription = "add note",
-                )
-                Text(
-                    text = stringResource(id = R.string.new_note),
-                    color = colorResource(id = R.color.turquoise),
-                )
-
-            }
+            Text(
+                text = stringResource(id = R.string.new_note),
+                color = colorResource(id = R.color.turquoise),
+                fontSize = 18.sp
+            )
+            Image(
+                painter = painterResource(id = R.drawable.add_note),
+                contentDescription = "back",
+            )
         }
 
             LazyRow(
@@ -77,8 +70,5 @@ fun NoteListScreen(
         }
     }
 
-fun createNewNote(navHostController: NavHostController) {
-    navHostController.navigate(HomeGraph.Notes.route)
-}
 
 

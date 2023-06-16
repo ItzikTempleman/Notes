@@ -5,24 +5,29 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Note
 import androidx.compose.runtime.*
+
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.font.FontFamily
+import com.itzik.notes.R
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.itzik.notes.project.navigation.AuthGraph
 import com.itzik.notes.project.navigation.HomeGraph
 import com.itzik.notes.project.viewmodels.NoteViewModel
-import com.itzik.notes.theme.Purple700
+import kotlinx.coroutines.NonDisposableHandle.parent
 import kotlinx.coroutines.delay
 
 @Composable
@@ -52,19 +57,30 @@ fun AnimatedSplashScreen(navHostController: NavHostController, noteViewModel: No
 
 @Composable
 fun SplashScreen(alpha: Float) {
-    Box(
+    Column(
+
         modifier = Modifier
-            .background(if (isSystemInDarkTheme()) Color.Black else Purple700)
+            .background(if (isSystemInDarkTheme()) Color.Black else Color.White)
             .fillMaxSize(),
-        contentAlignment = Alignment.Center
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
+        Text(
+            text = "Itzik Notes",
+            modifier = Modifier,
+            color = colorResource(id = R.color.turquoise),
+            fontFamily = FontFamily.Cursive,
+            fontSize = 38.sp
+        )
+
         Icon(
             modifier = Modifier
                 .size(120.dp)
                 .alpha(alpha = alpha),
             imageVector = Icons.Default.Note,
-            contentDescription = "Logo icon",
-            tint = Color.White
+            contentDescription = "logo icon",
+            tint = (if (isSystemInDarkTheme()) Color.White else  colorResource(id = R.color.turquoise))
         )
 
     }

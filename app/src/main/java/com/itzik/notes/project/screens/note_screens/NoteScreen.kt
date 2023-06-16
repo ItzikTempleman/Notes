@@ -26,6 +26,7 @@ import androidx.navigation.NavHostController
 import com.itzik.notes.R
 import com.itzik.notes.project.models.note.Note
 import com.itzik.notes.project.models.user.User
+import com.itzik.notes.project.navigation.HomeGraph
 import com.itzik.notes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
@@ -61,7 +62,7 @@ fun NoteScreen(
         Row(
             modifier = Modifier
                 .clickable {
-
+                    navHostController.navigate(HomeGraph.Notes.route)
                 }
                 .padding(4.dp)
                 .constrainAs(backRow) {
@@ -91,6 +92,7 @@ fun NoteScreen(
                 .clickable {
                     coroutineScope.launch {
                         saveNote(newChar, noteViewModel, user)
+                        navHostController.navigate(HomeGraph.Notes.route)
                     }
                 },
             text = stringResource(id = R.string.done),

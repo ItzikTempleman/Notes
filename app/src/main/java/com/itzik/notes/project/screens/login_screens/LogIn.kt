@@ -121,10 +121,9 @@ fun LoginScreen(
                 .constrainAs(registerButton) {
                     bottom.linkTo(parent.bottom)
                     end.linkTo(parent.end)
-                    start.linkTo(parent.start)
                 },
             text = "Not registered? Sign up",
-            fontSize = 24.sp,
+            fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
             color = colorResource(id = R.color.turquoise)
         )
@@ -141,11 +140,10 @@ fun LoginScreen(
                 }
                 .constrainAs(resetPasswordText) {
                     bottom.linkTo(parent.bottom)
-                    end.linkTo(registerButton.start)
                     start.linkTo(parent.start)
                 },
             text = "Forgot password",
-            fontSize = 24.sp,
+            fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
             color = colorResource(id = R.color.black)
         )

@@ -58,6 +58,5 @@ fun NoteItem(
                     end.linkTo(parent.end)
                 },
             color = colorResource(id = R.color.black), thickness = 0.5.dp)
-            //.border(width = 0.5.dp, color = colorResource(id = R.color.black))
     }
 }

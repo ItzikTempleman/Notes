@@ -15,8 +15,9 @@ class NoteViewModel
 
     suspend fun getNote() = repository.getNote()
 
-    suspend fun saveNote(note: Note) = repository.saveNote(note)
+    suspend fun getAllNotes() = repository.getAllNotes()
 
+    suspend fun saveNote(note: Note) = repository.saveNote(note)
 
     fun updateNote(note: Note) {
         noteList.add(note)

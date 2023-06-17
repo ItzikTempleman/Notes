@@ -6,13 +6,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -22,19 +22,28 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.itzik.notes.R
+import com.itzik.notes.project.models.note.Note
 import com.itzik.notes.project.models.user.User
 import com.itzik.notes.project.navigation.HomeGraph
 import com.itzik.notes.project.viewmodels.NoteViewModel
+import kotlinx.coroutines.launch
 
-
+var noteList = mutableListOf<Note>()
 @Composable
 fun NoteListScreen(
     modifier: Modifier,
     navHostController: NavHostController,
     noteViewModel: NoteViewModel,
-    user: User
+    user: User,
 
-) {
+    ) {
+    val coroutineScope = rememberCoroutineScope()
+
+    coroutineScope.launch {
+        noteList = noteViewModel.getAllNotes()
+    }
+
+
     ConstraintLayout(
         modifier = modifier.fillMaxSize()
     ) {

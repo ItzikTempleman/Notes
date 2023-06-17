@@ -12,8 +12,10 @@ interface NoteDao {
     @Query("SELECT * FROM $NOTE_TABLE")
     suspend fun getNote(): Note
 
+    @Query("SELECT * FROM $NOTE_TABLE")
+    suspend fun getAllNotes(): MutableList<Note>
+
     @Insert
     suspend fun saveNote(note: Note)
-
 
 }

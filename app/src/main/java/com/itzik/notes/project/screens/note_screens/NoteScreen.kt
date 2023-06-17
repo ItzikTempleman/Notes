@@ -8,6 +8,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -29,7 +30,6 @@ import java.time.format.DateTimeFormatter
 
 val fontSize = mutableStateOf(16)
 
-val noteList = mutableListOf<Note>()
 
 
 @Composable
@@ -189,7 +189,8 @@ suspend fun saveNote(newChar: String, noteViewModel: NoteViewModel, user: User) 
         noteContent = newChar,
         timeStamp = time,
         isMarked = false,
-        user = user
+        user = user,
+        fontSize = 16
     )
     Log.d("TAG", "note: $note")
     noteViewModel.updateNote(note)

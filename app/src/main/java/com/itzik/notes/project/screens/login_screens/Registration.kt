@@ -94,7 +94,7 @@ fun RegistrationScreen(navHostController: NavHostController, noteViewModel: Note
 
         Button(
             shape= RoundedCornerShape(20.dp),
-            colors = ButtonDefaults.buttonColors(colorResource(id = R.color.turquoise)),
+            colors = ButtonDefaults.buttonColors(colorResource(id = R.color.yellow)),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 30.dp)
@@ -107,7 +107,7 @@ fun RegistrationScreen(navHostController: NavHostController, noteViewModel: Note
                 else return@Button
             }
         ){
-            Text(text = stringResource(id = R.string.done), color = Color.White)
+            Text(text = stringResource(id = R.string.done), color = Color.White ,fontSize = 20.sp)
         }
     }
 }

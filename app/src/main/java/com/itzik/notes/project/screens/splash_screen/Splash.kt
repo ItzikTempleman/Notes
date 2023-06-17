@@ -11,22 +11,28 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Note
 import androidx.compose.runtime.*
-
+import androidx.compose.foundation.Image
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import com.itzik.notes.R
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
+import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.itzik.notes.project.navigation.AuthGraph
 import com.itzik.notes.project.navigation.HomeGraph
+import com.itzik.notes.project.screens.Wave
 import com.itzik.notes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.delay
 
@@ -39,13 +45,13 @@ fun AnimatedSplashScreen(navHostController: NavHostController, noteViewModel: No
     val alphaAim = animateFloatAsState(
         targetValue = if (startAnimation) 1f else 0f,
         animationSpec = tween(
-            durationMillis = 2500
+            durationMillis = 2000
         )
     )
 
     LaunchedEffect(key1 = true) {
         startAnimation = true
-        delay(2500)
+        delay(4500)
         navHostController.popBackStack()
         if (doesUserExist.value)
             navHostController.navigate(HomeGraph.Notes.route)
@@ -57,30 +63,48 @@ fun AnimatedSplashScreen(navHostController: NavHostController, noteViewModel: No
 
 @Composable
 fun SplashScreen(alpha: Float) {
-    Column(
+
+
+    ConstraintLayout(
 
         modifier = Modifier
-            .background(if (isSystemInDarkTheme()) Color.Black else Color.White)
             .fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        val (title, icon) = createRefs()
+        Image(
+            painter = painterResource(id = R.drawable.stripes),
+            contentDescription = null,
+            contentScale = ContentScale.FillBounds,
+            modifier = Modifier.fillMaxSize()
+
+        )
+
 
         Text(
             text = stringResource(id = R.string.app_name),
-            modifier = Modifier,
+            modifier = Modifier.zIndex(3f).constrainAs(title){
+                end.linkTo(parent.end)
+                top.linkTo(parent.top)
+                start.linkTo(parent.start)
+                bottom.linkTo(icon.top)
+            },
             color = colorResource(id = R.color.yellow),
             fontFamily = FontFamily.Cursive,
             fontSize = 100.sp
         )
 
         Icon(
-            modifier = Modifier
+            modifier = Modifier.zIndex(3f).constrainAs(icon){
+                end.linkTo(parent.end)
+                top.linkTo(parent.top)
+                start.linkTo(parent.start)
+                bottom.linkTo(parent.bottom)
+            }
                 .size(120.dp)
                 .alpha(alpha = alpha),
             imageVector = Icons.Default.Note,
             contentDescription = stringResource(id = R.string.app_name),
-            tint = (if (isSystemInDarkTheme()) Color.White else  colorResource(id = R.color.turquoise))
+            tint = (if (isSystemInDarkTheme()) Color.White else  colorResource(id = R.color.button_purple))
         )
 
     }

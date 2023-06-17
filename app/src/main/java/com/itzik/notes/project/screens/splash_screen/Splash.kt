@@ -3,7 +3,6 @@ package com.itzik.notes.project.screens.splash_screen
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
@@ -12,10 +11,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Note
 import androidx.compose.runtime.*
 import androidx.compose.foundation.Image
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 
@@ -32,7 +29,6 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.itzik.notes.project.navigation.AuthGraph
 import com.itzik.notes.project.navigation.HomeGraph
-import com.itzik.notes.project.screens.Wave
 import com.itzik.notes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.delay
 

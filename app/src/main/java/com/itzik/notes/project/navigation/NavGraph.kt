@@ -7,10 +7,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.itzik.notes.project.models.user.User
-
 import com.itzik.notes.project.screens.login_screens.LoginScreen
+
 import com.itzik.notes.project.screens.login_screens.RegistrationScreen
 import com.itzik.notes.project.screens.login_screens.ResetPasswordScreen
+
 import com.itzik.notes.project.screens.note_screens.NoteListScreen
 import com.itzik.notes.project.screens.note_screens.NoteScreen
 import com.itzik.notes.project.screens.splash_screen.AnimatedSplashScreen
@@ -53,7 +54,7 @@ fun SetupNavGraph(navHostController: NavHostController, noteViewModel: NoteViewM
             route = HOME
         ) {
             composable(route = HomeGraph.Notes.route) {
-                NoteListScreen(modifier = Modifier, navHostController, noteViewModel)
+                NoteListScreen(modifier = Modifier, navHostController, noteViewModel, user)
             }
             composable(route = HomeGraph.Note.route) {
                 NoteScreen(navHostController, noteViewModel, user)

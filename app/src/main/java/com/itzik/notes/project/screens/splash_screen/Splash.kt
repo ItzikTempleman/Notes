@@ -18,6 +18,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import com.itzik.notes.R
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,7 +28,6 @@ import androidx.navigation.NavHostController
 import com.itzik.notes.project.navigation.AuthGraph
 import com.itzik.notes.project.navigation.HomeGraph
 import com.itzik.notes.project.viewmodels.NoteViewModel
-import kotlinx.coroutines.NonDisposableHandle.parent
 import kotlinx.coroutines.delay
 
 @Composable
@@ -39,13 +39,13 @@ fun AnimatedSplashScreen(navHostController: NavHostController, noteViewModel: No
     val alphaAim = animateFloatAsState(
         targetValue = if (startAnimation) 1f else 0f,
         animationSpec = tween(
-            durationMillis = 3000
+            durationMillis = 2500
         )
     )
 
     LaunchedEffect(key1 = true) {
         startAnimation = true
-        delay(3000)
+        delay(2500)
         navHostController.popBackStack()
         if (doesUserExist.value)
             navHostController.navigate(HomeGraph.Notes.route)
@@ -67,11 +67,11 @@ fun SplashScreen(alpha: Float) {
     ) {
 
         Text(
-            text = "Itzik Notes",
+            text = stringResource(id = R.string.app_name),
             modifier = Modifier,
             color = colorResource(id = R.color.turquoise),
             fontFamily = FontFamily.Cursive,
-            fontSize = 38.sp
+            fontSize = 100.sp
         )
 
         Icon(
@@ -79,7 +79,7 @@ fun SplashScreen(alpha: Float) {
                 .size(120.dp)
                 .alpha(alpha = alpha),
             imageVector = Icons.Default.Note,
-            contentDescription = "logo icon",
+            contentDescription = stringResource(id = R.string.app_name),
             tint = (if (isSystemInDarkTheme()) Color.White else  colorResource(id = R.color.turquoise))
         )
 

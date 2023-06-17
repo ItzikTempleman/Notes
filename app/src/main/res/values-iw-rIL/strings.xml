@@ -2,8 +2,22 @@
 <resources>
     <string name="app_name">פתקים</string>
     <string name="content">תוכן</string>
-    <string name="notes">פתקים</string>
+    <string name="notes">כל הפתקים</string>
     <string name="done">סיום</string>
     <string name="new_note">צור חדש</string>
     <string name="sign_up">הירשם</string>
+    <string name="not_registered">לא רשום?</string>
+    <string name="forgot_password">שכחתי סיסמה</string>
+    <string name="log_in">התחבר</string>
+    <string name="user_name">שם משתמש</string>
+    <string name="password">סיסמה</string>
+    <string name="first_name">שם פרטי</string>
+    <string name="family_name">שם משפחה</string>
+    <string name="birthdate">תאריך לידה</string>
+    <string name="phone_number">מספר טלפון</string>
+    <string name="gender">מין</string>
+    <string name="reset_password">אפס סיסמה</string>
+    <string name="welcome">שלום</string>
+    <string name="back">חזרה</string>
+    <string name="font_size">A</string>
 </resources>

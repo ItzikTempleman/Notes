@@ -50,7 +50,6 @@ fun NoteScreen(
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(id = R.color.white))
     ) {
         val (
             backRow,
@@ -72,11 +71,11 @@ fun NoteScreen(
         ) {
             Image(
                 painter = painterResource(id = R.drawable.back),
-                contentDescription = "back",
+                contentDescription = stringResource(id = R.string.back),
             )
             Text(
                 text = stringResource(id = R.string.notes),
-                color = colorResource(id = R.color.turquoise),
+                color = colorResource(id = R.color.yellow),
                 fontSize = 18.sp
             )
         }
@@ -96,7 +95,7 @@ fun NoteScreen(
                     }
                 },
             text = stringResource(id = R.string.done),
-            color = colorResource(id = R.color.turquoise),
+            color = colorResource(id = R.color.yellow),
             fontSize = 18.sp
         )
 
@@ -123,7 +122,7 @@ fun NoteScreen(
                             if (fontSize.value % 2 != 0) fontSize.value--
                             if (fontSize.value < 16) fontSize.value = 16
                         },
-                    text = "A",
+                    text = stringResource(id = R.string.font_size),
                     textAlign = TextAlign.Center,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold
@@ -146,7 +145,7 @@ fun NoteScreen(
                             if (fontSize.value % 2 != 0) fontSize.value++
                             if (fontSize.value > 42) fontSize.value = 42
                         },
-                    text = "A",
+                    text = stringResource(id = R.string.font_size),
                     textAlign = TextAlign.Center,
                     fontSize = 26.sp,
                     fontWeight = FontWeight.Bold
@@ -173,7 +172,7 @@ fun NoteScreen(
                 )
             },
             colors = TextFieldDefaults.textFieldColors(
-                cursorColor = colorResource(R.color.turquoise),
+                cursorColor = colorResource(R.color.yellow),
                 textColor = colorResource(R.color.black),
                 disabledTextColor = colorResource(R.color.white),
                 backgroundColor = colorResource(R.color.white),

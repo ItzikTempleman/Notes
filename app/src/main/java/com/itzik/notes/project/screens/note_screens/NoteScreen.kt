@@ -29,7 +29,7 @@ import java.time.format.DateTimeFormatter
 
 val fontSize = mutableStateOf(16)
 
-
+val noteList = mutableListOf<Note>()
 
 
 @Composable
@@ -192,5 +192,6 @@ suspend fun saveNote(newChar: String, noteViewModel: NoteViewModel, user: User) 
         user = user
     )
     Log.d("TAG", "note: $note")
+    noteViewModel.updateNote(note)
     noteViewModel.saveNote(note)
 }

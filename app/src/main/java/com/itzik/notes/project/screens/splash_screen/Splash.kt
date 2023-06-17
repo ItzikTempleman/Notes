@@ -69,7 +69,7 @@ fun SplashScreen(alpha: Float) {
         Text(
             text = stringResource(id = R.string.app_name),
             modifier = Modifier,
-            color = colorResource(id = R.color.turquoise),
+            color = colorResource(id = R.color.yellow),
             fontFamily = FontFamily.Cursive,
             fontSize = 100.sp
         )

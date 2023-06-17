@@ -2,7 +2,7 @@
     <string name="app_name">Notes</string>
     <string name="welcome">Welcome</string>
     <string name="content">Content</string>
-    <string name="notes">All Notes</string>
+    <string name="notes">All notes</string>
     <string name="back">Back</string>
     <string name="done">Done</string>
     <string name="new_note">Create new</string>
@@ -12,6 +12,9 @@
     <string name="reset_password">Reset password</string>
     <string name="log_in">Log in</string>
     <string name="font_size">A</string>
+
+    <string name="sign_in_with_google">Sign in with Google</string>
+    <string name="sign_in_with_facebook">Sign in with Facebook</string>
 
     <string name="user_name">User name</string>
     <string name="password">Password</string>

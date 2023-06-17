@@ -2,14 +2,10 @@ package com.itzik.notes.project.screens.note_screens
 
 import android.util.Log
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
@@ -18,7 +14,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -52,32 +47,37 @@ fun NoteScreen(
             .fillMaxSize()
     ) {
         val (
-            backRow,
+            backBtn,
             fontSizeBox,
             doneBtn,
             contentTextField
         ) = createRefs()
 
-        Row(
+        Button(
+            shape = RoundedCornerShape(20.dp),
+            colors = ButtonDefaults.buttonColors(colorResource(id = R.color.yellow)),
             modifier = Modifier
-                .clickable {
-                    navHostController.navigate(HomeGraph.Notes.route)
-                }
                 .padding(4.dp)
-                .constrainAs(backRow) {
+                .constrainAs(backBtn) {
                     start.linkTo(parent.start)
                     top.linkTo(parent.top)
-                }
+                },
+            onClick = {
+                navHostController.navigate(HomeGraph.Notes.route)
+            }
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.back),
-                contentDescription = stringResource(id = R.string.back),
-            )
-            Text(
-                text = stringResource(id = R.string.notes),
-                color = colorResource(id = R.color.yellow),
-                fontSize = 18.sp
-            )
+            Row {
+                Image(
+                    modifier=Modifier.padding(2.dp),
+                    painter = painterResource(id = R.drawable.back),
+                    contentDescription = stringResource(id = R.string.back),
+                )
+                Text(
+                    text = stringResource(id = R.string.notes),
+                    color = colorResource(id = R.color.black),
+                    fontSize = 14.sp
+                )
+            }
         }
 
 
@@ -91,23 +91,21 @@ fun NoteScreen(
                 .clickable {
                     coroutineScope.launch {
                         saveNote(newChar, noteViewModel, user)
-                        navHostController.navigate(HomeGraph.Notes.route)
                     }
                 },
             text = stringResource(id = R.string.done),
-            color = colorResource(id = R.color.yellow),
+            color = colorResource(id = R.color.black),
             fontSize = 18.sp
         )
 
         Card(
             shape = RoundedCornerShape(6.dp), elevation = 4.dp,
             modifier = Modifier
-                .width(100.dp)
-                .height(44.dp)
-                .padding(4.dp)
+                .fillMaxWidth()
+                .height(40.dp)
+                .padding(horizontal = 8.dp)
                 .constrainAs(fontSizeBox) {
-                    top.linkTo(backRow.bottom)
-                    start.linkTo(parent.start)
+                    top.linkTo(backBtn.bottom)
                 }
         ) {
             Row(
@@ -182,7 +180,6 @@ fun NoteScreen(
                 focusedLabelColor = colorResource(R.color.white)
             )
         )
-
     }
 }
 

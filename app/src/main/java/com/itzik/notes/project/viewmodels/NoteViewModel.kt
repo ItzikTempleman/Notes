@@ -17,7 +17,7 @@ class NoteViewModel
 
 
     suspend fun getAllNotes():Flow<MutableList<Note>>{
-        val noteList: Flow<MutableList<Note>> = flow {
+        val noteList = flow {
             val updateFlowList=repository.getAllNotes()
             if(updateFlowList.isNotEmpty()){
                 emit(updateFlowList)

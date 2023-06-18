@@ -8,7 +8,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -24,6 +23,7 @@ import com.itzik.notes.project.models.note.Note
 import com.itzik.notes.project.models.user.User
 import com.itzik.notes.project.navigation.HomeGraph
 import com.itzik.notes.project.viewmodels.NoteViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -36,11 +36,11 @@ val fontSize = mutableStateOf(16)
 fun NoteScreen(
     navHostController: NavHostController,
     noteViewModel: NoteViewModel,
-    user:User
+    user:User,
+    coroutineScope:CoroutineScope
 ) {
     var newChar by remember { mutableStateOf("") }
 
-    val coroutineScope = rememberCoroutineScope()
 
     ConstraintLayout(
         modifier = Modifier

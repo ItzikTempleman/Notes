@@ -11,22 +11,31 @@ import com.itzik.notes.project.screens.login_screens.LoginScreen
 
 import com.itzik.notes.project.screens.login_screens.RegistrationScreen
 import com.itzik.notes.project.screens.login_screens.ResetPasswordScreen
+import com.itzik.notes.project.screens.note_screens.InnerNoteScreen
 
 import com.itzik.notes.project.screens.note_screens.NoteListScreen
 import com.itzik.notes.project.screens.note_screens.NoteScreen
 import com.itzik.notes.project.screens.splash_screen.AnimatedSplashScreen
 import com.itzik.notes.project.viewmodels.NoteViewModel
+import kotlinx.coroutines.CoroutineScope
 
 const val SPLASH_ROOT = "rootGraph"
 const val AUTH = "authGraph"
 const val HOME = "homeGraph"
 
+
 @Composable
-fun SetupNavGraph(navHostController: NavHostController, noteViewModel: NoteViewModel, user: User) {
+fun SetupNavGraph(
+    navHostController: NavHostController,
+    noteViewModel: NoteViewModel,
+    user:User,
+    coroutineScope: CoroutineScope
+) {
     NavHost(
         navController = navHostController,
         startDestination = SPLASH_ROOT
     ) {
+
         navigation(
             startDestination = RootSplashGraph.Splash.route,
             route = SPLASH_ROOT
@@ -54,14 +63,20 @@ fun SetupNavGraph(navHostController: NavHostController, noteViewModel: NoteViewM
             route = HOME
         ) {
             composable(route = HomeGraph.Notes.route) {
-                NoteListScreen(modifier = Modifier, navHostController, noteViewModel, user)
+                NoteListScreen(coroutineScope=coroutineScope, modifier = Modifier, navHostController, noteViewModel, user)
             }
             composable(route = HomeGraph.Note.route) {
-                NoteScreen(navHostController, noteViewModel, user)
+                NoteScreen(navHostController, noteViewModel, user, coroutineScope = coroutineScope)
+            }
+            composable(route = HomeGraph.InnerNote.route)
+                {
+                InnerNoteScreen(navHostController=navHostController, noteViewModel = noteViewModel, coroutineScope = coroutineScope, modifier = Modifier)
             }
         }
     }
 }
+
+
 sealed class RootSplashGraph(val route: String) {
     object Splash : RootSplashGraph(route = "splash")
 }
@@ -73,5 +88,6 @@ sealed class AuthGraph(val route: String) {
 sealed class HomeGraph(val route: String) {
     object Notes : HomeGraph(route = "noteList")
     object Note : HomeGraph(route = "note")
+    object InnerNote: HomeGraph(route = "innerNote")
 }
 

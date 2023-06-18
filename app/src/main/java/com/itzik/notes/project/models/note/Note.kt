@@ -1,13 +1,12 @@
 package com.itzik.notes.project.models.note
 
 import android.os.Parcelable
-import androidx.compose.ui.graphics.Color
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.itzik.notes.project.models.user.Gender
 import com.itzik.notes.project.models.user.User
 import com.itzik.notes.project.utils.Constants.NOTE_TABLE
 import kotlinx.parcelize.Parcelize
-import kotlinx.parcelize.RawValue
 
 @Parcelize
 @Entity(tableName = NOTE_TABLE)
@@ -19,7 +18,8 @@ data class Note(
     val timeStamp: String,
     val isMarked: Boolean,
     val fontSize: Int
-): Parcelable
+) : Parcelable
+
 
 enum class MarkedColor {
     RED, YELLOW, BLUE, GREEN, ORANGE, PURPLE, GREY

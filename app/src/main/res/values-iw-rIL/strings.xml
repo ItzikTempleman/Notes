@@ -22,4 +22,5 @@
     <string name="font_size">A</string>
     <string name="sign_in_with_google">התחבר באמצעות  Google</string>
     <string name="sign_in_with_facebook">"התחבר באמצעות Facebook "</string>
+    <string name="edit">עריכה</string>
 </resources>

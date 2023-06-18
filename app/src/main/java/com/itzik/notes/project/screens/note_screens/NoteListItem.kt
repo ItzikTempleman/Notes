@@ -18,11 +18,10 @@ import com.itzik.notes.project.models.note.Note
 
 @Composable
 fun NoteItem(
-    note: Note,
-    modifier: Modifier
+    note: Note
 ) {
     ConstraintLayout(
-        modifier = modifier
+        modifier = Modifier
             .padding(4.dp)
             .fillMaxWidth()
             .height(50.dp)

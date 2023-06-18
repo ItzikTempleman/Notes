@@ -3,6 +3,7 @@ package com.itzik.notes.project.main
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.itzik.notes.project.models.user.Gender
@@ -22,7 +23,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             noteViewModel = viewModel()
-
+            val coroutineScope= rememberCoroutineScope()
             user = User(
                 "Itzik", "Templeman",
                 "26/09/91", "0545408531",
@@ -32,7 +33,7 @@ class MainActivity : ComponentActivity() {
 
             NotesTheme {
                 //NoteScreen(noteViewModel, user)
-                SetupNavGraph(navHostController = rememberNavController(), noteViewModel, user)
+                SetupNavGraph(navHostController = rememberNavController(), noteViewModel, user=user, coroutineScope = coroutineScope)
             }
         }
     }

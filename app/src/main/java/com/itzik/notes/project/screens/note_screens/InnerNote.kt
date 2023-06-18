@@ -9,14 +9,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.itzik.notes.R
 import com.itzik.notes.project.models.note.Note
-import com.itzik.notes.project.models.user.User
 import com.itzik.notes.project.navigation.HomeGraph
 import com.itzik.notes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -24,7 +22,11 @@ import kotlinx.coroutines.CoroutineScope
 @Composable
 fun InnerNoteScreen(
 
-    navHostController:NavHostController, noteViewModel:NoteViewModel, coroutineScope:CoroutineScope, modifier:Modifier
+    navHostController: NavHostController,
+    noteViewModel: NoteViewModel,
+    coroutineScope: CoroutineScope,
+    modifier: Modifier,
+    noteArg: Note
 ) {
 
     ConstraintLayout(
@@ -53,7 +55,7 @@ fun InnerNoteScreen(
                 .constrainAs(textField) {
                     top.linkTo(editText.bottom)
                 },
-            text = "Hello"
+            text = noteArg.noteContent
         )
     }
 }

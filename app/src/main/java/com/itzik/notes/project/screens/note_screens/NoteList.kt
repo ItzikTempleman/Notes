@@ -122,7 +122,7 @@ fun NoteListLazyColumn(selectedNote: (Note) -> Unit) {
                     selectedNote(it)
                 }
             ) {
-                NoteItem(it)
+               NoteItem(it)
             }
         })
     }

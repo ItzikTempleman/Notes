@@ -1,11 +1,13 @@
 package com.itzik.notes.project.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.itzik.notes.project.models.note.Note
 import com.itzik.notes.project.models.user.User
 import com.itzik.notes.project.screens.login_screens.LoginScreen
 
@@ -68,9 +70,12 @@ fun SetupNavGraph(
             composable(route = HomeGraph.Note.route) {
                 NoteScreen(navHostController, noteViewModel, user, coroutineScope = coroutineScope)
             }
-            composable(route = HomeGraph.InnerNote.route)
-                {
-                InnerNoteScreen(navHostController=navHostController, noteViewModel = noteViewModel, coroutineScope = coroutineScope, modifier = Modifier)
+            composable(route = HomeGraph.InnerNote.route) {
+
+                 val noteArg= navHostController.previousBackStackEntry?.savedStateHandle?.get<Note>("note")
+                if (noteArg != null) {
+                    InnerNoteScreen(navHostController=navHostController, noteViewModel = noteViewModel, coroutineScope = coroutineScope, modifier = Modifier, noteArg=noteArg)
+                }
             }
         }
     }

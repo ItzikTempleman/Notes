@@ -3,7 +3,7 @@ package com.itzik.notes.project.room_database
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.itzik.notes.project.models.note.Note
+import com.itzik.notes.project.models.Note
 import com.itzik.notes.project.utils.Constants.NOTE_TABLE
 
 @Dao

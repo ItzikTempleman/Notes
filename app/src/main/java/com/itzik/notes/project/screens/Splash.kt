@@ -30,12 +30,12 @@ import com.itzik.notes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.delay
 
 @Composable
-fun AnimatedSplashScreen(navHostController: NavHostController, noteViewModel: NoteViewModel) {
-    var startAnimation by remember {
-        mutableStateOf(false)
-    }
+fun SplashScreen(navHostController: NavHostController) {
 
-    val alphaAim = animateFloatAsState(
+    var startAnimation by remember {
+        mutableStateOf(false) }
+
+    val alphaAnim = animateFloatAsState(
         targetValue = if (startAnimation) 1f else 0f,
         animationSpec = tween(
             durationMillis = 2000
@@ -45,17 +45,10 @@ fun AnimatedSplashScreen(navHostController: NavHostController, noteViewModel: No
     LaunchedEffect(key1 = true) {
         startAnimation = true
         delay(4500)
+
         navHostController.popBackStack()
-
         navHostController.navigate(HomeGraph.Notes.route)
-
     }
-    SplashScreen(alpha = alphaAim.value)
-}
-
-
-@Composable
-fun SplashScreen(alpha: Float) {
 
 
     ConstraintLayout(
@@ -66,12 +59,10 @@ fun SplashScreen(alpha: Float) {
         val (title, icon) = createRefs()
         Image(
             painter = painterResource(id = R.drawable.stripes),
-            contentDescription = null,
+            contentDescription = "splashImage",
             contentScale = ContentScale.FillBounds,
             modifier = Modifier.fillMaxSize()
-
         )
-
 
         Text(
             text = stringResource(id = R.string.app_name),
@@ -98,10 +89,10 @@ fun SplashScreen(alpha: Float) {
                     bottom.linkTo(parent.bottom)
                 }
                 .size(120.dp)
-                .alpha(alpha = alpha),
+                .alpha(alpha = alphaAnim.value),
             imageVector = Icons.Default.Note,
             contentDescription = stringResource(id = R.string.app_name),
-            tint = (if (isSystemInDarkTheme()) Color.White else  colorResource(id = R.color.button_purple))
+            tint = colorResource(id = R.color.button_purple)
         )
 
     }

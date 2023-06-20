@@ -1,4 +1,4 @@
-package com.itzik.notes.project.models.note
+package com.itzik.notes.project.models
 
 import android.os.Parcelable
 import androidx.room.Entity

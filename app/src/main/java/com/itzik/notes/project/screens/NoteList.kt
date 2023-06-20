@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.itzik.notes.R
-import com.itzik.notes.project.models.note.Note
+import com.itzik.notes.project.models.Note
 import com.itzik.notes.project.navigation.HomeGraph
 import com.itzik.notes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.CoroutineScope

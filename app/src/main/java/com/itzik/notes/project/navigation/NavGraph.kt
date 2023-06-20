@@ -6,18 +6,19 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.itzik.notes.project.models.note.Note
+import com.itzik.notes.project.models.Note
+import com.itzik.notes.project.screens.SplashScreen
 
 
 import com.itzik.notes.project.screens.note_screens.InnerNoteScreen
 
 import com.itzik.notes.project.screens.note_screens.NoteListScreen
 import com.itzik.notes.project.screens.note_screens.NoteScreen
-import com.itzik.notes.project.screens.AnimatedSplashScreen
+
 import com.itzik.notes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
 
-const val SPLASH_ROOT = "rootGraph"
+const val SPLASH = "splashGraph"
 const val HOME = "homeGraph"
 
 
@@ -30,15 +31,15 @@ fun SetupNavGraph(
 ) {
     NavHost(
         navController = navHostController,
-        startDestination = SPLASH_ROOT
+        startDestination = SPLASH
     ) {
 
         navigation(
-            startDestination = RootSplashGraph.Splash.route,
-            route = SPLASH_ROOT
+            startDestination = SplashGraph.Splash.route,
+            route = SPLASH
         ) {
-            composable(route = RootSplashGraph.Splash.route) {
-                AnimatedSplashScreen(navHostController, noteViewModel)
+            composable(route = SplashGraph.Splash.route) {
+                SplashScreen(navHostController)
             }
         }
 
@@ -64,8 +65,8 @@ fun SetupNavGraph(
 }
 
 
-sealed class RootSplashGraph(val route: String) {
-    object Splash : RootSplashGraph(route = "splash")
+sealed class SplashGraph(val route: String) {
+    object Splash : SplashGraph(route = "splash")
 }
 
 sealed class HomeGraph(val route: String) {

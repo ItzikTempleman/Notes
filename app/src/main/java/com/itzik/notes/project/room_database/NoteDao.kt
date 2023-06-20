@@ -15,4 +15,6 @@ interface NoteDao {
     @Insert
     suspend fun saveNote(note: Note)
 
+    @Query("DELETE FROM $NOTE_TABLE")
+    suspend fun deleteAllNotes()
 }

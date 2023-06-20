@@ -1,4 +1,4 @@
-package com.itzik.notes.project.screens.note_screens
+package com.itzik.notes.project.screens
 
 import android.util.Log
 import androidx.compose.foundation.Image

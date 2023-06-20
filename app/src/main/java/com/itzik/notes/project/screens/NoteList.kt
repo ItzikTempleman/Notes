@@ -1,16 +1,17 @@
-package com.itzik.notes.project.screens.note_screens
+package com.itzik.notes.project.screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -22,11 +23,13 @@ import androidx.navigation.NavHostController
 import com.itzik.notes.R
 import com.itzik.notes.project.models.Note
 import com.itzik.notes.project.navigation.HomeGraph
+import com.itzik.notes.project.screens.shapes.ButtonShapeScreen
 import com.itzik.notes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 var noteList = mutableListOf<Note>()
+
 
 @Composable
 fun NoteListScreen(
@@ -49,7 +52,7 @@ fun NoteListScreen(
     ConstraintLayout(
         modifier = modifier.fillMaxSize()
     ) {
-        val (noteListScreenTitle, createNote, noteListLazyColumn) = createRefs()
+        val (noteListScreenTitle, createNote, removeAllBtn, noteListLazyColumn) = createRefs()
 
         Text(
             text = stringResource(id = R.string.notes),
@@ -63,7 +66,8 @@ fun NoteListScreen(
         )
 
 
-        Button(
+
+        ButtonShapeScreen(
             shape = RoundedCornerShape(20.dp),
             colors = ButtonDefaults.buttonColors(colorResource(id = R.color.yellow)),
             modifier = Modifier
@@ -72,23 +76,38 @@ fun NoteListScreen(
                     end.linkTo(parent.end)
                     top.linkTo(parent.top)
                 },
-            onClick = {
-                navHostController.navigate(HomeGraph.Note.route)
-            }
-        ) {
-            Row {
-                Text(
-                    text = stringResource(id = R.string.new_note),
-                    fontSize = 14.sp
-                )
-                Image(
-                    modifier = Modifier.padding(2.dp),
-                    painter = painterResource(id = R.drawable.add_note),
-                    contentDescription = stringResource(id = R.string.new_note),
-                )
-            }
-        }
+            onclick = { navHostController.navigate(HomeGraph.Note.route) },
+            painter = painterResource(id = R.drawable.add_note),
+            contentDescription = stringResource(id = R.string.new_note),
+            fontSize = 14.sp,
+            text = stringResource(id = R.string.new_note),
+            imageModifier = Modifier.padding(2.dp)
+        )
 
+        ButtonShapeScreen(
+            shape = RoundedCornerShape(20.dp),
+            colors = ButtonDefaults.buttonColors(colorResource(id = R.color.white)),
+            modifier = Modifier
+                .padding(4.dp)
+                .constrainAs(removeAllBtn) {
+                    end.linkTo(createNote.start)
+                    top.linkTo(parent.top)
+                },
+            onclick = {
+                coroutineScope.launch {
+                    noteViewModel.deleteAllNotes()
+                    noteViewModel.deleteNotesFromList(noteList)
+                }
+            },
+            painter = painterResource(id = R.drawable.recycle_bin),
+            contentDescription = "delete all",
+            fontSize = 14.sp,
+            text = "",
+            imageModifier = Modifier
+        )
+
+
+        val mutableNoteList by remember { mutableStateOf(noteList) }
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -99,32 +118,29 @@ fun NoteListScreen(
                 }
                 .padding(4.dp)
         ) {
-            NoteListLazyColumn() {
-                navHostController.currentBackStackEntry?.savedStateHandle?.set(
-                    key = "note",
-                    value = it
-                )
-                navHostController.navigate(route = HomeGraph.InnerNote.route)
+            LazyColumn(modifier = Modifier.fillMaxHeight()) {
+                items(mutableNoteList, itemContent = {
+                    Surface(modifier = Modifier.fillMaxHeight().clickable {
+                        navHostController.currentBackStackEntry?.savedStateHandle?.set(key = "note", value = it)
+                        navHostController.navigate(route = HomeGraph.InnerNote.route)
+                    }
+                    ) {
+                        NoteItem(it)
+                    }
+                })
             }
         }
     }
 }
 
-@Composable
-fun NoteListLazyColumn(selectedNote: (Note) -> Unit) {
-    LazyColumn(modifier = Modifier.fillMaxHeight()) {
-        items(noteList, itemContent = {
-            Surface(modifier = Modifier
-                .fillMaxHeight()
-                .clickable {
-                    selectedNote(it)
-                }
-            ) {
-               NoteItem(it)
-            }
-        })
-    }
-}
+
+
+
+
+
+
+
+
 
 
 

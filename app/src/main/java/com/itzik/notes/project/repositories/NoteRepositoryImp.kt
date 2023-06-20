@@ -10,7 +10,7 @@ class NoteRepositoryImp @Inject constructor(
     @Singleton
     private val noteDao: NoteDao
     ) : NoteRepository {
-
+    override suspend fun deleteAllNotes() = noteDao.deleteAllNotes()
     override suspend fun getAllNotes(): MutableList<Note> =noteDao.getAllNotes()
     override suspend fun saveNote(note: Note) =noteDao.saveNote(note)
 }

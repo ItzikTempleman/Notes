@@ -10,10 +10,10 @@ import com.itzik.notes.project.models.Note
 import com.itzik.notes.project.screens.SplashScreen
 
 
-import com.itzik.notes.project.screens.note_screens.InnerNoteScreen
+import com.itzik.notes.project.screens.InnerNoteScreen
 
-import com.itzik.notes.project.screens.note_screens.NoteListScreen
-import com.itzik.notes.project.screens.note_screens.NoteScreen
+import com.itzik.notes.project.screens.NoteListScreen
+import com.itzik.notes.project.screens.NoteScreen
 
 import com.itzik.notes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.CoroutineScope

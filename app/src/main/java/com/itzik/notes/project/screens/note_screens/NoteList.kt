@@ -21,7 +21,6 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.itzik.notes.R
 import com.itzik.notes.project.models.note.Note
-import com.itzik.notes.project.models.user.User
 import com.itzik.notes.project.navigation.HomeGraph
 import com.itzik.notes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -34,8 +33,7 @@ fun NoteListScreen(
     coroutineScope: CoroutineScope,
     modifier: Modifier,
     navHostController: NavHostController,
-    noteViewModel: NoteViewModel,
-    user: User,
+    noteViewModel: NoteViewModel
 ) {
 
 
@@ -54,7 +52,7 @@ fun NoteListScreen(
         val (noteListScreenTitle, createNote, noteListLazyColumn) = createRefs()
 
         Text(
-            text = "${user.name}'s notes",
+            text = stringResource(id = R.string.notes),
             modifier = Modifier
                 .padding(12.dp)
                 .constrainAs(noteListScreenTitle) {

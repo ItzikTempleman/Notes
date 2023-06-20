@@ -23,9 +23,6 @@ import kotlinx.coroutines.CoroutineScope
 fun InnerNoteScreen(
 
     navHostController: NavHostController,
-    noteViewModel: NoteViewModel,
-    coroutineScope: CoroutineScope,
-    modifier: Modifier,
     noteArg: Note
 ) {
 

@@ -20,7 +20,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.itzik.notes.R
 import com.itzik.notes.project.models.note.Note
-import com.itzik.notes.project.models.user.User
+
 import com.itzik.notes.project.navigation.HomeGraph
 import com.itzik.notes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -36,7 +36,6 @@ val fontSize = mutableStateOf(16)
 fun NoteScreen(
     navHostController: NavHostController,
     noteViewModel: NoteViewModel,
-    user:User,
     coroutineScope:CoroutineScope
 ) {
     var newChar by remember { mutableStateOf("") }
@@ -90,7 +89,7 @@ fun NoteScreen(
                 }
                 .clickable {
                     coroutineScope.launch {
-                        saveNote(newChar, noteViewModel, user)
+                        saveNote(newChar, noteViewModel)
                     }
                 },
             text = stringResource(id = R.string.done),
@@ -183,13 +182,11 @@ fun NoteScreen(
     }
 }
 
-suspend fun saveNote(newChar: String, noteViewModel: NoteViewModel, user: User) {
+suspend fun saveNote(newChar: String, noteViewModel: NoteViewModel) {
     val time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
     val note = Note(
         noteContent = newChar,
         timeStamp = time,
-        isMarked = false,
-        user = user,
         fontSize = 16
     )
     Log.d("TAG", "note: $note")

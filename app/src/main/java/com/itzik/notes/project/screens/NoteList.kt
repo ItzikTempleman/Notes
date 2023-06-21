@@ -123,8 +123,7 @@ fun NoteListScreen(
                     Surface(modifier = Modifier.fillMaxHeight().clickable {
                         navHostController.currentBackStackEntry?.savedStateHandle?.set(key = "note", value = it)
                         navHostController.navigate(route = HomeGraph.InnerNote.route)
-                    }
-                    ) {
+                    }) {
                         NoteItem(it)
                     }
                 })

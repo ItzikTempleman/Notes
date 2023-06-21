@@ -97,7 +97,7 @@ fun NoteListScreen(
             onclick = {
                 coroutineScope.launch {
                     noteViewModel.deleteAllNotes()
-                    noteViewModel.deleteNotesFromList(noteList)
+                    noteList.clear()
                 }
             },
             painter = painterResource(id = R.drawable.recycle_bin),
@@ -121,10 +121,13 @@ fun NoteListScreen(
         ) {
             LazyColumn(modifier = Modifier.fillMaxHeight()) {
                 items(mutableNoteList, itemContent = {
-                    Surface(modifier = Modifier.fillMaxHeight().clickable {
-                        navHostController.currentBackStackEntry?.savedStateHandle?.set(key = "note", value = it)
-                        navHostController.navigate(route = HomeGraph.InnerNote.route)
-                    }) {
+                    Surface(modifier = Modifier
+                        .fillMaxHeight()
+                        .clickable {
+                            navHostController.currentBackStackEntry?.savedStateHandle?.set(key = "note",
+                                value = it)
+                            navHostController.navigate(route = HomeGraph.InnerNote.route)
+                        }) {
                         NoteItem(it)
                     }
                 })

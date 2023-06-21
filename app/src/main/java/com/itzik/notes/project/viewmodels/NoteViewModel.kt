@@ -16,19 +16,15 @@ class NoteViewModel
     ) : ViewModel() {
 
 
-    suspend fun getAllNotes():Flow<MutableList<Note>>{
+    suspend fun getAllNotes(): Flow<MutableList<Note>> {
         val noteList = flow {
-            val updateFlowList=repository.getAllNotes()
-            if(updateFlowList.isNotEmpty()){
+            val updateFlowList = repository.getAllNotes()
+            if (updateFlowList.isNotEmpty()) {
                 emit(updateFlowList)
-            }else return@flow
+            } else return@flow
         }
-       return noteList
+        return noteList
     }
-
-
-    suspend fun deleteAllNotes() = repository.deleteAllNotes()
-
 
     suspend fun saveNote(note: Note) = repository.saveNote(note)
 
@@ -36,7 +32,6 @@ class NoteViewModel
         noteList.add(note)
     }
 
-    fun deleteNotesFromList(notes:MutableList<Note>){
-        notes.clear()
-    }
+    suspend fun deleteAllNotes() = repository.deleteAllNotes()
+
 }

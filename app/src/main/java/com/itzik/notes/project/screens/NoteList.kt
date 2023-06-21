@@ -55,7 +55,8 @@ fun NoteListScreen(
         val (noteListScreenTitle, createNote, removeAllBtn, noteListLazyColumn) = createRefs()
 
         Text(
-            text = stringResource(id = R.string.notes),
+            text = if(noteList.isNotEmpty() )stringResource(id = R.string.notes)
+            else stringResource(id = R.string.no_notes ),
             modifier = Modifier
                 .padding(12.dp)
                 .constrainAs(noteListScreenTitle) {

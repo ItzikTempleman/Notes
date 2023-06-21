@@ -89,7 +89,10 @@ fun NoteScreen(
                 }
                 .clickable {
                     coroutineScope.launch {
-                        saveNote(newChar, noteViewModel)
+                        if(newChar.isNotBlank()) {
+                            saveNote(newChar, noteViewModel)
+                            newChar = ""
+                        }
                     }
                 },
             text = stringResource(id = R.string.done),

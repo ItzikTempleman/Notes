@@ -40,11 +40,11 @@ fun NoteListScreen(
 ) {
 
 
-    if (noteList.isEmpty()) {
+
         coroutineScope.launch {
             noteViewModel.getAllNotes().collect {
                 noteList = it
-            }
+
         }
     }
 

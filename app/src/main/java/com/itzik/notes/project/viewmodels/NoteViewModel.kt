@@ -23,7 +23,7 @@ class NoteViewModel
                 emit(updateFlowList)
             } else return@flow
         }
-        return noteList
+           return noteList
     }
 
     suspend fun saveNote(note: Note) = repository.saveNote(note)

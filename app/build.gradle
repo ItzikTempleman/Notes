@@ -4,16 +4,17 @@ plugins {
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
     id 'kotlin-parcelize'
+    id 'org.jetbrains.kotlin.android'
 }
 
 android {
 
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.itzik.notes"
         minSdk 26
-        targetSdk 33
+        targetSdk 34
         versionCode 3
         versionName "1.0"
 
@@ -30,8 +31,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
     kotlinOptions {
         jvmTarget = '1.8'
@@ -53,6 +54,7 @@ android {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
+    namespace 'com.itzik.notes'
 }
 
 dependencies {
@@ -64,8 +66,9 @@ dependencies {
     implementation "androidx.compose.material:material-icons-core:1.4.3"
     implementation "androidx.compose.material:material-icons-extended:1.4.3"
     implementation 'androidx.core:core-ktx:1.10.1'
-    implementation 'com.google.android.libraries.places:places:3.1.0'
+    implementation 'com.google.android.libraries.places:places:3.2.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.core:core-ktx:1.10.1'
     kapt "org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.5.0"
     debugImplementation "androidx.compose.ui:ui-tooling:1.4.3"
     implementation "androidx.constraintlayout:constraintlayout-compose:1.0.1"
@@ -73,7 +76,7 @@ dependencies {
     implementation "androidx.compose.ui:ui-tooling-preview:1.4.3"
     implementation "androidx.navigation:navigation-compose:2.6.0"
     implementation "me.onebone:toolbar-compose:2.3.5"
-    implementation "androidx.compose.runtime:runtime-livedata:1.5.0-beta02"
+    implementation "androidx.compose.runtime:runtime-livedata:1.6.0-alpha01"
     implementation 'androidx.activity:activity-compose:1.7.2'
 
     //dagger hilt
@@ -82,9 +85,9 @@ dependencies {
     kapt "com.google.dagger:hilt-android-compiler:2.44"
 
     //room
-    implementation "androidx.room:room-ktx:2.5.1"
-    implementation "androidx.room:room-runtime:2.5.1"
-    kapt "androidx.room:room-compiler:2.5.1"
+    implementation "androidx.room:room-ktx:2.5.2"
+    implementation "androidx.room:room-runtime:2.5.2"
+    kapt "androidx.room:room-compiler:2.5.2"
 
     //coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'

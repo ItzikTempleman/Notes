@@ -1,17 +1,13 @@
 package com.itzik.notes.project.screens
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -23,14 +19,13 @@ import androidx.navigation.NavHostController
 import com.itzik.notes.R
 import com.itzik.notes.project.models.Note
 import com.itzik.notes.project.navigation.HomeGraph
-import com.itzik.notes.project.screens.shapes.ButtonShapeScreen
+import com.itzik.notes.project.screens.shapes.ButtonCustomShape
 import com.itzik.notes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
+
 import kotlinx.coroutines.launch
 
-var noteList = mutableListOf<Note>()
-
-
+@SuppressLint("CoroutineCreationDuringComposition", "MutableCollectionMutableState")
 @Composable
 fun NoteListScreen(
     coroutineScope: CoroutineScope,
@@ -38,7 +33,7 @@ fun NoteListScreen(
     navHostController: NavHostController,
     noteViewModel: NoteViewModel
 ) {
-
+    var noteList by remember { mutableStateOf(mutableListOf<Note>()) }
 
     if (noteList.isEmpty()) {
         coroutineScope.launch {
@@ -48,15 +43,14 @@ fun NoteListScreen(
         }
     }
 
-
     ConstraintLayout(
         modifier = modifier.fillMaxSize()
     ) {
         val (noteListScreenTitle, createNote, removeAllBtn, noteListLazyColumn) = createRefs()
 
         Text(
-            text = if(noteList.isNotEmpty() )stringResource(id = R.string.notes)
-            else stringResource(id = R.string.no_notes ),
+            text = if (noteList.isNotEmpty()) stringResource(id = R.string.notes)
+            else stringResource(id = R.string.no_notes),
             modifier = Modifier
                 .padding(12.dp)
                 .constrainAs(noteListScreenTitle) {
@@ -66,9 +60,7 @@ fun NoteListScreen(
             fontSize = 20.sp
         )
 
-
-
-        ButtonShapeScreen(
+        ButtonCustomShape(
             shape = RoundedCornerShape(20.dp),
             colors = ButtonDefaults.buttonColors(colorResource(id = R.color.yellow)),
             modifier = Modifier
@@ -77,7 +69,7 @@ fun NoteListScreen(
                     end.linkTo(parent.end)
                     top.linkTo(parent.top)
                 },
-            onclick = { navHostController.navigate(HomeGraph.Note.route) },
+            onclick = { navHostController.navigate(HomeGraph.NoteScreen.route) },
             painter = painterResource(id = R.drawable.add_note),
             contentDescription = stringResource(id = R.string.new_note),
             fontSize = 14.sp,
@@ -85,7 +77,7 @@ fun NoteListScreen(
             imageModifier = Modifier.padding(2.dp)
         )
 
-        ButtonShapeScreen(
+        ButtonCustomShape(
             shape = RoundedCornerShape(20.dp),
             colors = ButtonDefaults.buttonColors(colorResource(id = R.color.white)),
             modifier = Modifier
@@ -97,7 +89,7 @@ fun NoteListScreen(
             onclick = {
                 coroutineScope.launch {
                     noteViewModel.deleteAllNotes()
-                    noteList.clear()
+                    noteViewModel.getAllNotes()
                 }
             },
             painter = painterResource(id = R.drawable.recycle_bin),
@@ -107,43 +99,17 @@ fun NoteListScreen(
             imageModifier = Modifier
         )
 
-
-        val mutableNoteList by remember { mutableStateOf(noteList) }
-        Column(
+        NotesLazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
+                .padding(4.dp)
                 .constrainAs(noteListLazyColumn) {
                     top.linkTo(createNote.bottom)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
-                }
-                .padding(4.dp)
-        ) {
-            LazyColumn(modifier = Modifier.fillMaxHeight()) {
-                items(mutableNoteList, itemContent = {
-                    Surface(modifier = Modifier
-                        .fillMaxHeight()
-                        .clickable {
-                            navHostController.currentBackStackEntry?.savedStateHandle?.set(key = "note",
-                                value = it)
-                            navHostController.navigate(route = HomeGraph.InnerNote.route)
-                        }) {
-                        NoteItem(it)
-                    }
-                })
-            }
-        }
+                },
+            notes = noteList,
+            navHostController = navHostController
+        )
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-

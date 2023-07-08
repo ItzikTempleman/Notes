@@ -3,7 +3,7 @@ package com.itzik.notes.project.viewmodels
 import androidx.lifecycle.ViewModel
 import com.itzik.notes.project.models.Note
 import com.itzik.notes.project.repositories.NoteRepository
-import com.itzik.notes.project.screens.noteList
+
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -29,7 +29,7 @@ class NoteViewModel
     suspend fun saveNote(note: Note) = repository.saveNote(note)
 
     fun updateNote(note: Note) {
-        noteList.add(note)
+  //      noteList.add(note)
     }
 
     suspend fun deleteAllNotes() = repository.deleteAllNotes()

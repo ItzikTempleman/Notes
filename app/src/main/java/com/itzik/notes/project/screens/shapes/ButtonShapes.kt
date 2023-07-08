@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.TextUnit
 
 
 @Composable
-fun ButtonShapeScreen(
+fun ButtonCustomShape(
     shape: Shape,
     colors: ButtonColors,
     modifier: Modifier,

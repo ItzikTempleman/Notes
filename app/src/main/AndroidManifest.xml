@@ -17,7 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Notes"
         android:usesCleartextTraffic="true"
-        tools:targetApi="33">
+        tools:targetApi="34">
         <activity
             android:name=".project.main.MainActivity"
             android:exported="true"

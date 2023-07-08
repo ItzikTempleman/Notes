@@ -1,12 +1,25 @@
-package com.itzik.notes.project.screens
-
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Card
+import androidx.compose.material.Text
+import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -20,7 +33,6 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.itzik.notes.R
 import com.itzik.notes.project.models.Note
-
 import com.itzik.notes.project.navigation.HomeGraph
 import com.itzik.notes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -28,7 +40,7 @@ import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-val fontSize = mutableStateOf(16)
+val fontSize = mutableIntStateOf(16)
 
 
 
@@ -36,7 +48,7 @@ val fontSize = mutableStateOf(16)
 fun NoteScreen(
     navHostController: NavHostController,
     noteViewModel: NoteViewModel,
-    coroutineScope:CoroutineScope
+    coroutineScope: CoroutineScope
 ) {
     var newChar by remember { mutableStateOf("") }
 
@@ -67,7 +79,7 @@ fun NoteScreen(
         ) {
             Row {
                 Image(
-                    modifier=Modifier.padding(2.dp),
+                    modifier= Modifier.padding(2.dp),
                     painter = painterResource(id = R.drawable.back),
                     contentDescription = stringResource(id = R.string.back),
                 )

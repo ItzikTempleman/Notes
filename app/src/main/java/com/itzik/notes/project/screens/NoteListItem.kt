@@ -24,17 +24,17 @@ fun NoteItem(
             .height(50.dp)
     ) {
         val (content, time, line) = createRefs()
-    Text(
-        color = colorResource(id = R.color.black),
-        modifier = Modifier
-            .constrainAs(content) {
-                top.linkTo(parent.top)
-                start.linkTo(parent.start)
-            }
-            .padding(8.dp),
-        text = note.noteContent,
-        maxLines = 1
-    )
+        Text(
+            color = colorResource(id = R.color.black),
+            modifier = Modifier
+                .constrainAs(content) {
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start)
+                }
+                .padding(8.dp),
+            text = note.noteContent,
+            maxLines = 1
+        )
 
         Text(color = colorResource(id = R.color.black),
             modifier = Modifier

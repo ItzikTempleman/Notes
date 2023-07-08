@@ -1,5 +1,6 @@
 package com.itzik.notes.project.navigation
 
+import NoteScreen
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -13,7 +14,7 @@ import com.itzik.notes.project.screens.SplashScreen
 import com.itzik.notes.project.screens.InnerNoteScreen
 
 import com.itzik.notes.project.screens.NoteListScreen
-import com.itzik.notes.project.screens.NoteScreen
+
 
 import com.itzik.notes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -50,7 +51,7 @@ fun SetupNavGraph(
             composable(route = HomeGraph.Notes.route) {
                 NoteListScreen(coroutineScope=coroutineScope, modifier = Modifier, navHostController, noteViewModel)
             }
-            composable(route = HomeGraph.Note.route) {
+            composable(route = HomeGraph.NoteScreen.route) {
                 NoteScreen(navHostController, noteViewModel, coroutineScope = coroutineScope)
             }
             composable(route = HomeGraph.InnerNote.route) {
@@ -71,7 +72,7 @@ sealed class SplashGraph(val route: String) {
 
 sealed class HomeGraph(val route: String) {
     object Notes : HomeGraph(route = "noteList")
-    object Note : HomeGraph(route = "note")
+    object NoteScreen : HomeGraph(route = "note")
     object InnerNote: HomeGraph(route = "innerNote")
 }
 

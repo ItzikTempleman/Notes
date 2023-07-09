@@ -28,10 +28,6 @@ class NoteViewModel
 
     suspend fun saveNote(note: Note) = repository.saveNote(note)
 
-    fun updateNote(note: Note) {
-       // noteList.add(note)
-    }
-
     suspend fun deleteAllNotes() = repository.deleteAllNotes()
 
 }

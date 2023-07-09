@@ -204,7 +204,5 @@ suspend fun saveNote(newChar: String, noteViewModel: NoteViewModel) {
         timeStamp = time,
         fontSize = 16
     )
-    Log.d("TAG", "note: $note")
-    noteViewModel.updateNote(note)
     noteViewModel.saveNote(note)
 }

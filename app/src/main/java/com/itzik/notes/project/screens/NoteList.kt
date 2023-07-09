@@ -1,13 +1,9 @@
 package com.itzik.notes.project.screens
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -41,11 +37,11 @@ fun NoteListScreen(
 ) {
     var noteList by remember { mutableStateOf(mutableListOf<Note>()) }
 
-    if (noteList.isEmpty()) {
+
         coroutineScope.launch {
             noteViewModel.getAllNotes().collect {
                 noteList = it
-            }
+
         }
     }
 
@@ -95,7 +91,7 @@ fun NoteListScreen(
             onclick = {
                 coroutineScope.launch {
                     noteViewModel.deleteAllNotes()
-                    noteViewModel.getAllNotes()
+                    noteList= emptyList<Note>().toMutableList()
                 }
             },
             painter = painterResource(id = R.drawable.recycle_bin),
@@ -119,7 +115,6 @@ fun NoteListScreen(
         )
     }
 }
-
 
 
 

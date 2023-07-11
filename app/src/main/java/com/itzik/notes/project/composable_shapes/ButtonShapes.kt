@@ -1,4 +1,4 @@
-package com.itzik.notes.project.screens.shapes
+package com.itzik.notes.project.composable_shapes
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row

@@ -38,7 +38,7 @@ fun DrawerBody(
     itemList: List<MenuItem>,
     modifier: Modifier = Modifier,
     itemTextStyle: TextStyle = TextStyle(fontSize = 18.sp),
-    onItemClick: (MenuItem) -> Unit,
+    onClick: () -> Unit,
 ) {
     LazyColumn(modifier) {
         items(items = itemList) {
@@ -46,7 +46,7 @@ fun DrawerBody(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
-                        onItemClick(it)
+                        onClick()
                     }
                     .padding(16.dp)
             ) {

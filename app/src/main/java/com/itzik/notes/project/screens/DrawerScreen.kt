@@ -41,7 +41,7 @@ fun DrawerScreen(coroutineScope: CoroutineScope, modifier: Modifier) {
                     contentDescription = "",
                     icon = Icons.Default.Recycling
                 )
-            ), onItemClick = {
+            ), onClick = {
                 moveToDeletedNotesScreen()
             })
         }

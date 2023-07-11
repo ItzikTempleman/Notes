@@ -57,7 +57,6 @@ fun NoteListScreen(
             .constrainAs(drawerScreen) {
                 start.linkTo(parent.start)
             }
-            .zIndex(3f)
 
         )
         Text(

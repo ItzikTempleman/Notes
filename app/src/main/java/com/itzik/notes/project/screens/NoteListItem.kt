@@ -1,5 +1,6 @@
 package com.itzik.notes.project.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -59,5 +60,5 @@ fun NoteItem(
 }
 
 fun moveToDeletedNotesScreen() {
-
+Log.d("TAG","clicked")
 }

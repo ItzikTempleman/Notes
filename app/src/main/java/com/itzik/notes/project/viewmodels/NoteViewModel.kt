@@ -30,4 +30,5 @@ class NoteViewModel
 
     suspend fun deleteAllNotes() = repository.deleteAllNotes()
 
+    suspend fun addNoteToTrashBin(note:MutableList<Note>)=repository.saveDeletedNotesToTrashBin(note)
 }

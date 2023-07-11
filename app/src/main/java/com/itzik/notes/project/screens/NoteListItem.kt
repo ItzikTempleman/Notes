@@ -15,7 +15,7 @@ import com.itzik.notes.project.models.Note
 
 @Composable
 fun NoteItem(
-    note: Note
+    note: Note,
 ) {
     ConstraintLayout(
         modifier = Modifier
@@ -53,6 +53,11 @@ fun NoteItem(
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                 },
-            color = colorResource(id = R.color.black), thickness = 0.5.dp)
+            color = colorResource(id = R.color.black), thickness = 0.5.dp
+        )
     }
+}
+
+fun moveToDeletedNotesScreen() {
+
 }

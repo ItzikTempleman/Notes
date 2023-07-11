@@ -36,7 +36,7 @@ fun InnerNoteScreen(
                     end.linkTo(parent.end)
                 }
                 .clickable {
-                    navHostController.navigate(HomeGraph.NoteScreen.route)
+                    //navHostController.navigate(HomeGraph.NoteScreen.route)
                 },
             text = stringResource(id = R.string.edit),
             color = colorResource(id = R.color.black),

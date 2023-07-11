@@ -44,7 +44,7 @@ fun SplashScreen(navHostController: NavHostController) {
 
     LaunchedEffect(key1 = true) {
         startAnimation = true
-        delay(4500)
+        delay(2000)
 
         navHostController.popBackStack()
         navHostController.navigate(HomeGraph.Notes.route)
@@ -92,7 +92,7 @@ fun SplashScreen(navHostController: NavHostController) {
                 .alpha(alpha = alphaAnim.value),
             imageVector = Icons.Default.Note,
             contentDescription = stringResource(id = R.string.app_name),
-            tint = colorResource(id = R.color.button_purple)
+            tint = colorResource(id = R.color.white)
         )
 
     }

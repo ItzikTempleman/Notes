@@ -1,3 +1,4 @@
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -11,6 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
@@ -43,12 +45,12 @@ import java.time.format.DateTimeFormatter
 val fontSize = mutableIntStateOf(16)
 
 
-
+@SuppressLint("AutoboxingStateValueProperty")
 @Composable
 fun NoteScreen(
     navHostController: NavHostController,
     noteViewModel: NoteViewModel,
-    coroutineScope: CoroutineScope
+    coroutineScope: CoroutineScope,
 ) {
     var newChar by remember { mutableStateOf("") }
 
@@ -59,67 +61,56 @@ fun NoteScreen(
     ) {
         val (
             backBtn,
+            backText,
             fontSizeBox,
-            doneBtn,
-            contentTextField
+            contentTextField,
         ) = createRefs()
 
-        Button(
-            shape = RoundedCornerShape(20.dp),
-            colors = ButtonDefaults.buttonColors(colorResource(id = R.color.yellow)),
+
+
+
+        Icon(
             modifier = Modifier
-                .padding(4.dp)
+                .padding(vertical = 12.dp, horizontal = 8.dp)
                 .constrainAs(backBtn) {
                     start.linkTo(parent.start)
                     top.linkTo(parent.top)
+                }
+                .clickable {
+                    coroutineScope.launch {
+                        if (newChar.isNotBlank()) {
+                            saveNote(newChar, noteViewModel)
+                            newChar = ""
+                        }
+                        navHostController.navigate(HomeGraph.Notes.route)
+                    }
                 },
-            onClick = {
-                navHostController.navigate(HomeGraph.Notes.route)
-            }
-        ) {
-            Row {
-                Image(
-                    modifier= Modifier.padding(2.dp),
-                    painter = painterResource(id = R.drawable.back),
-                    contentDescription = stringResource(id = R.string.back),
-                )
-                Text(
-                    text = stringResource(id = R.string.notes),
-                    color = colorResource(id = R.color.black),
-                    fontSize = 14.sp
-                )
-            }
-        }
+            contentDescription = stringResource(id = R.string.back),
+            painter = painterResource(id = R.drawable.back),
+        )
 
 
         Text(
             modifier = Modifier
-                .padding(8.dp)
-                .constrainAs(doneBtn) {
-                    top.linkTo(parent.top)
-                    end.linkTo(parent.end)
-                }
-                .clickable {
-                    coroutineScope.launch {
-                        if(newChar.isNotBlank()) {
-                            saveNote(newChar, noteViewModel)
-                            newChar = ""
-                        }
-                    }
+                .padding( horizontal = 2.dp)
+                .constrainAs(backText) {
+                    start.linkTo(backBtn.end)
+                    top.linkTo(backBtn.top)
+                    bottom.linkTo(backBtn.bottom)
                 },
-            text = stringResource(id = R.string.done),
-            color = colorResource(id = R.color.black),
-            fontSize = 18.sp
+            text = stringResource(id = R.string.notes),
+            fontSize = 20.sp
         )
+
 
         Card(
             shape = RoundedCornerShape(6.dp), elevation = 4.dp,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(40.dp)
-                .padding(horizontal = 8.dp)
+                .height(56.dp)
+                .padding(8.dp)
                 .constrainAs(fontSizeBox) {
-                    top.linkTo(backBtn.bottom)
+                    top.linkTo(backText.bottom)
                 }
         ) {
             Row(

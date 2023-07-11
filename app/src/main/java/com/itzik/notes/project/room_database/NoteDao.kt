@@ -17,4 +17,11 @@ interface NoteDao {
 
     @Query("DELETE FROM $NOTE_TABLE")
     suspend fun deleteAllNotes()
+
+
+    @Insert
+    suspend fun saveNotesToTrashBin(notes: MutableList<Note>)
+
+
+
 }

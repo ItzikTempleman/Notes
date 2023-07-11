@@ -28,7 +28,7 @@ fun NotesLazyColumn(
                     .fillMaxHeight()
                     .clickable {
                         navHostController.currentBackStackEntry?.savedStateHandle?.set(key = "note", value = it)
-                        navHostController.navigate(route = HomeGraph.NoteScreen.route)
+                        navHostController.navigate(route = HomeGraph.InnerNote.route)
                     }) {
                     NoteItem(it)
                 }

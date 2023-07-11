@@ -1,9 +1,12 @@
 package com.itzik.notes.project.screens
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -16,6 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.itzik.notes.R
@@ -38,9 +42,9 @@ fun NoteListScreen(
     var noteList by remember { mutableStateOf(mutableListOf<Note>()) }
 
 
-        coroutineScope.launch {
-            noteViewModel.getAllNotes().collect {
-                noteList = it
+    coroutineScope.launch {
+        noteViewModel.getAllNotes().collect {
+            noteList = it
 
         }
     }
@@ -48,8 +52,14 @@ fun NoteListScreen(
     ConstraintLayout(
         modifier = modifier.fillMaxSize()
     ) {
-        val (noteListScreenTitle, createNote, removeAllBtn, noteListLazyColumn) = createRefs()
+        val (drawerScreen, noteListScreenTitle, createNote, removeAllBtn, noteListLazyColumn) = createRefs()
+        DrawerScreen(coroutineScope, modifier = Modifier
+            .constrainAs(drawerScreen) {
+                start.linkTo(parent.start)
+            }
+            .zIndex(3f)
 
+        )
         Text(
             text = if (noteList.isNotEmpty()) stringResource(id = R.string.notes)
             else stringResource(id = R.string.no_notes),
@@ -58,53 +68,44 @@ fun NoteListScreen(
                 .constrainAs(noteListScreenTitle) {
                     top.linkTo(parent.top)
                     start.linkTo(parent.start)
+                    end.linkTo(parent.end)
                 },
             fontSize = 20.sp
         )
 
-        ButtonCustomShape(
-            shape = RoundedCornerShape(20.dp),
-            colors = ButtonDefaults.buttonColors(colorResource(id = R.color.yellow)),
+        Icon(
             modifier = Modifier
-                .padding(4.dp)
+                .padding(12.dp)
                 .constrainAs(createNote) {
                     end.linkTo(parent.end)
                     top.linkTo(parent.top)
-                },
-            onclick = { navHostController.navigate(HomeGraph.NoteScreen.route) },
+                }
+                .clickable { navHostController.navigate(HomeGraph.NoteScreen.route) },
+            contentDescription = "create note",
             painter = painterResource(id = R.drawable.add_note),
-            contentDescription = stringResource(id = R.string.new_note),
-            fontSize = 14.sp,
-            text = stringResource(id = R.string.new_note),
-            imageModifier = Modifier.padding(2.dp)
         )
 
-        ButtonCustomShape(
-            shape = RoundedCornerShape(20.dp),
-            colors = ButtonDefaults.buttonColors(colorResource(id = R.color.white)),
+        Icon(
             modifier = Modifier
-                .padding(4.dp)
+                .padding(12.dp)
                 .constrainAs(removeAllBtn) {
                     end.linkTo(createNote.start)
                     top.linkTo(parent.top)
+                }.clickable {
+                    coroutineScope.launch {
+                        noteViewModel.deleteAllNotes()
+                        noteList = emptyList<Note>().toMutableList()
+                    }
                 },
-            onclick = {
-                coroutineScope.launch {
-                    noteViewModel.deleteAllNotes()
-                    noteList= emptyList<Note>().toMutableList()
-                }
-            },
-            painter = painterResource(id = R.drawable.recycle_bin),
             contentDescription = "delete all",
-            fontSize = 14.sp,
-            text = "",
-            imageModifier = Modifier
+            painter = painterResource(id = R.drawable.recycle_bin),
         )
+
 
         NotesLazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(4.dp)
+                .padding(vertical = 12.dp, horizontal = 4.dp)
                 .constrainAs(noteListLazyColumn) {
                     top.linkTo(createNote.bottom)
                     start.linkTo(parent.start)

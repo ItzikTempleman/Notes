@@ -1,10 +1,17 @@
 package com.itzik.notes.project.screens
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Recycling
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -12,6 +19,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -27,7 +35,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 
-@SuppressLint("CoroutineCreationDuringComposition", "MutableCollectionMutableState")
+@SuppressLint(
+    "CoroutineCreationDuringComposition", "MutableCollectionMutableState",
+    "UnusedMaterialScaffoldPaddingParameter"
+)
 @Composable
 fun NoteListScreen(
     coroutineScope: CoroutineScope,
@@ -44,70 +55,122 @@ fun NoteListScreen(
 
         }
     }
-    DrawerScreen(coroutineScope,scaffoldState)
-    ConstraintLayout(
-        modifier = modifier.fillMaxSize()
-    ) {
-        val ( noteListScreenTitle, createNote, removeAllBtn, noteListLazyColumn) = createRefs()
 
-        Text(
-            text = if (noteList.isNotEmpty()) stringResource(id = R.string.notes)
-            else stringResource(id = R.string.no_notes),
-            modifier = Modifier.zIndex(6f)
-                .padding(12.dp)
-                .constrainAs(noteListScreenTitle) {
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                },
-            fontSize = 20.sp
-        )
+    Scaffold(
+        modifier = modifier
+            .fillMaxSize()
+            .background(colorResource(id = R.color.white)),
+        scaffoldState = scaffoldState,
+        topBar = {
+            TopAppBar(
+                title = {
+                    ConstraintLayout(modifier.fillMaxWidth()) {
+                        val (title, delete, addNote) = createRefs()
+                        Text(
+                            modifier = Modifier.constrainAs(title){
+                                start.linkTo(parent.start)
+                            }
+                                .padding(12.dp),
+                            text = if (noteList.isNotEmpty()) stringResource(id = R.string.notes)
+                            else stringResource(id = R.string.no_notes),
+                            fontSize = 20.sp
+                        )
 
-        Icon(
-            modifier = Modifier.zIndex(6f)
-                .padding(12.dp)
-                .constrainAs(createNote) {
-                    end.linkTo(parent.end)
-                    top.linkTo(parent.top)
-                }
-                .clickable { navHostController.navigate(HomeGraph.NoteScreen.route) },
-            contentDescription = "create note",
-            painter = painterResource(id = R.drawable.add_note),
-        )
+                        Icon(
+                            modifier = Modifier.constrainAs(delete){
+                                end.linkTo(addNote.start)
+                            }
+                                .padding(12.dp)
 
-        Icon(
-            modifier = Modifier.zIndex(6f)
-                .padding(12.dp)
-                .constrainAs(removeAllBtn) {
-                    end.linkTo(createNote.start)
-                    top.linkTo(parent.top)
-                }.clickable {
-                    coroutineScope.launch {
-                        noteViewModel.deleteAllNotes()
-                        noteList = emptyList<Note>().toMutableList()
+                                .clickable {
+                                    coroutineScope.launch {
+                                        noteViewModel.deleteAllNotes()
+                                        noteList = emptyList<Note>().toMutableList()
+                                    }
+                                },
+                            contentDescription = "delete all",
+                            painter = painterResource(id = R.drawable.recycle_bin),
+                        )
+
+                        Icon(
+                            modifier = Modifier.constrainAs(addNote){
+                                end.linkTo(parent.end)
+                            }
+                                .padding(12.dp)
+                                .clickable { navHostController.navigate(HomeGraph.NoteScreen.route) },
+                            contentDescription = "create note",
+                            painter = painterResource(id = R.drawable.add_note),
+                        )
+
                     }
+
                 },
-            contentDescription = "delete all",
-            painter = painterResource(id = R.drawable.recycle_bin),
-        )
+
+                backgroundColor = colorResource(id = R.color.white),
+                navigationIcon = {
+                    Icon(imageVector = Icons.Default.Menu, contentDescription = "",
+                        modifier = Modifier
+                            .clickable {
+                                coroutineScope.launch {
+                                    scaffoldState.drawerState.open()
+                                }
+                            }
+                            .padding(start = 8.dp)
+                    )
+                }
+            )
+        },
+
+        drawerContent = {
+            Column(
+                Modifier
+                    .fillMaxWidth()
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Close,
+                    contentDescription = "",
+                    modifier = Modifier
+                        .clickable {
+                            coroutineScope.launch {
+                                scaffoldState.drawerState.close()
+                            }
+                        }
+                        .padding(start = 8.dp, top = 20.dp, bottom = 64.dp)
+                )
+
+                Icon(
+                    imageVector = Icons.Default.Recycling,
+                    contentDescription = "",
+                    modifier = Modifier
+                        .clickable {
+                            moveToDeletedNotesScreen()
+                        }
+                        .padding(start = 8.dp, bottom = 16.dp)
+                )
+            }
+        }
+    ) {
 
 
-        NotesLazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 12.dp, horizontal = 4.dp)
-                .constrainAs(noteListLazyColumn) {
-                    top.linkTo(createNote.bottom)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                },
-            notes = noteList,
-            navHostController = navHostController
-        )
+        ConstraintLayout(
+            modifier = modifier.fillMaxSize()
+        ) {
+            val (noteListLazyColumn) = createRefs()
+            NotesLazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 12.dp, horizontal = 4.dp)
+                    .constrainAs(noteListLazyColumn) {
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    },
+                notes = noteList,
+                navHostController = navHostController
+            )
+        }
     }
 }
-
-
 
 
 

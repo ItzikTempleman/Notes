@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -15,6 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.itzik.notes.R
@@ -35,28 +37,23 @@ fun NoteListScreen(
 ) {
     var noteList by remember { mutableStateOf(mutableListOf<Note>()) }
 
-
+    val scaffoldState = rememberScaffoldState()
     coroutineScope.launch {
         noteViewModel.getAllNotes().collect {
             noteList = it
 
         }
     }
-
+    DrawerScreen(coroutineScope,scaffoldState)
     ConstraintLayout(
         modifier = modifier.fillMaxSize()
     ) {
-        val (drawerScreen, noteListScreenTitle, createNote, removeAllBtn, noteListLazyColumn) = createRefs()
-        DrawerScreen(coroutineScope, modifier = Modifier
-            .constrainAs(drawerScreen) {
-                start.linkTo(parent.start)
-            }
+        val ( noteListScreenTitle, createNote, removeAllBtn, noteListLazyColumn) = createRefs()
 
-        )
         Text(
             text = if (noteList.isNotEmpty()) stringResource(id = R.string.notes)
             else stringResource(id = R.string.no_notes),
-            modifier = Modifier
+            modifier = Modifier.zIndex(6f)
                 .padding(12.dp)
                 .constrainAs(noteListScreenTitle) {
                     top.linkTo(parent.top)
@@ -67,7 +64,7 @@ fun NoteListScreen(
         )
 
         Icon(
-            modifier = Modifier
+            modifier = Modifier.zIndex(6f)
                 .padding(12.dp)
                 .constrainAs(createNote) {
                     end.linkTo(parent.end)
@@ -79,7 +76,7 @@ fun NoteListScreen(
         )
 
         Icon(
-            modifier = Modifier
+            modifier = Modifier.zIndex(6f)
                 .padding(12.dp)
                 .constrainAs(removeAllBtn) {
                     end.linkTo(createNote.start)

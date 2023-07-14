@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.itzik.notes.project.models.Note
+import com.itzik.notes.project.screens.DeletedNotesScreen
 import com.itzik.notes.project.screens.SplashScreen
 
 
@@ -61,6 +62,10 @@ fun SetupNavGraph(
                     InnerNoteScreen(navHostController=navHostController, noteArg=noteArg)
                 }
             }
+
+            composable(route = HomeGraph.DeletedNotes.route){
+                DeletedNotesScreen(coroutineScope = coroutineScope, modifier = Modifier, navHostController = navHostController, noteViewModel = noteViewModel)
+            }
         }
     }
 }
@@ -74,7 +79,6 @@ sealed class HomeGraph(val route: String) {
     object Notes : HomeGraph(route = "noteList")
     object NoteScreen : HomeGraph(route = "note")
     object InnerNote: HomeGraph(route = "innerNote")
-
     object DeletedNotes:HomeGraph(route = "deleted notes")
 }
 

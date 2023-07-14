@@ -3,6 +3,8 @@ package com.itzik.notes.project.screens
 import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -32,6 +34,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.itzik.notes.R
+import com.itzik.notes.project.models.MenuItem
 import com.itzik.notes.project.models.Note
 import com.itzik.notes.project.navigation.HomeGraph
 import com.itzik.notes.project.viewmodels.NoteViewModel
@@ -127,37 +130,48 @@ fun NoteListScreen(
         },
 
         drawerContent = {
-            Column(
-                modifier = Modifier
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Close,
-                    contentDescription = "",
-                    modifier = Modifier
-                        .clickable {
+            DrawerBody(
+                items = listOf(
+                    MenuItem(
+                        id = "Close",
+                        title = "Close",
+                        contentDescription = "",
+                        vectorIcon = Icons.Default.Close,
+                        imageIcon = null
+                    ),
+                    MenuItem(
+
+                        id = "Empty trash bin",
+                        title = "Empty trash bin",
+                        contentDescription = "",
+                        vectorIcon = Icons.Default.Recycling,
+                        imageIcon = null
+                    ),
+                    MenuItem(
+                        id = "Deleted items folder",
+                        title = "Deleted items folder",
+                        contentDescription = "",
+                        vectorIcon = null,
+                        imageIcon = painterResource(R.drawable.deleted_folder)
+                    ),
+                ), onClick = {
+                    when (it.id) {
+                        "Close" ->
                             coroutineScope.launch {
                                 scaffoldState.drawerState.close()
                             }
-                        }
-                        .padding(start = 8.dp, top = 20.dp, bottom = 64.dp)
-                )
 
-                Icon(
-                    imageVector = Icons.Default.Recycling,
-                    contentDescription = "",
-                    modifier = Modifier
-                        .clickable {
-                            isDialogOpen.value = true
-                        }
-                        .padding(start = 8.dp, bottom = 16.dp)
-                )
-            }
+                        "Empty trash bin" -> isDialogOpen.value = true
+
+                        "Deleted items folder" -> navHostController.navigate(HomeGraph.DeletedNotes.route)
+                    }
+                }
+            )
         }
     ) {
         if (isDialogOpen.value && noteList.isNotEmpty()) {
-            AlertDialogScreen(isDialogOpen, noteViewModel,coroutineScope)
+            AlertDialogScreen(isDialogOpen, noteViewModel, coroutineScope)
         }
-
         ConstraintLayout(
             modifier = modifier.fillMaxSize()
         ) {
@@ -179,16 +193,36 @@ fun NoteListScreen(
     }
 }
 
-fun moveToDeletedNotesScreen() {
-
-}
-
 fun customShape() = object : Shape {
     override fun createOutline(
         size: Size,
         layoutDirection: LayoutDirection,
         density: Density,
     ): Outline {
-        return Outline.Rectangle(Rect(0f, 0f, 160f /* width */, 2500f /* height */))
+        return Outline.Rectangle(Rect(0f, 0f, 550f /* width */, 500f /* height */))
+    }
+}
+
+@Composable
+fun DrawerBody(
+    items: List<MenuItem>,
+    modifier: Modifier = Modifier,
+    onClick: (MenuItem) -> Unit,
+) {
+    LazyColumn(modifier) {
+        items(items) { item ->
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        onClick(item)
+                    }
+                    .padding(16.dp)
+            ) {
+                item.vectorIcon?.let { Icon(imageVector = it, contentDescription = null) }
+                item.imageIcon?.let { Icon(painter = it, contentDescription = null) }
+                Text(text = item.title, modifier = Modifier.padding(horizontal = 8.dp))
+            }
+        }
     }
 }

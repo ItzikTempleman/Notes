@@ -74,5 +74,7 @@ sealed class HomeGraph(val route: String) {
     object Notes : HomeGraph(route = "noteList")
     object NoteScreen : HomeGraph(route = "note")
     object InnerNote: HomeGraph(route = "innerNote")
+
+    object DeletedNotes:HomeGraph(route = "deleted notes")
 }
 

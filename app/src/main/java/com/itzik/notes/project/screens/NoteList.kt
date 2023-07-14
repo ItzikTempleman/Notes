@@ -1,12 +1,10 @@
 package com.itzik.notes.project.screens
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Shapes
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
@@ -20,13 +18,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.itzik.notes.R
@@ -35,7 +37,6 @@ import com.itzik.notes.project.navigation.HomeGraph
 import com.itzik.notes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-
 
 @SuppressLint(
     "CoroutineCreationDuringComposition", "MutableCollectionMutableState",
@@ -49,8 +50,9 @@ fun NoteListScreen(
     noteViewModel: NoteViewModel,
 ) {
     var noteList by remember { mutableStateOf(mutableListOf<Note>()) }
-
     val scaffoldState = rememberScaffoldState()
+    val isDialogOpen = remember { mutableStateOf(false) }
+
     coroutineScope.launch {
         noteViewModel.getAllNotes().collect {
             noteList = it
@@ -59,19 +61,19 @@ fun NoteListScreen(
     }
 
     Scaffold(
-        modifier = modifier
-            .fillMaxSize()
-            .background(colorResource(id = R.color.white)),
+        modifier = modifier,
         scaffoldState = scaffoldState,
+        drawerShape = customShape(),
         topBar = {
             TopAppBar(
                 title = {
                     ConstraintLayout(modifier.fillMaxWidth()) {
                         val (title, delete, addNote) = createRefs()
                         Text(
-                            modifier = Modifier.constrainAs(title){
-                                start.linkTo(parent.start)
-                            }
+                            modifier = Modifier
+                                .constrainAs(title) {
+                                    start.linkTo(parent.start)
+                                }
                                 .padding(12.dp),
                             text = if (noteList.isNotEmpty()) stringResource(id = R.string.notes)
                             else stringResource(id = R.string.no_notes),
@@ -79,14 +81,14 @@ fun NoteListScreen(
                         )
 
                         Icon(
-                            modifier = Modifier.constrainAs(delete){
-                                end.linkTo(addNote.start)
-                            }
+                            modifier = Modifier
+                                .constrainAs(delete) {
+                                    end.linkTo(addNote.start)
+                                }
                                 .padding(12.dp)
 
                                 .clickable {
                                     coroutineScope.launch {
-                                        noteViewModel.deleteAllNotes()
                                         noteList = emptyList<Note>().toMutableList()
                                     }
                                 },
@@ -95,9 +97,10 @@ fun NoteListScreen(
                         )
 
                         Icon(
-                            modifier = Modifier.constrainAs(addNote){
-                                end.linkTo(parent.end)
-                            }
+                            modifier = Modifier
+                                .constrainAs(addNote) {
+                                    end.linkTo(parent.end)
+                                }
                                 .padding(12.dp)
                                 .clickable { navHostController.navigate(HomeGraph.NoteScreen.route) },
                             contentDescription = "create note",
@@ -125,7 +128,7 @@ fun NoteListScreen(
 
         drawerContent = {
             Column(
-                Modifier.width(60.dp)
+                modifier = Modifier
             ) {
                 Icon(
                     imageVector = Icons.Default.Close,
@@ -144,18 +147,21 @@ fun NoteListScreen(
                     contentDescription = "",
                     modifier = Modifier
                         .clickable {
-                            moveToDeletedNotesScreen()
+                            isDialogOpen.value = true
                         }
                         .padding(start = 8.dp, bottom = 16.dp)
                 )
             }
         }
     ) {
-
+        if (isDialogOpen.value && noteList.isNotEmpty()) {
+            AlertDialogScreen(isDialogOpen, noteViewModel,coroutineScope)
+        }
 
         ConstraintLayout(
             modifier = modifier.fillMaxSize()
         ) {
+
             val (noteListLazyColumn) = createRefs()
             NotesLazyColumn(
                 modifier = Modifier
@@ -173,11 +179,16 @@ fun NoteListScreen(
     }
 }
 
+fun moveToDeletedNotesScreen() {
 
+}
 
-
-
-
-
-
-
+fun customShape() = object : Shape {
+    override fun createOutline(
+        size: Size,
+        layoutDirection: LayoutDirection,
+        density: Density,
+    ): Outline {
+        return Outline.Rectangle(Rect(0f, 0f, 160f /* width */, 2500f /* height */))
+    }
+}

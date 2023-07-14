@@ -58,7 +58,3 @@ fun NoteItem(
         )
     }
 }
-
-fun moveToDeletedNotesScreen() {
-Log.d("TAG","clicked")
-}

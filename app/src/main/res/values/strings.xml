@@ -25,6 +25,7 @@
     <string name="birthdate">Birth date</string>
     <string name="phone_number">phone number</string>
     <string name="gender">Gender</string>
-
+    <string name="are_you_sure"> Are you sure you want to delete all of your notes?</string>
+    Are you sure you want to delete all of your notes?"
 
 </resources>

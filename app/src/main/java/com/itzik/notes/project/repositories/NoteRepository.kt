@@ -6,6 +6,6 @@ interface NoteRepository {
     suspend fun deleteAllNotes()
     suspend fun getAllNotes(): MutableList<Note>
     suspend fun saveNote(note: Note)
-
     suspend fun saveDeletedNotesToTrashBin(notes:MutableList<Note>)
+    suspend fun getAllDeletedNotes(): MutableList<Note>
 }

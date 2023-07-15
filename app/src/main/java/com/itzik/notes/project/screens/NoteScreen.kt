@@ -193,7 +193,8 @@ suspend fun saveNote(newChar: String, noteViewModel: NoteViewModel) {
     val note = Note(
         noteContent = newChar,
         timeStamp = time,
-        fontSize = 16
+        fontSize = 16,
+        isInTrashBin = false
     )
     noteViewModel.saveNote(note)
 }

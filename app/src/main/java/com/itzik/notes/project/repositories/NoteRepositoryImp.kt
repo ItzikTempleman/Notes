@@ -8,10 +8,11 @@ import javax.inject.Singleton
 class NoteRepositoryImp @Inject constructor(
 
     @Singleton
-    private val noteDao: NoteDao
-    ) : NoteRepository {
+    private val noteDao: NoteDao,
+) : NoteRepository {
     override suspend fun deleteAllNotes() = noteDao.deleteAllNotes()
-    override suspend fun getAllNotes(): MutableList<Note> =noteDao.getAllNotes()
-    override suspend fun saveNote(note: Note) =noteDao.saveNote(note)
-    override suspend fun saveDeletedNotesToTrashBin(notes: MutableList<Note>) =noteDao.saveNotesToTrashBin(notes)
+    override suspend fun getAllNotes(): MutableList<Note> = noteDao.getAllNotes()
+    override suspend fun saveNote(note: Note) = noteDao.saveNote(note)
+    override suspend fun saveDeletedNotesToTrashBin(notes: MutableList<Note>) = noteDao.saveNotesToTrashBin(notes)
+    override suspend fun getAllDeletedNotes(): MutableList<Note> = noteDao.getAllDeletedNotes()
 }

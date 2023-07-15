@@ -14,7 +14,8 @@ data class Note(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val timeStamp: String,
-    val fontSize: Int
+    val fontSize: Int,
+    var isInTrashBin: Boolean =false
 ) : Parcelable
 
 

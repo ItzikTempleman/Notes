@@ -94,8 +94,8 @@ fun NoteListScreen(
                                 .padding(12.dp)
                                 .clickable {
                                     coroutineScope.launch {
-                                        noteList = emptyList<Note>().toMutableList()
                                         noteViewModel.addNoteToTrashBin(noteList)
+                                        noteList = emptyList<Note>().toMutableList()
                                     }
                                 },
                             contentDescription = "delete all",

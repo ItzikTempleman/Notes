@@ -2,6 +2,7 @@ package com.itzik.notes.project.room_database
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.itzik.notes.project.models.Note
 import com.itzik.notes.project.utils.Constants.NOTE_TABLE
@@ -9,7 +10,7 @@ import com.itzik.notes.project.utils.Constants.NOTE_TABLE
 @Dao
 interface NoteDao {
 
-    @Query("SELECT * FROM $NOTE_TABLE")
+    @Query("SELECT * FROM $NOTE_TABLE WHERE isInTrashBin=0" )
     suspend fun getAllNotes(): MutableList<Note>
 
     @Insert
@@ -18,10 +19,10 @@ interface NoteDao {
     @Query("DELETE FROM $NOTE_TABLE")
     suspend fun deleteAllNotes()
 
-
-    @Insert
+    @Insert (onConflict = OnConflictStrategy.IGNORE)
     suspend fun saveNotesToTrashBin(notes: MutableList<Note>)
 
-
+    @Query("SELECT * FROM $NOTE_TABLE WHERE isInTrashBin=1" )
+    suspend fun getAllDeletedNotes(): MutableList<Note>
 
 }

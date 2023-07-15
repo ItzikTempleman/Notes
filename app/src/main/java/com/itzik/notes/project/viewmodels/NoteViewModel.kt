@@ -19,9 +19,9 @@ class NoteViewModel
 
     suspend fun getAllNotes(): Flow<MutableList<Note>> {
         val noteList = flow {
-            val updateFlowList = repository.getAllNotes()
-            if (updateFlowList.isNotEmpty()) {
-                emit(updateFlowList)
+            val updatedFlowList = repository.getAllNotes()
+            if (updatedFlowList.isNotEmpty()) {
+                emit(updatedFlowList)
             } else return@flow
         }
         return noteList
@@ -45,10 +45,14 @@ class NoteViewModel
 
     suspend fun getAllDeletedNotes(): Flow<MutableList<Note>> {
         val deletedNoteList = flow {
-            val updateFlowList = repository.getAllDeletedNotes()
-            if (updateFlowList.isNotEmpty()) {
-                emit(updateFlowList)
+            val updatedList = repository.getAllDeletedNotes()
+            if (updatedList.isNotEmpty()) {
+//                for (deletedItem in updatedList.iterator()) {
+//                    Log.d("tag", "deleted item: $deletedItem")
+//                }
+                emit(updatedList)
             } else return@flow
+
         }
         return deletedNoteList
     }

@@ -15,7 +15,7 @@ data class Note(
     val id: Int = 0,
     val timeStamp: String,
     val fontSize: Int,
-    var isInTrashBin: Boolean =false
+    var isInTrashBin: Boolean
 ) : Parcelable
 
 

@@ -13,6 +13,9 @@ interface NoteDao {
     @Query("SELECT * FROM $NOTE_TABLE WHERE isInTrashBin=0" )
     suspend fun getAllNotes(): MutableList<Note>
 
+    @Query("SELECT * FROM $NOTE_TABLE WHERE isInTrashBin=1" )
+    suspend fun getAllDeletedNotes(): MutableList<Note>
+
     @Insert
     suspend fun saveNote(note: Note)
 
@@ -21,8 +24,4 @@ interface NoteDao {
 
     @Insert (onConflict = OnConflictStrategy.IGNORE)
     suspend fun saveNotesToTrashBin(notes: MutableList<Note>)
-
-    @Query("SELECT * FROM $NOTE_TABLE WHERE isInTrashBin=1" )
-    suspend fun getAllDeletedNotes(): MutableList<Note>
-
 }

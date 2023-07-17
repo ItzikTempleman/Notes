@@ -29,6 +29,12 @@ class NoteViewModel
 
     suspend fun saveNote(note: Note) = repository.saveNote(note)
 
+    suspend fun deleteAllNotes() = repository.deleteAllNotes()
+
+
+
+
+
     suspend fun addNoteToTrashBin(notes: MutableList<Note>) {
         val deletedNotesList = emptyList<Note>().toMutableList()
         for (note in notes.iterator()) {
@@ -36,25 +42,15 @@ class NoteViewModel
             deletedNotesList.addAll(notes)
         }
         repository.saveDeletedNotesToTrashBin(deletedNotesList)
-        Log.d("tag", "deleted notes list: $deletedNotesList")
-
     }
-
-    suspend fun deleteAllNotes() = repository.deleteAllNotes()
-
 
     suspend fun getAllDeletedNotes(): Flow<MutableList<Note>> {
         val deletedNoteList = flow {
             val updatedList = repository.getAllDeletedNotes()
             if (updatedList.isNotEmpty()) {
-//                for (deletedItem in updatedList.iterator()) {
-//                    Log.d("tag", "deleted item: $deletedItem")
-//                }
                 emit(updatedList)
             } else return@flow
-
         }
         return deletedNoteList
     }
-
 }

@@ -1,5 +1,6 @@
 package com.itzik.notes.project.repositories
 
+import android.util.Log
 import com.itzik.notes.project.models.Note
 import com.itzik.notes.project.room_database.NoteDao
 import javax.inject.Inject
@@ -13,6 +14,6 @@ class NoteRepositoryImp @Inject constructor(
     override suspend fun deleteAllNotes() = noteDao.deleteAllNotes()
     override suspend fun getAllNotes(): MutableList<Note> = noteDao.getAllNotes()
     override suspend fun saveNote(note: Note) = noteDao.saveNote(note)
-    override suspend fun saveDeletedNotesToTrashBin(notes: MutableList<Note>) = noteDao.saveNotesToTrashBin(notes)
+    override suspend fun saveDeletedNotesToTrashBin(notes: MutableList<Note>) =noteDao.saveNotesToTrashBin(notes)
     override suspend fun getAllDeletedNotes(): MutableList<Note> = noteDao.getAllDeletedNotes()
 }

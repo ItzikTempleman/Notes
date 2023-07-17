@@ -1,6 +1,4 @@
 import android.annotation.SuppressLint
-import android.util.Log
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,8 +7,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -42,9 +38,9 @@ import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
+
+
 val fontSize = mutableIntStateOf(16)
-
-
 @SuppressLint("AutoboxingStateValueProperty")
 @Composable
 fun NoteScreen(
@@ -79,7 +75,7 @@ fun NoteScreen(
                 .clickable {
                     coroutineScope.launch {
                         if (newChar.isNotBlank()) {
-                            saveNote(newChar, noteViewModel)
+                            saveNote(newChar, fontSize.value.toString() , noteViewModel)
                             newChar = ""
                         }
                         navHostController.navigate(HomeGraph.Notes.route)
@@ -188,12 +184,12 @@ fun NoteScreen(
     }
 }
 
-suspend fun saveNote(newChar: String, noteViewModel: NoteViewModel) {
+suspend fun saveNote(newChar: String, fontSize: String, noteViewModel: NoteViewModel) {
     val time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
     val note = Note(
         noteContent = newChar,
         timeStamp = time,
-        fontSize = 16,
+        fontSize = fontSize.toInt(),
         isInTrashBin = false
     )
     noteViewModel.saveNote(note)

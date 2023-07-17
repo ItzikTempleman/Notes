@@ -8,7 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.itzik.notes.project.models.Note
-import com.itzik.notes.project.screens.DeletedNotesScreen
+import com.itzik.notes.project.screens.TrashBinScreen
 import com.itzik.notes.project.screens.SplashScreen
 
 
@@ -64,7 +64,7 @@ fun SetupNavGraph(
             }
 
             composable(route = HomeGraph.DeletedNotes.route){
-                DeletedNotesScreen(coroutineScope = coroutineScope, modifier = Modifier, navHostController = navHostController, noteViewModel = noteViewModel)
+                TrashBinScreen(coroutineScope = coroutineScope, modifier = Modifier, navHostController = navHostController, noteViewModel = noteViewModel)
             }
         }
     }

@@ -34,7 +34,7 @@ fun AlertDialogScreen(
                 TextButton(onClick = {
                     isDialogOpen.value = false
                     coroutineScope.launch {
-                        noteViewModel.deleteAllNotes()
+                        noteViewModel.emptyTrashBin()
                     }
 
                 }) {

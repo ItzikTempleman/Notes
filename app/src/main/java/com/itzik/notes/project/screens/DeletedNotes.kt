@@ -17,29 +17,28 @@ import androidx.navigation.NavHostController
 import com.itzik.notes.project.models.Note
 import com.itzik.notes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @SuppressLint("CoroutineCreationDuringComposition", "MutableCollectionMutableState")
 @Composable
-fun DeletedNotesScreen(
+fun TrashBinScreen(
     coroutineScope: CoroutineScope,
     modifier: Modifier,
     navHostController: NavHostController,
-    noteViewModel: NoteViewModel
+    noteViewModel: NoteViewModel,
 ) {
     var deletedNoteList by remember { mutableStateOf(mutableListOf<Note>()) }
 
     coroutineScope.launch {
         noteViewModel.getAllDeletedNotes().collect {
-            deletedNoteList=it
+            deletedNoteList = it
         }
     }
 
     ConstraintLayout(modifier = modifier.fillMaxSize()) {
         val (titleText, deletedNotesList) = createRefs()
         Text(
-            text = "Deleted Notes",
+            text = "Trash Bin",
             fontSize = 20.sp,
             fontFamily = FontFamily.SansSerif,
             color = Color.Blue,
@@ -56,8 +55,8 @@ fun DeletedNotesScreen(
                 end.linkTo(parent.end)
                 top.linkTo(titleText.bottom)
             },
-            notes =deletedNoteList,
-            navHostController =navHostController
+            notes = deletedNoteList,
+            navHostController = navHostController
         )
 
     }

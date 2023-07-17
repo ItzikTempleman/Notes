@@ -64,6 +64,7 @@ fun NoteListScreen(
     noteViewModel: NoteViewModel,
 ) {
     var noteList by remember { mutableStateOf(mutableListOf<Note>()) }
+    var deletedNoteList by remember { mutableStateOf(mutableListOf<Note>()) }
     val scaffoldState = rememberScaffoldState()
     val isDialogOpen = remember { mutableStateOf(false) }
 
@@ -71,6 +72,12 @@ fun NoteListScreen(
         noteViewModel.getAllNotes().collect {
             noteList = it
 
+        }
+    }
+
+    coroutineScope.launch {
+        noteViewModel.getAllDeletedNotes().collect {
+            deletedNoteList = it
         }
     }
 
@@ -151,7 +158,6 @@ fun NoteListScreen(
                         imageIcon = null
                     ),
                     MenuItem(
-
                         id = "Empty trash bin",
                         title = "Empty trash bin",
                         contentDescription = "",
@@ -159,8 +165,8 @@ fun NoteListScreen(
                         imageIcon = null
                     ),
                     MenuItem(
-                        id = "Deleted items folder",
-                        title = "Deleted items folder",
+                        id = "Trash bin",
+                        title = "Trash bin",
                         contentDescription = "",
                         vectorIcon = null,
                         imageIcon = painterResource(R.drawable.deleted_folder)
@@ -174,13 +180,13 @@ fun NoteListScreen(
 
                         "Empty trash bin" -> isDialogOpen.value = true
 
-                        "Deleted items folder" -> navHostController.navigate(HomeGraph.DeletedNotes.route)
+                        "Trash bin" -> navHostController.navigate(HomeGraph.DeletedNotes.route)
                     }
                 }
             )
         }
     ) {
-        if (isDialogOpen.value && noteList.isNotEmpty()) {
+        if (isDialogOpen.value && deletedNoteList.isNotEmpty()) {
             AlertDialogScreen(isDialogOpen, noteViewModel, coroutineScope)
         }
         ConstraintLayout(

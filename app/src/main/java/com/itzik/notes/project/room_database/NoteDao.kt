@@ -9,19 +9,15 @@ import com.itzik.notes.project.utils.Constants.NOTE_TABLE
 
 @Dao
 interface NoteDao {
-
-    @Query("SELECT * FROM $NOTE_TABLE WHERE isInTrashBin=0" )
-    suspend fun getAllNotes(): MutableList<Note>
-
-    @Query("SELECT * FROM $NOTE_TABLE WHERE isInTrashBin=1" )
-    suspend fun getAllDeletedNotes(): MutableList<Note>
+    @Query("SELECT * FROM $NOTE_TABLE WHERE isInTrashBin=:deletedOnly" )
+    suspend fun getNotes(deletedOnly: Boolean = false): MutableList<Note>
 
     @Insert
     suspend fun saveNote(note: Note)
 
-    @Query("DELETE FROM $NOTE_TABLE")
-    suspend fun deleteAllNotes()
+    @Query("DELETE FROM $NOTE_TABLE WHERE isInTrashBin=1")
+    suspend fun emptyTrashBin()
 
-    @Insert (onConflict = OnConflictStrategy.IGNORE)
+    @Insert (onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveNotesToTrashBin(notes: MutableList<Note>)
 }

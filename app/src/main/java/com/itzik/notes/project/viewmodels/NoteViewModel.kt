@@ -1,6 +1,5 @@
 package com.itzik.notes.project.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.itzik.notes.project.models.Note
 import com.itzik.notes.project.repositories.NoteRepository
@@ -29,11 +28,7 @@ class NoteViewModel
 
     suspend fun saveNote(note: Note) = repository.saveNote(note)
 
-    suspend fun deleteAllNotes() = repository.deleteAllNotes()
-
-
-
-
+    suspend fun emptyTrashBin() = repository.emptyTrashBin()
 
     suspend fun addNoteToTrashBin(notes: MutableList<Note>) {
         val deletedNotesList = emptyList<Note>().toMutableList()

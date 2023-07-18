@@ -21,6 +21,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.itzik.notes.R
 import com.itzik.notes.project.models.Note
+import com.itzik.notes.project.navigation.HomeGraph
 import com.itzik.notes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -48,13 +49,41 @@ fun ArchivedScreen(
     }
 
     ConstraintLayout(modifier = modifier.fillMaxSize()) {
-        val (titleText, deleteAll,deletedNotesList) = createRefs()
+        val (backBtn,backText, titleText, deleteAll,deletedNotesList) = createRefs()
+                Icon(
+                    modifier = Modifier
+                        .padding(top = 12.dp, start = 8.dp)
+                        .constrainAs(backBtn) {
+                            start.linkTo(parent.start)
+                            top.linkTo(parent.top)
+                        }
+                        .clickable {
+
+                                navHostController.navigate(HomeGraph.Notes.route)
+
+                        },
+                    contentDescription = stringResource(id = R.string.back),
+                    painter = painterResource(id = R.drawable.back),
+                )
+
+
+                Text(
+                    modifier = Modifier.padding(top=8.dp)
+                        .constrainAs(backText) {
+                            start.linkTo(backBtn.end)
+                            top.linkTo(backBtn.top)
+                            bottom.linkTo(backBtn.bottom)
+                        },
+                    text = stringResource(id = R.string.back_to_notes),
+                    fontSize = 12.sp
+                )
         Text(
             text = stringResource(id = R.string.archived_notes),
             fontSize = 20.sp,
             color = colorResource(id = R.color.black),
             modifier = modifier.constrainAs(titleText) {
                 start.linkTo(parent.start)
+                end.linkTo(parent.end)
                 top.linkTo(parent.top)
             }.padding(8.dp)
         )

@@ -29,4 +29,5 @@
     <string name="delete">מחיקה?</string>
     <string name="confirm">אישור</string>
     <string name="cancel">ביטול</string>
+    <string name="back_to_notes">חזרה לפתקים שלך</string>
 </resources>

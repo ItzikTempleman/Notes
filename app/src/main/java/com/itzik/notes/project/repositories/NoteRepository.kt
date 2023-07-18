@@ -8,4 +8,6 @@ interface NoteRepository {
     suspend fun saveNote(note: Note)
     suspend fun saveDeletedNotesToTrashBin(notes:MutableList<Note>)
     suspend fun getAllDeletedNotes(): MutableList<Note>
+
+    suspend fun archiveANote(note:Note)
 }

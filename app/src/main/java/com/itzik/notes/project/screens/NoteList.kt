@@ -161,6 +161,7 @@ fun NoteListScreen(
 
             val (noteListLazyColumn) = createRefs()
             NotesLazyColumn(
+                noteViewModel=noteViewModel,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 12.dp, horizontal = 4.dp)
@@ -170,11 +171,21 @@ fun NoteListScreen(
                         end.linkTo(parent.end)
                     },
                 notes = noteList,
-                navHostController = navHostController
-            )
+                navHostController = navHostController,
+                coroutineScope=coroutineScope
+                )
         }
     }
 }
+
+
+
+
+
+
+
+
+
 
 fun customShape() = object : Shape {
     override fun createOutline(

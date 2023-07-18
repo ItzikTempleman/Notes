@@ -48,4 +48,6 @@ class NoteViewModel
         }
         return deletedNoteList
     }
+
+    suspend fun archiveANote(note: Note)= repository.archiveANote(note)
 }

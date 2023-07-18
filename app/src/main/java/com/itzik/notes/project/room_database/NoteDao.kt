@@ -20,4 +20,8 @@ interface NoteDao {
 
     @Insert (onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveNotesToTrashBin(notes: MutableList<Note>)
+
+    @Insert (onConflict = OnConflictStrategy.REPLACE)
+    fun archiveSingleNote(note:Note)
+
 }

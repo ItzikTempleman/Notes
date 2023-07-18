@@ -15,4 +15,6 @@ class NoteRepositoryImp @Inject constructor(
     override suspend fun saveNote(note: Note) = noteDao.saveNote(note)
     override suspend fun saveDeletedNotesToTrashBin(notes: MutableList<Note>) =noteDao.saveNotesToTrashBin(notes)
     override suspend fun getAllDeletedNotes(): MutableList<Note> = noteDao.getNotes(true)
+    override suspend fun archiveANote(note: Note) =noteDao.archiveSingleNote(note)
+
 }

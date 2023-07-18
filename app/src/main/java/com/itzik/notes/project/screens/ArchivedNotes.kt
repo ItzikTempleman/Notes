@@ -58,9 +58,7 @@ fun ArchivedScreen(
                             top.linkTo(parent.top)
                         }
                         .clickable {
-
                                 navHostController.navigate(HomeGraph.Notes.route)
-
                         },
                     contentDescription = stringResource(id = R.string.back),
                     painter = painterResource(id = R.drawable.back),
@@ -106,7 +104,9 @@ fun ArchivedScreen(
                 top.linkTo(titleText.bottom)
             },
             notes = deletedNoteList,
-            navHostController = navHostController
+            navHostController = navHostController,
+            coroutineScope=coroutineScope,
+            noteViewModel = noteViewModel
         )
 
     }

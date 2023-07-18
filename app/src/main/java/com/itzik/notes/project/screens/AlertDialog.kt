@@ -8,6 +8,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import com.itzik.notes.R
+import com.itzik.notes.project.models.Note
 import com.itzik.notes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -16,13 +17,15 @@ import kotlinx.coroutines.launch
 fun AlertDialogScreen(
     isDialogOpen: MutableState<Boolean>,
     noteViewModel: NoteViewModel,
-    coroutineScope: CoroutineScope
-) {
+    coroutineScope: CoroutineScope,
+    deletedNoteList: MutableList<Note>,
+
+    ) {
     if (isDialogOpen.value) {
 
         AlertDialog(
             onDismissRequest = { isDialogOpen.value = true },
-            title = { Text(text = "Deleter?", color = colorResource(id = R.color.black)) },
+            title = { Text(text = stringResource(id = R.string.delete), color = colorResource(id = R.color.black)) },
             text = {
                 Text(
                     text = stringResource(id = R.string.are_you_sure),
@@ -35,11 +38,12 @@ fun AlertDialogScreen(
                     isDialogOpen.value = false
                     coroutineScope.launch {
                         noteViewModel.emptyTrashBin()
+                        deletedNoteList.clear()
                     }
 
                 }) {
                     Text(
-                        text = "Confirm",
+                        text = stringResource(id = R.string.confirm),
                         color = colorResource(id = R.color.black)
                     )
                 }
@@ -49,15 +53,15 @@ fun AlertDialogScreen(
                     isDialogOpen.value = false
                 }) {
                     Text(
-                        text = "Cancel",
+                        text = stringResource(id = R.string.cancel),
                         color = colorResource(id = R.color.black)
                     )
                 }
 
             },
 
-            backgroundColor = colorResource(id = R.color.tea_green),
-            contentColor = colorResource(id = R.color.white)
+            backgroundColor = colorResource(id = R.color.white),
+            contentColor = colorResource(id = R.color.black)
         )
     }
 }

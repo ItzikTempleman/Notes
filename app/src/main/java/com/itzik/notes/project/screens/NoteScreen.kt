@@ -1,4 +1,8 @@
 import android.annotation.SuppressLint
+import androidx.activity.ComponentActivity
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,12 +17,15 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -39,8 +46,8 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 
-
 val fontSize = mutableIntStateOf(16)
+
 @SuppressLint("AutoboxingStateValueProperty")
 @Composable
 fun NoteScreen(
@@ -49,6 +56,36 @@ fun NoteScreen(
     coroutineScope: CoroutineScope,
 ) {
     var newChar by remember { mutableStateOf("") }
+
+    @Composable
+    fun BackPressHandler(onBackPressed: () -> Unit) {
+        val backDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
+
+        val backCallback = remember {
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    onBackPressed()
+                }
+            }
+        }
+
+        DisposableEffect(backDispatcher) {
+            backDispatcher?.addCallback(backCallback)
+            onDispose {
+                backCallback.remove()
+            }
+        }
+    }
+    BackPressHandler {
+        coroutineScope.launch {
+            if(newChar.isNotEmpty()) {
+                saveNote(newChar, fontSize.value.toString(), noteViewModel)
+                navHostController.navigate(HomeGraph.Notes.route)
+            }
+        }
+    }
+
+
 
 
     ConstraintLayout(
@@ -75,7 +112,7 @@ fun NoteScreen(
                 .clickable {
                     coroutineScope.launch {
                         if (newChar.isNotBlank()) {
-                            saveNote(newChar, fontSize.value.toString() , noteViewModel)
+                            saveNote(newChar, fontSize.value.toString(), noteViewModel)
                             newChar = ""
                         }
                         navHostController.navigate(HomeGraph.Notes.route)
@@ -88,7 +125,7 @@ fun NoteScreen(
 
         Text(
             modifier = Modifier
-                .padding( horizontal = 2.dp)
+                .padding(horizontal = 2.dp)
                 .constrainAs(backText) {
                     start.linkTo(backBtn.end)
                     top.linkTo(backBtn.top)
@@ -99,18 +136,14 @@ fun NoteScreen(
         )
 
 
-        Card(
-            shape = RoundedCornerShape(6.dp), elevation = 4.dp,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp)
-                .padding(8.dp)
-                .constrainAs(fontSizeBox) {
-                    top.linkTo(backText.bottom)
-                }
-        ) {
+
             Row(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .height(56.dp)
+                    .padding(8.dp)
+                    .constrainAs(fontSizeBox) {
+                        top.linkTo(backText.bottom)
+                    }
             ) {
                 Text(
                     modifier = Modifier
@@ -149,14 +182,14 @@ fun NoteScreen(
                     fontSize = 26.sp,
                     fontWeight = FontWeight.Bold
                 )
-            }
+
         }
 
 
         TextField(
             modifier = Modifier
                 .padding(4.dp)
-                .fillMaxWidth()
+                .fillMaxSize()
                 .constrainAs(contentTextField) {
                     top.linkTo(fontSizeBox.bottom)
                 },
@@ -171,7 +204,7 @@ fun NoteScreen(
                 )
             },
             colors = TextFieldDefaults.textFieldColors(
-                cursorColor = colorResource(R.color.yellow),
+                cursorColor = colorResource(R.color.black),
                 textColor = colorResource(R.color.black),
                 disabledTextColor = colorResource(R.color.white),
                 backgroundColor = colorResource(R.color.white),

@@ -66,7 +66,7 @@ fun NoteListScreen(
     var noteList by remember { mutableStateOf(mutableListOf<Note>()) }
     var deletedNoteList by remember { mutableStateOf(mutableListOf<Note>()) }
     val scaffoldState = rememberScaffoldState()
-    val isDialogOpen = remember { mutableStateOf(false) }
+
 
     coroutineScope.launch {
         noteViewModel.getAllNotes().collect {
@@ -114,7 +114,7 @@ fun NoteListScreen(
                                     }
                                 },
                             contentDescription = "delete all",
-                            painter = painterResource(id = R.drawable.recycle_bin),
+                            painter = painterResource(id = R.drawable.deleted),
                         )
 
                         Icon(
@@ -123,9 +123,11 @@ fun NoteListScreen(
                                     end.linkTo(parent.end)
                                 }
                                 .padding(12.dp)
-                                .clickable { navHostController.navigate(HomeGraph.NoteScreen.route) },
+                                .clickable { navHostController.navigate(HomeGraph.NoteScreen.route)
+
+                                           },
                             contentDescription = "create note",
-                            painter = painterResource(id = R.drawable.add_note),
+                            painter = painterResource(id = R.drawable.add_note)
                         )
 
                     }
@@ -151,44 +153,19 @@ fun NoteListScreen(
             DrawerBody(
                 items = listOf(
                     MenuItem(
-                        id = "Close",
-                        title = "Close",
-                        contentDescription = "",
-                        vectorIcon = Icons.Default.Close,
-                        imageIcon = null
-                    ),
-                    MenuItem(
-                        id = "Empty trash bin",
-                        title = "Empty trash bin",
-                        contentDescription = "",
-                        vectorIcon = Icons.Default.Recycling,
-                        imageIcon = null
-                    ),
-                    MenuItem(
-                        id = "Trash bin",
-                        title = "Trash bin",
+                        id = "Archived notes",
+                        title = "Archived notes",
                         contentDescription = "",
                         vectorIcon = null,
                         imageIcon = painterResource(R.drawable.deleted_folder)
-                    ),
+                    )
                 ), onClick = {
-                    when (it.id) {
-                        "Close" ->
-                            coroutineScope.launch {
-                                scaffoldState.drawerState.close()
-                            }
-
-                        "Empty trash bin" -> isDialogOpen.value = true
-
-                        "Trash bin" -> navHostController.navigate(HomeGraph.DeletedNotes.route)
-                    }
+             navHostController.navigate(HomeGraph.Archived.route)
                 }
             )
         }
     ) {
-        if (isDialogOpen.value && deletedNoteList.isNotEmpty()) {
-            AlertDialogScreen(isDialogOpen, noteViewModel, coroutineScope)
-        }
+
         ConstraintLayout(
             modifier = modifier.fillMaxSize()
         ) {
@@ -216,8 +193,7 @@ fun customShape() = object : Shape {
         layoutDirection: LayoutDirection,
         density: Density,
     ): Outline {
-        val roundRect = RoundRect(15f, 15f, 550f, 550f, CornerRadius(20f), CornerRadius(20f), CornerRadius(20f), CornerRadius(20f))
-
+        val roundRect = RoundRect(15f, 15f, 550f, 150f, CornerRadius(20f), CornerRadius(20f), CornerRadius(20f), CornerRadius(20f))
         return Outline.Rounded(roundRect)
 
     }
@@ -242,7 +218,6 @@ fun DrawerBody(
                 item.vectorIcon?.let { Icon(imageVector = it, contentDescription = null) }
                 item.imageIcon?.let { Icon(painter = it, contentDescription = null) }
                 Text(text = item.title, modifier = Modifier.padding(horizontal = 8.dp))
-               // Divider(color = Color.Black, thickness = 0.5.dp)
             }
         }
     }

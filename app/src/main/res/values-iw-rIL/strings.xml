@@ -20,9 +20,13 @@
     <string name="welcome">שלום</string>
     <string name="back">חזרה</string>
     <string name="font_size">A</string>
+    <string name="archived_notes">ארכיון</string>
     <string name="sign_in_with_google">התחבר באמצעות  Google</string>
     <string name="sign_in_with_facebook">"התחבר באמצעות Facebook "</string>
     <string name="edit">עריכה</string>
     <string name="no_notes">אין פתקים</string>
     <string name="are_you_sure">האם למחוק את כל הפתקים שלך?</string>
+    <string name="delete">מחיקה?</string>
+    <string name="confirm">אישור</string>
+    <string name="cancel">ביטול</string>
 </resources>

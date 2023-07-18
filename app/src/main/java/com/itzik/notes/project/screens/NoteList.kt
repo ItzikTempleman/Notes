@@ -1,23 +1,16 @@
 package com.itzik.notes.project.screens
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Recycling
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -25,14 +18,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.RoundRect
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Outline
-import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -50,7 +39,6 @@ import com.itzik.notes.project.navigation.HomeGraph
 import com.itzik.notes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import kotlin.math.round
 
 @SuppressLint(
     "CoroutineCreationDuringComposition", "MutableCollectionMutableState",
@@ -153,6 +141,7 @@ fun NoteListScreen(
             DrawerBody(
                 items = listOf(
                     MenuItem(
+                        modifier=modifier,
                         id = "Archived notes",
                         title = "Archived notes",
                         contentDescription = "",
@@ -193,7 +182,7 @@ fun customShape() = object : Shape {
         layoutDirection: LayoutDirection,
         density: Density,
     ): Outline {
-        val roundRect = RoundRect(15f, 15f, 550f, 150f, CornerRadius(20f), CornerRadius(20f), CornerRadius(20f), CornerRadius(20f))
+        val roundRect = RoundRect(15f, 150f, 550f, 280f, CornerRadius(20f), CornerRadius(20f), CornerRadius(20f), CornerRadius(20f))
         return Outline.Rounded(roundRect)
 
     }
@@ -213,7 +202,7 @@ fun DrawerBody(
                     .clickable {
                         onClick(item)
                     }
-                    .padding(16.dp)
+                    .padding(top = 70.dp,start=16.dp)
             ) {
                 item.vectorIcon?.let { Icon(imageVector = it, contentDescription = null) }
                 item.imageIcon?.let { Icon(painter = it, contentDescription = null) }

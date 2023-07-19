@@ -18,6 +18,7 @@ import androidx.compose.material.DismissValue
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FractionalThreshold
 import androidx.compose.material.Icon
+import androidx.compose.material.Scaffold
 import androidx.compose.material.SwipeToDismiss
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
@@ -54,19 +55,36 @@ fun NotesLazyColumn(
         mutableStateOf(false)
     }
         LazyColumn(modifier = modifier.fillMaxSize()) {
-            items(notes, {it}) { item ->
-                val currentItem= rememberUpdatedState(newValue =item ).value
+            items(
+                notes
+                //,{it}
+            )
+            { item ->
+                val currentItem = rememberUpdatedState(newValue = item).value
                 val dismissState = rememberDismissState(
                     confirmStateChange = {
-                        if (it == DismissValue.DismissedToEnd || it == DismissValue.DismissedToStart) {
-                            coroutineScope.launch {
-                                noteViewModel.archiveANote(currentItem)
-                                notes.remove(item)
-                                isSwipeRemoved = true
-                                item.isInTrashBin= true
-                                Log.d("TAG", "swiped: ${item.noteContent} and list siz is: ${notes.size}")
-                           }
+                        when (it) {
+                            DismissValue.DismissedToEnd -> {
+                                coroutineScope.launch {
+                                    noteViewModel.archiveANote(currentItem)
+                                    notes.remove(item)
+                                    isSwipeRemoved = true
+                                    item.isInTrashBin = true
+                                }
+                            }
+
+                            DismissValue.DismissedToStart -> {}
+                            else -> {}
                         }
+//                        if (it == DismissValue.DismissedToEnd || it == DismissValue.DismissedToStart) {
+//                            coroutineScope.launch {
+//                                noteViewModel.archiveANote(currentItem)
+//                                notes.remove(item)
+//                                isSwipeRemoved = true
+//                                item.isInTrashBin= true
+//                                Log.d("TAG", "swiped: ${item.noteContent} and list siz is: ${notes.size}")
+//                           }
+//                        }
                         true
                     }
                 )
@@ -74,38 +92,40 @@ fun NotesLazyColumn(
                 SwipeToDismiss(
                     state = dismissState,
                     directions = setOf(DismissDirection.StartToEnd, DismissDirection.EndToStart),
-                    dismissThresholds ={ FractionalThreshold(0.2f)} ,
+                    dismissThresholds = { FractionalThreshold(0.2f) },
                     background = {
                         val direction = dismissState.dismissDirection ?: return@SwipeToDismiss
                         val color by animateColorAsState(
                             targetValue = when (dismissState.targetValue) {
-                                DismissValue.Default -> {
-                                    Color.LightGray
-                                    true
-                                }
+                                DismissValue.Default -> Color.LightGray
                                 DismissValue.DismissedToEnd -> Color.Green
                                 DismissValue.DismissedToStart -> Color.Red
                             }
                         )
 
-                        val icon = when (direction){
+                        val icon = when (direction) {
                             DismissDirection.StartToEnd -> Icons.Default.Done
                             DismissDirection.EndToStart -> Icons.Default.Delete
                         }
 
-                        val scale by animateFloatAsState(targetValue = if(dismissState.targetValue== DismissValue.Default) 0.8f else 1.2f)
+                        val scale by animateFloatAsState(targetValue = if (dismissState.targetValue == DismissValue.Default) 0.8f else 1.2f)
 
-                        val alignment= when(direction){
+                        val alignment = when (direction) {
                             DismissDirection.EndToStart -> Alignment.CenterEnd
                             DismissDirection.StartToEnd -> Alignment.CenterStart
                         }
-                        Box(modifier= Modifier
-                            .fillMaxSize()
-                            .background(color)
-                            .padding(horizontal = 12.dp),
-                        contentAlignment = alignment
-                            ){
-                            Icon(icon , contentDescription ="Icon", modifier=Modifier.scale(scale) )
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(color)
+                                .padding(horizontal = 12.dp),
+                            contentAlignment = alignment
+                        ) {
+                            Icon(
+                                icon,
+                                contentDescription = "Icon",
+                                modifier = Modifier.scale(scale)
+                            )
                         }
                     },
 
@@ -128,4 +148,5 @@ fun NotesLazyColumn(
                 )
             }
         }
+
     }

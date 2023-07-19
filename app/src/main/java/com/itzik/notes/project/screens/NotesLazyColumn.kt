@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -55,11 +56,8 @@ fun NotesLazyColumn(
     var isSwipeRemoved by remember{
         mutableStateOf(false)
     }
-    Column(
-        modifier = modifier
-    ) {
-        LazyColumn(modifier = Modifier.fillMaxHeight()) {
-            items(notes) { item ->
+        LazyColumn(modifier = modifier.fillMaxSize()) {
+            items(notes, {it}) { item ->
                 val dismissState = rememberDismissState(
                     confirmStateChange = {
                         if (it == DismissValue.DismissedToEnd || it == DismissValue.DismissedToStart) {
@@ -68,7 +66,7 @@ fun NotesLazyColumn(
                                 notes.remove(item)
                                 isSwipeRemoved = true
                                 item.isInTrashBin= true
-                                Log.d("TAG", "swiped: ${item.noteContent}")
+                                Log.d("TAG", "swiped: ${item.noteContent} and list siz is: ${notes.size}")
                             }
                         }
                         true
@@ -76,7 +74,7 @@ fun NotesLazyColumn(
                 )
                 SwipeToDismiss(
                     state = dismissState,
-                    directions = setOf(DismissDirection.EndToStart, DismissDirection.StartToEnd),
+                    directions = setOf(DismissDirection.StartToEnd, DismissDirection.EndToStart),
                     dismissThresholds ={ FractionalThreshold(0.2f)} ,
                     background = {
                         val direction = dismissState.dismissDirection ?: return@SwipeToDismiss
@@ -102,13 +100,13 @@ fun NotesLazyColumn(
                             .padding(horizontal = 12.dp),
                         contentAlignment = alignment
                             ){
-                            Icon(icon , contentDescription =null, modifier=Modifier.scale(scale) )
+                            Icon(icon , contentDescription ="Icon", modifier=Modifier.scale(scale) )
                         }
                     },
                     dismissContent = {
                         Card(
                             modifier = Modifier
-                                .fillMaxHeight()
+                                .fillMaxWidth()
                                 .clickable {
                                     navHostController.currentBackStackEntry?.savedStateHandle?.set(
                                         key = "note",
@@ -125,4 +123,3 @@ fun NotesLazyColumn(
             }
         }
     }
-}

@@ -1,5 +1,6 @@
 package com.itzik.notes.project.viewmodels
 
+import androidx.compose.runtime.State
 import androidx.lifecycle.ViewModel
 import com.itzik.notes.project.models.Note
 import com.itzik.notes.project.repositories.NoteRepository

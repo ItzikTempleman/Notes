@@ -1,5 +1,6 @@
 package com.itzik.notes.project.repositories
 
+import androidx.compose.runtime.State
 import com.itzik.notes.project.models.Note
 
 interface NoteRepository {
@@ -9,5 +10,5 @@ interface NoteRepository {
     suspend fun saveDeletedNotesToTrashBin(notes:MutableList<Note>)
     suspend fun getAllDeletedNotes(): MutableList<Note>
 
-    suspend fun archiveANote(note:Note)
+    suspend fun archiveANote(note: Note)
 }

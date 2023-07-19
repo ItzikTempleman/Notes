@@ -1,5 +1,6 @@
 package com.itzik.notes.project.room_database
 
+import androidx.compose.runtime.State
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -22,6 +23,6 @@ interface NoteDao {
     suspend fun saveNotesToTrashBin(notes: MutableList<Note>)
 
     @Insert (onConflict = OnConflictStrategy.REPLACE)
-    fun archiveSingleNote(note:Note)
+    fun archiveSingleNote(note: Note)
 
 }

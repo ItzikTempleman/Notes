@@ -1,6 +1,5 @@
 package com.itzik.notes.project.screens
 
-import android.graphics.Path.Direction
 import android.util.Log
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
@@ -8,8 +7,6 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -21,7 +18,6 @@ import androidx.compose.material.DismissValue
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FractionalThreshold
 import androidx.compose.material.Icon
-import androidx.compose.material.Surface
 import androidx.compose.material.SwipeToDismiss
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
@@ -31,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -58,20 +55,22 @@ fun NotesLazyColumn(
     }
         LazyColumn(modifier = modifier.fillMaxSize()) {
             items(notes, {it}) { item ->
+                val currentItem= rememberUpdatedState(newValue =item ).value
                 val dismissState = rememberDismissState(
                     confirmStateChange = {
                         if (it == DismissValue.DismissedToEnd || it == DismissValue.DismissedToStart) {
                             coroutineScope.launch {
-                                noteViewModel.archiveANote(item)
+                                noteViewModel.archiveANote(currentItem)
                                 notes.remove(item)
                                 isSwipeRemoved = true
                                 item.isInTrashBin= true
                                 Log.d("TAG", "swiped: ${item.noteContent} and list siz is: ${notes.size}")
-                            }
+                           }
                         }
                         true
                     }
                 )
+
                 SwipeToDismiss(
                     state = dismissState,
                     directions = setOf(DismissDirection.StartToEnd, DismissDirection.EndToStart),
@@ -80,11 +79,15 @@ fun NotesLazyColumn(
                         val direction = dismissState.dismissDirection ?: return@SwipeToDismiss
                         val color by animateColorAsState(
                             targetValue = when (dismissState.targetValue) {
-                                DismissValue.Default -> Color.LightGray
+                                DismissValue.Default -> {
+                                    Color.LightGray
+                                    true
+                                }
                                 DismissValue.DismissedToEnd -> Color.Green
                                 DismissValue.DismissedToStart -> Color.Red
                             }
                         )
+
                         val icon = when (direction){
                             DismissDirection.StartToEnd -> Icons.Default.Done
                             DismissDirection.EndToStart -> Icons.Default.Delete
@@ -96,13 +99,16 @@ fun NotesLazyColumn(
                             DismissDirection.EndToStart -> Alignment.CenterEnd
                             DismissDirection.StartToEnd -> Alignment.CenterStart
                         }
-                        Box(modifier= Modifier.fillMaxSize().background(color)
+                        Box(modifier= Modifier
+                            .fillMaxSize()
+                            .background(color)
                             .padding(horizontal = 12.dp),
                         contentAlignment = alignment
                             ){
                             Icon(icon , contentDescription ="Icon", modifier=Modifier.scale(scale) )
                         }
                     },
+
                     dismissContent = {
                         Card(
                             modifier = Modifier

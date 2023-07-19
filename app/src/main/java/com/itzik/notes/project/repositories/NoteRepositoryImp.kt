@@ -1,5 +1,6 @@
 package com.itzik.notes.project.repositories
 
+import androidx.compose.runtime.State
 import com.itzik.notes.project.models.Note
 import com.itzik.notes.project.room_database.NoteDao
 import javax.inject.Inject

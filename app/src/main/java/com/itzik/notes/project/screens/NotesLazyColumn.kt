@@ -40,6 +40,7 @@ import com.itzik.notes.project.models.Note
 import com.itzik.notes.project.navigation.HomeGraph
 import com.itzik.notes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -48,105 +49,90 @@ fun NotesLazyColumn(
     modifier: Modifier,
     notes: MutableList<Note>,
     navHostController: NavHostController,
-    noteViewModel:NoteViewModel,
+    noteViewModel: NoteViewModel,
     coroutineScope: CoroutineScope,
 ) {
-    var isSwipeRemoved by remember{
-        mutableStateOf(false)
-    }
-        LazyColumn(modifier = modifier.fillMaxSize()) {
-            items(
-                notes
-                //,{it}
+    var noteList = notes
+    LazyColumn(modifier = modifier.fillMaxSize()) {
+        items(noteList)
+
+        { item ->
+
+            val currentItem = rememberUpdatedState(newValue = item).value
+            val dismissState = rememberDismissState(
+                confirmStateChange = { thisNote ->
+
+                    if (thisNote == DismissValue.DismissedToStart) {
+                        coroutineScope.launch {
+                            currentItem.isInTrashBin = true
+                            noteViewModel.archiveANote(currentItem)
+                           noteViewModel.getAllNotes().collect { updatedNotesList ->
+                                updatedNotesList.remove(currentItem)
+                            }
+                        }
+                    }
+                    true
+                }
             )
-            { item ->
-                val currentItem = rememberUpdatedState(newValue = item).value
-                val dismissState = rememberDismissState(
-                    confirmStateChange = {
-                        when (it) {
-                            DismissValue.DismissedToEnd -> {
-                                coroutineScope.launch {
-                                    noteViewModel.archiveANote(currentItem)
-                                    notes.remove(item)
-                                    isSwipeRemoved = true
-                                    item.isInTrashBin = true
-                                }
-                            }
 
-                            DismissValue.DismissedToStart -> {}
-                            else -> {}
+            SwipeToDismiss(
+                state = dismissState,
+                directions = setOf(DismissDirection.StartToEnd, DismissDirection.EndToStart),
+                dismissThresholds = { FractionalThreshold(0.2f) },
+
+                background = {
+                    val direction = dismissState.dismissDirection ?: return@SwipeToDismiss
+                    val scale by animateFloatAsState(targetValue = if (dismissState.targetValue == DismissValue.Default) 0.8f else 1.2f)
+                    val color by animateColorAsState(
+                        targetValue = when (dismissState.targetValue) {
+                            DismissValue.Default -> Color.LightGray
+                            DismissValue.DismissedToEnd -> Color.Green
+                            DismissValue.DismissedToStart -> Color.Red
                         }
-//                        if (it == DismissValue.DismissedToEnd || it == DismissValue.DismissedToStart) {
-//                            coroutineScope.launch {
-//                                noteViewModel.archiveANote(currentItem)
-//                                notes.remove(item)
-//                                isSwipeRemoved = true
-//                                item.isInTrashBin= true
-//                                Log.d("TAG", "swiped: ${item.noteContent} and list siz is: ${notes.size}")
-//                           }
-//                        }
-                        true
-                    }
-                )
+                    )
 
-                SwipeToDismiss(
-                    state = dismissState,
-                    directions = setOf(DismissDirection.StartToEnd, DismissDirection.EndToStart),
-                    dismissThresholds = { FractionalThreshold(0.2f) },
-                    background = {
-                        val direction = dismissState.dismissDirection ?: return@SwipeToDismiss
-                        val color by animateColorAsState(
-                            targetValue = when (dismissState.targetValue) {
-                                DismissValue.Default -> Color.LightGray
-                                DismissValue.DismissedToEnd -> Color.Green
-                                DismissValue.DismissedToStart -> Color.Red
-                            }
+                    val icon = when (direction) {
+                        DismissDirection.StartToEnd -> Icons.Default.Done
+                        DismissDirection.EndToStart -> Icons.Default.Delete
+                    }
+                    val alignment = when (direction) {
+                        DismissDirection.EndToStart -> Alignment.CenterEnd
+                        DismissDirection.StartToEnd -> Alignment.CenterStart
+                    }
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(color)
+                            .padding(horizontal = 12.dp),
+                        contentAlignment = alignment
+                    ) {
+                        Icon(
+                            icon,
+                            contentDescription = "Icon",
+                            modifier = Modifier.scale(scale)
                         )
-
-                        val icon = when (direction) {
-                            DismissDirection.StartToEnd -> Icons.Default.Done
-                            DismissDirection.EndToStart -> Icons.Default.Delete
-                        }
-
-                        val scale by animateFloatAsState(targetValue = if (dismissState.targetValue == DismissValue.Default) 0.8f else 1.2f)
-
-                        val alignment = when (direction) {
-                            DismissDirection.EndToStart -> Alignment.CenterEnd
-                            DismissDirection.StartToEnd -> Alignment.CenterStart
-                        }
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .background(color)
-                                .padding(horizontal = 12.dp),
-                            contentAlignment = alignment
-                        ) {
-                            Icon(
-                                icon,
-                                contentDescription = "Icon",
-                                modifier = Modifier.scale(scale)
-                            )
-                        }
-                    },
-
-                    dismissContent = {
-                        Card(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable {
-                                    navHostController.currentBackStackEntry?.savedStateHandle?.set(
-                                        key = "note",
-                                        value = item
-                                    )
-                                    navHostController.navigate(route = HomeGraph.InnerNote.route)
-                                },
-                            elevation = animateDpAsState(targetValue = if (dismissState.dismissDirection != null) 4.dp else 0.dp).value
-                        ) {
-                            NoteItem(item)
-                        }
                     }
-                )
-            }
-        }
 
+                },
+
+                dismissContent = {
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                navHostController.currentBackStackEntry?.savedStateHandle?.set(
+                                    key = "note",
+                                    value = item
+                                )
+                                navHostController.navigate(route = HomeGraph.InnerNote.route)
+                            },
+                        elevation = animateDpAsState(targetValue = if (dismissState.dismissDirection != null) 4.dp else 0.dp).value
+                    ) {
+                        NoteItem(item)
+                    }
+                }
+            )
+        }
     }
+
+}

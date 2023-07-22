@@ -7,10 +7,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
-import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
@@ -75,19 +73,20 @@ fun NoteListScreen(
     }
 
     Scaffold(
+        contentColor= colorResource(id = R.color.strong_yellow),
         modifier = modifier,
         scaffoldState = scaffoldState,
         drawerShape = customShape(),
         topBar = {
             TopAppBar(
                 elevation= (-4).dp,
-                contentColor = colorResource(id = R.color.white),
+                contentColor = colorResource(id = R.color.strong_yellow),
                 backgroundColor = colorResource(id = R.color.blue_green),
                 title = {
                     ConstraintLayout(modifier.fillMaxWidth()) {
                         val (title, delete, addNote) = createRefs()
                         Text(
-                            color = colorResource(id = R.color.white),
+                            color = colorResource(id = R.color.strong_yellow),
                             modifier = Modifier
                                 .constrainAs(title) {
                                     end.linkTo(delete.start)
@@ -148,6 +147,7 @@ fun NoteListScreen(
         drawerBackgroundColor = colorResource(id = R.color.white),
         drawerContent = {
             DrawerBody(
+                
                 items = listOf(
                     MenuItem(
                         modifier = modifier,
@@ -155,7 +155,7 @@ fun NoteListScreen(
                         title = "Archived notes",
                         contentDescription = "",
                         vectorIcon = null,
-                        imageIcon = painterResource(R.drawable.deleted_folder)
+                        imageIcon = painterResource(R.drawable.deleted_folder),
                     )
                 ), onClick = {
                     navHostController.navigate(HomeGraph.Archived.route)

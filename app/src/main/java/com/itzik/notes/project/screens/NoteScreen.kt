@@ -106,7 +106,7 @@ fun NoteScreen(
 
 
         Icon(
-            tint= colorResource(id = R.color.white),
+            tint= colorResource(id = R.color.strong_yellow),
             modifier = Modifier
                 .padding(vertical = 12.dp, horizontal = 8.dp)
                 .constrainAs(backBtn) {
@@ -128,7 +128,7 @@ fun NoteScreen(
 
 
         Text(
-            color=colorResource(id = R.color.white),
+            color=colorResource(id = R.color.strong_yellow),
             modifier = Modifier
                 .constrainAs(backText) {
                     start.linkTo(backBtn.end)

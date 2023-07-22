@@ -70,7 +70,7 @@ fun ArchivedScreen(
             val (backBtn, backText, titleText, deleteAll) = createRefs()
 
             Icon(
-                tint = colorResource(id = R.color.white),
+                tint = colorResource(id = R.color.strong_yellow),
                 modifier = Modifier
                     .padding(top = 12.dp, start = 8.dp)
                     .constrainAs(backBtn) {
@@ -94,22 +94,22 @@ fun ArchivedScreen(
                         bottom.linkTo(backBtn.bottom)
                     },
                 text = stringResource(id = R.string.back_to_notes),
-                color = colorResource(id = R.color.white),
+                color = colorResource(id = R.color.strong_yellow),
                 fontSize = 12.sp
             )
             Text(
                 text = stringResource(id = R.string.archived_notes),
                 fontSize = 14.sp,
-                color = colorResource(id = R.color.white),
+                color = colorResource(id = R.color.strong_yellow),
                 modifier = modifier
                     .constrainAs(titleText) {
                         end.linkTo(deleteAll.start)
                         top.linkTo(parent.top)
                     }
-                    .padding(8.dp)
+                    .padding(12.dp)
             )
             Icon(
-                tint = colorResource(id = R.color.white),
+                tint = colorResource(id = R.color.dark_teal),
                 modifier = Modifier
                     .constrainAs(deleteAll) {
                         end.linkTo(parent.end)
@@ -118,7 +118,7 @@ fun ArchivedScreen(
                     .clickable {
                         isDialogOpen.value = true
                     }
-                    .padding(8.dp),
+                    .padding(12.dp),
                 contentDescription = null,
 
                 painter = painterResource(id = R.drawable.recycle_bin),

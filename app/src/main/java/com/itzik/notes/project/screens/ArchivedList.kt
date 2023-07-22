@@ -65,7 +65,7 @@ fun ArchivedScreen(
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(70.dp)
+                .height(85.dp)
         ) {
             val (backBtn, backText, titleText, deleteAll) = createRefs()
 
@@ -127,7 +127,7 @@ fun ArchivedScreen(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(12.dp))
+                .clip(RoundedCornerShape(topEnd = 12.dp, topStart = 12.dp))
                 .background(colorResource(id = R.color.white))
         ) {
             NotesLazyColumn(

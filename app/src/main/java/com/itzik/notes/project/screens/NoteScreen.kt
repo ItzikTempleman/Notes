@@ -130,14 +130,13 @@ fun NoteScreen(
         Text(
             color=colorResource(id = R.color.white),
             modifier = Modifier
-                .padding(horizontal = 2.dp)
                 .constrainAs(backText) {
                     start.linkTo(backBtn.end)
                     top.linkTo(backBtn.top)
                     bottom.linkTo(backBtn.bottom)
                 },
             text = stringResource(id = R.string.notes),
-            fontSize = 20.sp
+            fontSize = 14.sp
         )
 
 

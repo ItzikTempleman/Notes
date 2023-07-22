@@ -170,8 +170,8 @@ fun NoteListScreen(
         ) {
             Scaffold(
                 modifier = Modifier
-                    .padding(top = 8.dp)
-                    .clip(RoundedCornerShape(12.dp))
+                    .padding(top = 30.dp)
+                    .clip(RoundedCornerShape(topEnd = 12.dp, topStart = 12.dp))
                     .fillMaxSize()
                     .background(colorResource(id = R.color.white))
             ) {

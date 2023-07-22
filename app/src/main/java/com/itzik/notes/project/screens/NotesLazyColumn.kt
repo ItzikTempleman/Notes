@@ -54,9 +54,7 @@ fun NotesLazyColumn(
 ) {
     var noteList = notes
     LazyColumn(modifier = modifier.fillMaxSize()) {
-        items(noteList)
-
-        { item ->
+        items(noteList) { item ->
 
             val currentItem = rememberUpdatedState(newValue = item).value
             val dismissState = rememberDismissState(
@@ -67,7 +65,7 @@ fun NotesLazyColumn(
                             currentItem.isInTrashBin = true
                             noteViewModel.archiveANote(currentItem)
                            noteViewModel.getAllNotes().collect { updatedNotesList ->
-                                updatedNotesList.remove(currentItem)
+                               noteList=updatedNotesList
                             }
                         }
                     }
@@ -77,7 +75,7 @@ fun NotesLazyColumn(
 
             SwipeToDismiss(
                 state = dismissState,
-                directions = setOf(DismissDirection.StartToEnd, DismissDirection.EndToStart),
+                directions = setOf( DismissDirection.EndToStart),
                 dismissThresholds = { FractionalThreshold(0.2f) },
 
                 background = {
@@ -114,25 +112,22 @@ fun NotesLazyColumn(
                     }
 
                 },
-
                 dismissContent = {
                     Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
+                        modifier = modifier.fillMaxWidth()
                             .clickable {
                                 navHostController.currentBackStackEntry?.savedStateHandle?.set(
                                     key = "note",
-                                    value = item
+                                    value = currentItem
                                 )
                                 navHostController.navigate(route = HomeGraph.InnerNote.route)
                             },
                         elevation = animateDpAsState(targetValue = if (dismissState.dismissDirection != null) 4.dp else 0.dp).value
                     ) {
-                        NoteItem(item)
+                        NoteItem(currentItem)
                     }
                 }
             )
         }
     }
-
 }

@@ -1,12 +1,16 @@
 package com.itzik.notes.project.screens
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
+import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
@@ -18,6 +22,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.RoundRect
 import androidx.compose.ui.geometry.Size
@@ -75,18 +80,22 @@ fun NoteListScreen(
         drawerShape = customShape(),
         topBar = {
             TopAppBar(
+                elevation= (-4).dp,
+                contentColor = colorResource(id = R.color.white),
+                backgroundColor = colorResource(id = R.color.blue_green),
                 title = {
                     ConstraintLayout(modifier.fillMaxWidth()) {
                         val (title, delete, addNote) = createRefs()
                         Text(
+                            color = colorResource(id = R.color.white),
                             modifier = Modifier
                                 .constrainAs(title) {
-                                    start.linkTo(parent.start)
+                                    end.linkTo(delete.start)
                                 }
                                 .padding(12.dp),
                             text = if (noteList.isNotEmpty()) stringResource(id = R.string.notes)
                             else stringResource(id = R.string.no_notes),
-                            fontSize = 20.sp
+                            fontSize = 14.sp
                         )
 
                         Icon(
@@ -110,10 +119,11 @@ fun NoteListScreen(
                                 .constrainAs(addNote) {
                                     end.linkTo(parent.end)
                                 }
-                                .padding(12.dp)
-                                .clickable { navHostController.navigate(HomeGraph.NoteScreen.route)
+                                .padding(8.dp)
+                                .clickable {
+                                    navHostController.navigate(HomeGraph.NoteScreen.route)
 
-                                           },
+                                },
                             contentDescription = "create note",
                             painter = painterResource(id = R.drawable.add_note)
                         )
@@ -122,7 +132,6 @@ fun NoteListScreen(
 
                 },
 
-                backgroundColor = colorResource(id = R.color.white),
                 navigationIcon = {
                     Icon(imageVector = Icons.Default.Menu, contentDescription = "",
                         modifier = Modifier
@@ -141,7 +150,7 @@ fun NoteListScreen(
             DrawerBody(
                 items = listOf(
                     MenuItem(
-                        modifier=modifier,
+                        modifier = modifier,
                         id = "Archived notes",
                         title = "Archived notes",
                         contentDescription = "",
@@ -149,34 +158,35 @@ fun NoteListScreen(
                         imageIcon = painterResource(R.drawable.deleted_folder)
                     )
                 ), onClick = {
-             navHostController.navigate(HomeGraph.Archived.route)
+                    navHostController.navigate(HomeGraph.Archived.route)
                 }
             )
         }
     ) {
-
-        ConstraintLayout(
-            modifier = modifier.fillMaxSize()
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = colorResource(id = R.color.blue_green))
         ) {
-
-            val (noteListLazyColumn) = createRefs()
-            NotesLazyColumn(
-                noteViewModel=noteViewModel,
+            Scaffold(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 12.dp, horizontal = 4.dp)
-                    .constrainAs(noteListLazyColumn) {
-                        top.linkTo(parent.top)
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                    },
-                notes = noteList,
-                navHostController = navHostController,
-                coroutineScope=coroutineScope
+                    .padding(top = 8.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .fillMaxSize()
+                    .background(colorResource(id = R.color.white))
+            ) {
+                NotesLazyColumn(
+                    modifier = modifier,
+                    noteViewModel = noteViewModel,
+                    notes = noteList,
+                    navHostController = navHostController,
+                    coroutineScope = coroutineScope
                 )
+            }
         }
     }
 }
+
 
 
 
@@ -213,7 +223,7 @@ fun DrawerBody(
                     .clickable {
                         onClick(item)
                     }
-                    .padding(top = 70.dp,start=16.dp)
+                    .padding(top = 70.dp, start = 16.dp)
             ) {
                 item.vectorIcon?.let { Icon(imageVector = it, contentDescription = null) }
                 item.imageIcon?.let { Icon(painter = it, contentDescription = null) }

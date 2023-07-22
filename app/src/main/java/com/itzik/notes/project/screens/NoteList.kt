@@ -1,29 +1,37 @@
 package com.itzik.notes.project.screens
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
+import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.RoundRect
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.BlendMode.Companion.Color
 import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.colorResource
@@ -73,18 +81,18 @@ fun NoteListScreen(
     }
 
     Scaffold(
-        contentColor= colorResource(id = R.color.strong_yellow),
+        contentColor = colorResource(id = R.color.strong_yellow),
         modifier = modifier,
         scaffoldState = scaffoldState,
         drawerShape = customShape(),
         topBar = {
             TopAppBar(
-                elevation= (-4).dp,
+                elevation = (-4).dp,
                 contentColor = colorResource(id = R.color.strong_yellow),
                 backgroundColor = colorResource(id = R.color.blue_green),
                 title = {
                     ConstraintLayout(modifier.fillMaxWidth()) {
-                        val (title, delete, addNote) = createRefs()
+                        val (title, delete) = createRefs()
                         Text(
                             color = colorResource(id = R.color.strong_yellow),
                             modifier = Modifier
@@ -98,9 +106,10 @@ fun NoteListScreen(
                         )
 
                         Icon(
+                            tint = colorResource(id = R.color.dark_teal),
                             modifier = Modifier
                                 .constrainAs(delete) {
-                                    end.linkTo(addNote.start)
+                                    end.linkTo(parent.end)
                                 }
                                 .padding(12.dp)
                                 .clickable {
@@ -113,19 +122,8 @@ fun NoteListScreen(
                             painter = painterResource(id = R.drawable.deleted),
                         )
 
-                        Icon(
-                            modifier = Modifier
-                                .constrainAs(addNote) {
-                                    end.linkTo(parent.end)
-                                }
-                                .padding(8.dp)
-                                .clickable {
-                                    navHostController.navigate(HomeGraph.NoteScreen.route)
 
-                                },
-                            contentDescription = "create note",
-                            painter = painterResource(id = R.drawable.add_note)
-                        )
+
 
                     }
 
@@ -147,7 +145,7 @@ fun NoteListScreen(
         drawerBackgroundColor = colorResource(id = R.color.white),
         drawerContent = {
             DrawerBody(
-                
+
                 items = listOf(
                     MenuItem(
                         modifier = modifier,
@@ -163,11 +161,12 @@ fun NoteListScreen(
             )
         }
     ) {
-        Column(
+        ConstraintLayout(
             modifier = Modifier
                 .fillMaxSize()
                 .background(color = colorResource(id = R.color.blue_green))
         ) {
+            val (add)=createRefs()
             Scaffold(
                 modifier = Modifier
                     .padding(top = 30.dp)
@@ -183,18 +182,35 @@ fun NoteListScreen(
                     coroutineScope = coroutineScope
                 )
             }
+
+
+            FloatingActionButton(
+                    modifier = Modifier
+                        .constrainAs(add) {
+                            start.linkTo(parent.start)
+                            end.linkTo(parent.end)
+                            bottom.linkTo(parent.bottom)
+                        }
+                        .padding(8.dp),
+
+                    onClick = {
+                        navHostController.navigate(HomeGraph.NoteScreen.route)
+                    },
+                backgroundColor= colorResource(id = R.color.strong_yellow),
+                    shape = RoundedCornerShape(120.dp),
+                ) {
+
+                    Icon(
+                        contentDescription = "create note",
+                        painter = painterResource(id = R.drawable.add_note),
+                        tint = colorResource(id = R.color.white),
+                    )
+                }
+
+
         }
     }
 }
-
-
-
-
-
-
-
-
-
 
 
 fun customShape() = object : Shape {
@@ -203,7 +219,16 @@ fun customShape() = object : Shape {
         layoutDirection: LayoutDirection,
         density: Density,
     ): Outline {
-        val roundRect = RoundRect(15f, 150f, 550f, 280f, CornerRadius(20f), CornerRadius(20f), CornerRadius(20f), CornerRadius(20f))
+        val roundRect = RoundRect(
+            15f,
+            150f,
+            550f,
+            280f,
+            CornerRadius(20f),
+            CornerRadius(20f),
+            CornerRadius(20f),
+            CornerRadius(20f)
+        )
         return Outline.Rounded(roundRect)
 
     }

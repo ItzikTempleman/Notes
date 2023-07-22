@@ -1,7 +1,5 @@
 import android.annotation.SuppressLint
-import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -12,7 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
@@ -50,14 +47,16 @@ import java.time.format.DateTimeFormatter
 
 val fontSize = mutableIntStateOf(16)
 
-@SuppressLint("AutoboxingStateValueProperty")
+@SuppressLint("AutoboxingStateValueProperty", "UnrememberedMutableState")
 @Composable
 fun NoteScreen(
+    noteArg: Note?,
     navHostController: NavHostController,
     noteViewModel: NoteViewModel,
     coroutineScope: CoroutineScope,
 ) {
     var newChar by remember { mutableStateOf("") }
+    var isEditClicked =mutableStateOf(false)
 
     @Composable
     fun BackPressHandler(onBackPressed: () -> Unit) {
@@ -80,7 +79,7 @@ fun NoteScreen(
     }
     BackPressHandler {
         coroutineScope.launch {
-            if(newChar.isNotEmpty()) {
+            if (newChar.isNotEmpty()) {
                 saveNote(newChar, fontSize.value.toString(), noteViewModel)
                 navHostController.navigate(HomeGraph.Notes.route)
             }
@@ -96,6 +95,7 @@ fun NoteScreen(
             .background(colorResource(id = R.color.blue_green))
     ) {
         val (
+            edit,
             backBtn,
             backText,
             fontSizeBox,
@@ -104,9 +104,29 @@ fun NoteScreen(
 
 
 
+        if (noteArg != null) {
+            Text(
+                modifier = Modifier
+                    .padding(12.dp)
+                    .constrainAs(edit) {
+                        top.linkTo(parent.top)
+                        end.linkTo(parent.end)
+                    }
+                    .clickable {
+                        isEditClicked.value =!isEditClicked.value
+                        //navHostController.navigate(HomeGraph.NoteScreen.route)
+                    },
+                text = if(isEditClicked.value) stringResource(id = R.string.done) else stringResource(id = R.string.edit),
+                color = colorResource(id = R.color.strong_yellow),
+                fontSize = 14.sp
+            )
+        }
+
+
+
 
         Icon(
-            tint= colorResource(id = R.color.strong_yellow),
+            tint = colorResource(id = R.color.strong_yellow),
             modifier = Modifier
                 .padding(vertical = 12.dp, horizontal = 8.dp)
                 .constrainAs(backBtn) {
@@ -128,7 +148,7 @@ fun NoteScreen(
 
 
         Text(
-            color=colorResource(id = R.color.strong_yellow),
+            color = colorResource(id = R.color.strong_yellow),
             modifier = Modifier
                 .constrainAs(backText) {
                     start.linkTo(backBtn.end)
@@ -141,54 +161,54 @@ fun NoteScreen(
 
 
 
-            Row(
+        Row(
+            modifier = Modifier
+                .height(56.dp)
+                .padding(8.dp)
+                .constrainAs(fontSizeBox) {
+                    top.linkTo(backText.bottom)
+                }
+        ) {
+            Text(
+                color = colorResource(id = R.color.white),
                 modifier = Modifier
-                    .height(56.dp)
-                    .padding(8.dp)
-                    .constrainAs(fontSizeBox) {
-                        top.linkTo(backText.bottom)
-                    }
-            ) {
-                Text(
-                    color=colorResource(id = R.color.white),
-                    modifier = Modifier
-                        .padding(top = 4.dp)
-                        .width(30.dp)
-                        .clickable {
-                            fontSize.value--
-                            if (fontSize.value % 2 != 0) fontSize.value--
-                            if (fontSize.value < 16) fontSize.value = 16
-                        },
-                    text = stringResource(id = R.string.font_size),
-                    textAlign = TextAlign.Center,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold
-                )
+                    .padding(top = 4.dp)
+                    .width(30.dp)
+                    .clickable {
+                        fontSize.value--
+                        if (fontSize.value % 2 != 0) fontSize.value--
+                        if (fontSize.value < 16) fontSize.value = 16
+                    },
+                text = stringResource(id = R.string.font_size),
+                textAlign = TextAlign.Center,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            )
 
-                Text(
-                    color=colorResource(id = R.color.white),
-                    modifier = Modifier
-                        .padding(top = 8.dp)
-                        .width(30.dp),
-                    text = fontSize.value.toString(),
-                    textAlign = TextAlign.Center, fontSize = 14.sp, fontWeight = FontWeight.Bold
-                )
+            Text(
+                color = colorResource(id = R.color.white),
+                modifier = Modifier
+                    .padding(top = 8.dp)
+                    .width(30.dp),
+                text = fontSize.value.toString(),
+                textAlign = TextAlign.Center, fontSize = 14.sp, fontWeight = FontWeight.Bold
+            )
 
 
-                Text(
-                    color=colorResource(id = R.color.white),
-                    modifier = Modifier
-                        .width(30.dp)
-                        .clickable {
-                            fontSize.value++
-                            if (fontSize.value % 2 != 0) fontSize.value++
-                            if (fontSize.value > 42) fontSize.value = 42
-                        },
-                    text = stringResource(id = R.string.font_size),
-                    textAlign = TextAlign.Center,
-                    fontSize = 26.sp,
-                    fontWeight = FontWeight.Bold
-                )
+            Text(
+                color = colorResource(id = R.color.white),
+                modifier = Modifier
+                    .width(30.dp)
+                    .clickable {
+                        fontSize.value++
+                        if (fontSize.value % 2 != 0) fontSize.value++
+                        if (fontSize.value > 42) fontSize.value = 42
+                    },
+                text = stringResource(id = R.string.font_size),
+                textAlign = TextAlign.Center,
+                fontSize = 26.sp,
+                fontWeight = FontWeight.Bold
+            )
 
         }
 
@@ -196,7 +216,7 @@ fun NoteScreen(
         TextField(
             modifier = Modifier
                 .padding(
-                    top =40.dp,
+                    top = 40.dp,
                 )
                 .clip(RoundedCornerShape(12.dp))
                 .fillMaxSize()

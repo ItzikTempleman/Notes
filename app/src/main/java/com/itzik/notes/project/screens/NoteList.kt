@@ -121,10 +121,6 @@ fun NoteListScreen(
                             contentDescription = "delete all",
                             painter = painterResource(id = R.drawable.deleted),
                         )
-
-
-
-
                     }
 
                 },

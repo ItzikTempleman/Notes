@@ -126,10 +126,7 @@ fun InnerNoteScreen(
                 text = noteArg.noteContent
             )
 
-
-
         }else {
-
             Row(
                 modifier = Modifier
                     .height(56.dp)

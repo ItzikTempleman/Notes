@@ -38,6 +38,7 @@ import androidx.navigation.NavHostController
 import com.itzik.notes.R
 import com.itzik.notes.project.models.Note
 import com.itzik.notes.project.navigation.HomeGraph
+import com.itzik.notes.project.utils.saveNote
 import com.itzik.notes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -56,7 +57,7 @@ fun NoteScreen(
     coroutineScope: CoroutineScope,
 ) {
     var newChar by remember { mutableStateOf("") }
-    var isEditClicked =mutableStateOf(false)
+
 
     @Composable
     fun BackPressHandler(onBackPressed: () -> Unit) {
@@ -86,47 +87,17 @@ fun NoteScreen(
         }
     }
 
-
-
-
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
             .background(colorResource(id = R.color.blue_green))
     ) {
         val (
-            edit,
             backBtn,
             backText,
             fontSizeBox,
             contentTextField,
-        text
         ) = createRefs()
-
-
-
-        if (noteArg != null) {
-            Text(
-                modifier = Modifier
-                    .padding(12.dp)
-                    .constrainAs(edit) {
-                        top.linkTo(parent.top)
-                        end.linkTo(parent.end)
-                    }
-                    .clickable {
-                        isEditClicked.value = !isEditClicked.value
-                        //navHostController.navigate(HomeGraph.NoteScreen.route)
-                    },
-                text = if (isEditClicked.value) stringResource(id = R.string.done) else stringResource(
-                    id = R.string.edit
-                ),
-                color = colorResource(id = R.color.strong_yellow),
-                fontSize = 14.sp
-            )
-        }
-
-
-
 
         Icon(
             tint = colorResource(id = R.color.strong_yellow),
@@ -161,9 +132,6 @@ fun NoteScreen(
             text = stringResource(id = R.string.notes),
             fontSize = 14.sp
         )
-
-
-
         Row(
             modifier = Modifier
                 .height(56.dp)
@@ -214,63 +182,44 @@ fun NoteScreen(
             )
 
         }
-
-            Text(
-                modifier = Modifier
-                    .constrainAs(contentTextField) {
-                        top.linkTo(fontSizeBox.bottom)
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                        bottom.linkTo(parent.bottom)
-                    },
-                text = noteArg.noteContent
-            )
-
-            TextField(
-                modifier = Modifier
-                    .padding(
-                        top = 40.dp,
-                    )
-                    .clip(RoundedCornerShape(12.dp))
-                    .fillMaxSize()
-                    .constrainAs(contentTextField) {
-                        top.linkTo(fontSizeBox.bottom)
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                        bottom.linkTo(parent.bottom)
-                    },
-                value = newChar,
-                onValueChange = {
-                    newChar = it
-                },
-                textStyle = TextStyle.Default.copy(fontSize = fontSize.value.sp),
-                placeholder = {
-                    Text(
-                        text = stringResource(id = R.string.content),
-                    )
-                },
-                colors = TextFieldDefaults.textFieldColors(
-                    cursorColor = colorResource(R.color.black),
-                    textColor = colorResource(R.color.black),
-                    disabledTextColor = colorResource(R.color.white),
-                    backgroundColor = colorResource(R.color.white),
-                    focusedIndicatorColor = colorResource(R.color.white),
-                    unfocusedIndicatorColor = colorResource(R.color.white),
-                    disabledIndicatorColor = colorResource(R.color.white),
-                    focusedLabelColor = colorResource(R.color.white)
+        TextField(
+            modifier = Modifier
+                .padding(
+                    top = 40.dp,
                 )
+                .clip(RoundedCornerShape(12.dp))
+                .fillMaxSize()
+                .constrainAs(contentTextField) {
+                    top.linkTo(fontSizeBox.bottom)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    bottom.linkTo(parent.bottom)
+                },
+            value = newChar,
+            onValueChange = {
+                newChar = it
+            },
+            textStyle = TextStyle.Default.copy(fontSize = fontSize.value.sp),
+            placeholder = {
+                Text(
+                    text = stringResource(id = R.string.content),
+                )
+            },
+            colors = TextFieldDefaults.textFieldColors(
+                cursorColor = colorResource(R.color.black),
+                textColor = colorResource(R.color.black),
+                disabledTextColor = colorResource(R.color.white),
+                backgroundColor = colorResource(R.color.white),
+                focusedIndicatorColor = colorResource(R.color.white),
+                unfocusedIndicatorColor = colorResource(R.color.white),
+                disabledIndicatorColor = colorResource(R.color.white),
+                focusedLabelColor = colorResource(R.color.white)
             )
-        }
+        )
     }
-
-
-suspend fun saveNote(newChar: String, fontSize: String, noteViewModel: NoteViewModel) {
-    val time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
-    val note = Note(
-        noteContent = newChar,
-        timeStamp = time,
-        fontSize = fontSize.toInt(),
-        isInTrashBin = false
-    )
-    noteViewModel.saveNote(note)
 }
+
+
+
+
+

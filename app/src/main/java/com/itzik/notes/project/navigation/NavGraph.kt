@@ -60,8 +60,8 @@ fun SetupNavGraph(
 
                  val noteArg= navHostController.previousBackStackEntry?.savedStateHandle?.get<Note>("note")
                 if (noteArg != null) {
-                   // InnerNoteScreen(navHostController=navHostController, noteArg=noteArg)
-                    NoteScreen(navHostController = navHostController, noteViewModel = noteViewModel, coroutineScope = coroutineScope,  noteArg =noteArg)
+                    InnerNoteScreen(navHostController=navHostController, noteArg=noteArg)
+                    //NoteScreen(navHostController = navHostController, noteViewModel = noteViewModel, coroutineScope = coroutineScope,  noteArg =noteArg)
                 }
             }
 

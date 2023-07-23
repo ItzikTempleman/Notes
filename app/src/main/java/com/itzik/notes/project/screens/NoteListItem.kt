@@ -25,7 +25,7 @@ fun NoteItem(
 ) {
     Card(
         modifier = Modifier
-            .clip(RoundedCornerShape(6.dp))
+            .clip(RoundedCornerShape(16.dp))
             .fillMaxWidth().padding(4.dp)
             .height(50.dp)
         ,elevation = 4.dp

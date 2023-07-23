@@ -25,11 +25,11 @@ fun AlertDialogScreen(
 
         AlertDialog(
             onDismissRequest = { isDialogOpen.value = true },
-            title = { Text(text = stringResource(id = R.string.delete), color = colorResource(id = R.color.black)) },
+            title = { Text(text = stringResource(id = R.string.delete), color = colorResource(id = R.color.white)) },
             text = {
                 Text(
                     text = stringResource(id = R.string.are_you_sure),
-                    color = colorResource(id = R.color.black)
+                    color = colorResource(id = R.color.white)
                 )
             },
 
@@ -44,7 +44,7 @@ fun AlertDialogScreen(
                 }) {
                     Text(
                         text = stringResource(id = R.string.confirm),
-                        color = colorResource(id = R.color.black)
+                        color = colorResource(id = R.color.white)
                     )
                 }
             },
@@ -54,14 +54,14 @@ fun AlertDialogScreen(
                 }) {
                     Text(
                         text = stringResource(id = R.string.cancel),
-                        color = colorResource(id = R.color.black)
+                        color = colorResource(id = R.color.white)
                     )
                 }
 
             },
 
-            backgroundColor = colorResource(id = R.color.light_grey),
-            contentColor = colorResource(id = R.color.black)
+            backgroundColor = colorResource(id = R.color.button_purple),
+            contentColor = colorResource(id = R.color.white)
         )
     }
 }

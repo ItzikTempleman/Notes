@@ -90,7 +90,7 @@ fun NoteScreen(
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(id = R.color.blue_green))
+            .background(colorResource(id = R.color.button_purple))
     ) {
         val (
             backBtn,
@@ -100,7 +100,7 @@ fun NoteScreen(
         ) = createRefs()
 
         Icon(
-            tint = colorResource(id = R.color.strong_yellow),
+            tint = colorResource(id = R.color.white),
             modifier = Modifier
                 .padding(vertical = 12.dp, horizontal = 8.dp)
                 .constrainAs(backBtn) {
@@ -122,7 +122,7 @@ fun NoteScreen(
 
 
         Text(
-            color = colorResource(id = R.color.strong_yellow),
+            color = colorResource(id = R.color.white),
             modifier = Modifier
                 .constrainAs(backText) {
                     start.linkTo(backBtn.end)
@@ -184,10 +184,8 @@ fun NoteScreen(
         }
         TextField(
             modifier = Modifier
-                .padding(
-                    top = 40.dp,
-                )
-                .clip(RoundedCornerShape(12.dp))
+                .padding(top = 40.dp, start = 8.dp, end=6.dp, bottom = 8.dp)
+                .clip(RoundedCornerShape(16.dp))
                 .fillMaxSize()
                 .constrainAs(contentTextField) {
                     top.linkTo(fontSizeBox.bottom)
@@ -209,7 +207,7 @@ fun NoteScreen(
                 cursorColor = colorResource(R.color.black),
                 textColor = colorResource(R.color.black),
                 disabledTextColor = colorResource(R.color.white),
-                backgroundColor = colorResource(R.color.white),
+                backgroundColor = colorResource(R.color.almost_white),
                 focusedIndicatorColor = colorResource(R.color.white),
                 unfocusedIndicatorColor = colorResource(R.color.white),
                 disabledIndicatorColor = colorResource(R.color.white),

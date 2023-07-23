@@ -60,7 +60,7 @@ fun ArchivedScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(colorResource(id = R.color.blue_green))
+            .background(colorResource(id = R.color.button_purple))
     ) {
         ConstraintLayout(
             modifier = Modifier
@@ -70,7 +70,7 @@ fun ArchivedScreen(
             val (backBtn, backText, titleText, deleteAll) = createRefs()
 
             Icon(
-                tint = colorResource(id = R.color.strong_yellow),
+                tint = colorResource(id = R.color.white),
                 modifier = Modifier
                     .padding(top = 12.dp, start = 8.dp)
                     .constrainAs(backBtn) {
@@ -94,13 +94,13 @@ fun ArchivedScreen(
                         bottom.linkTo(backBtn.bottom)
                     },
                 text = stringResource(id = R.string.back_to_notes),
-                color = colorResource(id = R.color.strong_yellow),
+                color = colorResource(id = R.color.white),
                 fontSize = 12.sp
             )
             Text(
                 text = stringResource(id = R.string.archived_notes),
                 fontSize = 14.sp,
-                color = colorResource(id = R.color.strong_yellow),
+                color = colorResource(id = R.color.white),
                 modifier = modifier
                     .constrainAs(titleText) {
                         end.linkTo(deleteAll.start)
@@ -109,7 +109,7 @@ fun ArchivedScreen(
                     .padding(12.dp)
             )
             Icon(
-                tint = colorResource(id = R.color.dark_teal),
+                tint = colorResource(id = R.color.white),
                 modifier = Modifier
                     .constrainAs(deleteAll) {
                         end.linkTo(parent.end)
@@ -127,8 +127,9 @@ fun ArchivedScreen(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(topEnd = 12.dp, topStart = 12.dp))
-                .background(colorResource(id = R.color.white))
+                .padding( start = 8.dp, end=6.dp, bottom = 8.dp)
+                .clip(RoundedCornerShape(16.dp))
+                .background(colorResource(id = R.color.almost_white))
         ) {
             NotesLazyColumn(
                 modifier = modifier,

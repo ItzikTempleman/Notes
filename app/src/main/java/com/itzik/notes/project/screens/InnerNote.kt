@@ -32,21 +32,25 @@ import com.itzik.notes.R
 import com.itzik.notes.project.models.Note
 import com.itzik.notes.project.navigation.HomeGraph
 import com.itzik.notes.project.utils.saveNote
+import com.itzik.notes.project.viewmodels.NoteViewModel
 import fontSize
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnrememberedMutableState", "AutoboxingStateValueProperty")
 @Composable
 fun InnerNoteScreen(
-
+    noteViewModel: NoteViewModel,
+    coroutineScope: CoroutineScope,
     navHostController: NavHostController,
     noteArg: Note,
 ) {
+    var newChar by remember { mutableStateOf(noteArg.noteContent) }
     val isEditClicked = mutableStateOf(false)
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(id = R.color.blue_green))
+            .background(colorResource(id = R.color.button_purple))
     ) {
         val (
             topBar,
@@ -69,7 +73,7 @@ fun InnerNoteScreen(
             ) = createRefs()
 
             Icon(
-                tint = colorResource(id = R.color.strong_yellow),
+                tint = colorResource(id = R.color.white),
                 modifier = Modifier
                     .padding(vertical = 12.dp, horizontal = 8.dp)
                     .constrainAs(back) {
@@ -85,7 +89,7 @@ fun InnerNoteScreen(
 
 
             Text(
-                color = colorResource(id = R.color.strong_yellow),
+                color = colorResource(id = R.color.white),
                 modifier = Modifier
                     .constrainAs(backText) {
                         start.linkTo(back.end)
@@ -105,28 +109,34 @@ fun InnerNoteScreen(
                     }
                     .clickable {
                         isEditClicked.value = !isEditClicked.value
+                        if(isEditClicked.value){
+                            coroutineScope.launch {
+                                saveNote(newChar, fontSize.value.toString(), noteViewModel)
+                            }
+                        }
                     },
                 text = if (isEditClicked.value) stringResource(id = R.string.done) else stringResource(
                     id = R.string.edit
                 ),
-                color = colorResource(id = R.color.strong_yellow),
+                color = colorResource(id = R.color.white),
                 fontSize = 14.sp
             )
         }
 
         if (!isEditClicked.value) {
             Text(
-                modifier = Modifier.padding(top=45.dp)
+                modifier = Modifier
+                    .padding(top = 45.dp, start = 8.dp, end=6.dp, bottom = 8.dp)
+                    .clip(RoundedCornerShape(16.dp))
                     .constrainAs(body) {
                         top.linkTo(topBar.bottom)
                     }
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(colorResource(id = R.color.white))
+                    .background(colorResource(id = R.color.almost_white))
                     .fillMaxSize(),
                 text = noteArg.noteContent
             )
 
-        }else {
+        } else {
             Row(
                 modifier = Modifier
                     .height(56.dp)
@@ -180,14 +190,15 @@ fun InnerNoteScreen(
 
             TextField(
                 modifier = Modifier
-                    .clip(RoundedCornerShape(12.dp))
+                    .padding( start = 8.dp, end=6.dp, bottom = 8.dp)
+                    .clip(RoundedCornerShape(16.dp))
                     .fillMaxSize()
                     .constrainAs(body) {
                         top.linkTo(row.bottom)
                     },
-                value = noteArg.noteContent,
+                value = newChar,
                 onValueChange = {
-                    noteArg.noteContent = it
+                    newChar = it
                 },
                 textStyle = TextStyle.Default.copy(fontSize = fontSize.value.sp),
                 placeholder = {
@@ -199,7 +210,7 @@ fun InnerNoteScreen(
                     cursorColor = colorResource(R.color.black),
                     textColor = colorResource(R.color.black),
                     disabledTextColor = colorResource(R.color.white),
-                    backgroundColor = colorResource(R.color.white),
+                    backgroundColor = colorResource(R.color.almost_white),
                     focusedIndicatorColor = colorResource(R.color.white),
                     unfocusedIndicatorColor = colorResource(R.color.white),
                     disabledIndicatorColor = colorResource(R.color.white),

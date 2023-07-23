@@ -7,18 +7,12 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-
-
-
     <color name="red">#F44336</color>
     <color name="blue">#026B9B</color>
-    <color name="yellow">#deb522</color>
+    <color name="yellow">#f7d284</color>
     <color name="green">#4CAF50</color>
-
-
     <color name="pink">#E91E63</color>
-
-    <color name="full_transparent">#00EAEAEA</color>
+    <color name="orange">#fba024</color>
     <color name="transparent">#00EAEAEA</color>
     <color name="almost_transparent">#34FFFFFF</color>
     <color name="semi_transparent">#74FFFFFF</color>
@@ -28,18 +22,17 @@
     <color name="light_grey">#EAEAEA</color>
     <color name="dark_green">#25352A</color>
     <color name="blue_green">#1A434D</color>
-    <color name="almost_white">#EFEFEF</color>
+    <color name="almost_white">#DAD8D8</color>
     <color name="dark_teal">#5F9EA0</color>
     <color name="strong_yellow">#FFCD00</color>
     <color name="light_red">#FF837A</color>
     <color name="light_blue">#64CEF1</color>
     <color name="light_yellow">#FBF4B4</color>
-    <color name="light_green">#77CA7A</color>
-    <color name="lighter_green"> #dcf8c6</color>
+    <color name="light_green">#8bbe87</color>
+    <color name="lighter_green">#dcf8c6</color>
     <color name="tea_green">#DCF8C6</color>
     <color name="dark_blue_grey">#272A3C</color>
-    <color name="purple">#C3B0E7</color>
-
+    <color name="purple">#7969d3</color>
     <color name="button_purple">#553667</color>
     <color name="very_light__purple">#EDE6FB</color>
     <color name="dark_purple">#2c243d</color>

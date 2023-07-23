@@ -81,20 +81,20 @@ fun NoteListScreen(
     }
 
     Scaffold(
-        contentColor = colorResource(id = R.color.strong_yellow),
+        contentColor = colorResource(id = R.color.white),
         modifier = modifier,
         scaffoldState = scaffoldState,
         drawerShape = customShape(),
         topBar = {
             TopAppBar(
                 elevation = (-4).dp,
-                contentColor = colorResource(id = R.color.strong_yellow),
-                backgroundColor = colorResource(id = R.color.blue_green),
+                contentColor = colorResource(id = R.color.white),
+                backgroundColor = colorResource(id = R.color.button_purple),
                 title = {
                     ConstraintLayout(modifier.fillMaxWidth()) {
                         val (title, delete) = createRefs()
                         Text(
-                            color = colorResource(id = R.color.strong_yellow),
+                            color = colorResource(id = R.color.white),
                             modifier = Modifier
                                 .constrainAs(title) {
                                     end.linkTo(delete.start)
@@ -106,7 +106,7 @@ fun NoteListScreen(
                         )
 
                         Icon(
-                            tint = colorResource(id = R.color.dark_teal),
+                            tint = colorResource(id = R.color.white),
                             modifier = Modifier
                                 .constrainAs(delete) {
                                     end.linkTo(parent.end)
@@ -138,7 +138,7 @@ fun NoteListScreen(
                 }
             )
         },
-        drawerBackgroundColor = colorResource(id = R.color.white),
+        drawerBackgroundColor = colorResource(id = R.color.almost_white),
         drawerContent = {
             DrawerBody(
 
@@ -160,15 +160,15 @@ fun NoteListScreen(
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = colorResource(id = R.color.blue_green))
+                .background(color = colorResource(id = R.color.button_purple))
         ) {
             val (add)=createRefs()
             Scaffold(
                 modifier = Modifier
-                    .padding(top = 30.dp)
-                    .clip(RoundedCornerShape(topEnd = 12.dp, topStart = 12.dp))
+                    .padding(top = 30.dp, start = 8.dp, end=6.dp, bottom = 8.dp)
+                    .clip(RoundedCornerShape(16.dp))
                     .fillMaxSize()
-                    .background(colorResource(id = R.color.white))
+                    .background(colorResource(id = R.color.almost_white))
             ) {
                 NotesLazyColumn(
                     modifier = modifier,
@@ -191,7 +191,7 @@ fun NoteListScreen(
                     onClick = {
                         navHostController.navigate(HomeGraph.NoteScreen.route)
                     },
-                backgroundColor= colorResource(id = R.color.strong_yellow),
+                backgroundColor= colorResource(id = R.color.button_purple),
                     shape = RoundedCornerShape(120.dp),
                 ) {
 

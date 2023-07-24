@@ -89,7 +89,7 @@ fun NoteListScreen(
             TopAppBar(
                 elevation = (-4).dp,
                 contentColor = colorResource(id = R.color.white),
-                backgroundColor = colorResource(id = R.color.button_purple),
+                backgroundColor = colorResource(id = R.color.purple),
                 title = {
                     ConstraintLayout(modifier.fillMaxWidth()) {
                         val (title, delete) = createRefs()
@@ -160,15 +160,13 @@ fun NoteListScreen(
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = colorResource(id = R.color.button_purple))
+                .background(color = colorResource(id = R.color.purple))
         ) {
             val (add)=createRefs()
             Scaffold(
                 modifier = Modifier
-                    .padding(top = 30.dp, start = 8.dp, end=6.dp, bottom = 8.dp)
-                    .clip(RoundedCornerShape(16.dp))
                     .fillMaxSize()
-                    .background(colorResource(id = R.color.almost_white))
+                    .background(colorResource(id = R.color.white))
             ) {
                 NotesLazyColumn(
                     modifier = modifier,
@@ -191,7 +189,7 @@ fun NoteListScreen(
                     onClick = {
                         navHostController.navigate(HomeGraph.NoteScreen.route)
                     },
-                backgroundColor= colorResource(id = R.color.button_purple),
+                backgroundColor= colorResource(id = R.color.turquoise),
                     shape = RoundedCornerShape(120.dp),
                 ) {
 

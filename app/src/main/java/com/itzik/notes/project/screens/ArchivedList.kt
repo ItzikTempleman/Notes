@@ -60,7 +60,7 @@ fun ArchivedScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(colorResource(id = R.color.button_purple))
+            .background(colorResource(id = R.color.purple))
     ) {
         ConstraintLayout(
             modifier = Modifier
@@ -127,9 +127,7 @@ fun ArchivedScreen(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding( start = 8.dp, end=6.dp, bottom = 8.dp)
-                .clip(RoundedCornerShape(16.dp))
-                .background(colorResource(id = R.color.almost_white))
+                .background(colorResource(id = R.color.white))
         ) {
             NotesLazyColumn(
                 modifier = modifier,

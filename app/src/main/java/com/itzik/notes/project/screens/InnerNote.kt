@@ -50,7 +50,7 @@ fun InnerNoteScreen(
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(id = R.color.button_purple))
+            .background(colorResource(id = R.color.purple))
     ) {
         val (
             topBar,
@@ -126,8 +126,6 @@ fun InnerNoteScreen(
         if (!isEditClicked.value) {
             Text(
                 modifier = Modifier
-                    .padding(top = 45.dp, start = 8.dp, end=6.dp, bottom = 8.dp)
-                    .clip(RoundedCornerShape(16.dp))
                     .constrainAs(body) {
                         top.linkTo(topBar.bottom)
                     }
@@ -190,8 +188,7 @@ fun InnerNoteScreen(
 
             TextField(
                 modifier = Modifier
-                    .padding( start = 8.dp, end=6.dp, bottom = 8.dp)
-                    .clip(RoundedCornerShape(16.dp))
+
                     .fillMaxSize()
                     .constrainAs(body) {
                         top.linkTo(row.bottom)

@@ -60,7 +60,7 @@ fun AlertDialogScreen(
 
             },
 
-            backgroundColor = colorResource(id = R.color.button_purple),
+            backgroundColor = colorResource(id = R.color.purple),
             contentColor = colorResource(id = R.color.white)
         )
     }

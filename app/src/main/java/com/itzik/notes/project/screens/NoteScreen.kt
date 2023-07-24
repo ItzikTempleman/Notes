@@ -90,7 +90,7 @@ fun NoteScreen(
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(id = R.color.button_purple))
+            .background(colorResource(id = R.color.purple))
     ) {
         val (
             backBtn,
@@ -132,18 +132,21 @@ fun NoteScreen(
             text = stringResource(id = R.string.notes),
             fontSize = 14.sp
         )
-        Row(
-            modifier = Modifier
+            ConstraintLayout(
+            modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
+                .background(colorResource(id = R.color.white))
                 .height(56.dp)
-                .padding(8.dp)
                 .constrainAs(fontSizeBox) {
                     top.linkTo(backText.bottom)
                 }
         ) {
+                val (text1, fontSizeText, text2)= createRefs()
             Text(
-                color = colorResource(id = R.color.white),
-                modifier = Modifier
-                    .padding(top = 4.dp)
+                color = colorResource(id = R.color.black),
+                modifier = Modifier.constrainAs(text1){
+                    start.linkTo(parent.start)
+                }
+                    .padding(top = 4.dp, start = 4.dp)
                     .width(30.dp)
                     .clickable {
                         fontSize.value--
@@ -151,14 +154,16 @@ fun NoteScreen(
                         if (fontSize.value < 16) fontSize.value = 16
                     },
                 text = stringResource(id = R.string.font_size),
-                textAlign = TextAlign.Center,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             )
 
             Text(
-                color = colorResource(id = R.color.white),
-                modifier = Modifier
+
+                color = colorResource(id = R.color.black),
+                modifier = Modifier.constrainAs(fontSizeText){
+                    start.linkTo(text1.end)
+                }
                     .padding(top = 8.dp)
                     .width(30.dp),
                 text = fontSize.value.toString(),
@@ -167,8 +172,10 @@ fun NoteScreen(
 
 
             Text(
-                color = colorResource(id = R.color.white),
-                modifier = Modifier
+                color = colorResource(id = R.color.black),
+                modifier = Modifier.constrainAs(text2){
+                    start.linkTo(fontSizeText.end)
+                }
                     .width(30.dp)
                     .clickable {
                         fontSize.value++
@@ -184,9 +191,8 @@ fun NoteScreen(
         }
         TextField(
             modifier = Modifier
-                .padding(top = 40.dp, start = 8.dp, end=6.dp, bottom = 8.dp)
-                .clip(RoundedCornerShape(16.dp))
                 .fillMaxSize()
+                .padding(top = 30.dp)
                 .constrainAs(contentTextField) {
                     top.linkTo(fontSizeBox.bottom)
                     start.linkTo(parent.start)
@@ -207,7 +213,7 @@ fun NoteScreen(
                 cursorColor = colorResource(R.color.black),
                 textColor = colorResource(R.color.black),
                 disabledTextColor = colorResource(R.color.white),
-                backgroundColor = colorResource(R.color.almost_white),
+                backgroundColor = colorResource(R.color.white),
                 focusedIndicatorColor = colorResource(R.color.white),
                 unfocusedIndicatorColor = colorResource(R.color.white),
                 disabledIndicatorColor = colorResource(R.color.white),

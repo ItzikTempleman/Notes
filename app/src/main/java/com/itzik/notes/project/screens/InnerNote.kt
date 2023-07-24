@@ -1,6 +1,7 @@
 package com.itzik.notes.project.screens
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -35,6 +36,7 @@ import com.itzik.notes.project.utils.saveNote
 import com.itzik.notes.project.viewmodels.NoteViewModel
 import fontSize
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnrememberedMutableState", "AutoboxingStateValueProperty")
@@ -45,12 +47,13 @@ fun InnerNoteScreen(
     navHostController: NavHostController,
     noteArg: Note,
 ) {
-    var newChar by remember { mutableStateOf(noteArg.noteContent) }
+    val originalChar by remember { mutableStateOf(noteArg.noteContent) }
+    var newChar by remember { mutableStateOf(originalChar) }
     val isEditClicked = mutableStateOf(false)
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(id = R.color.purple))
+            .background(colorResource(id = R.color.turquoise))
     ) {
         val (
             topBar,
@@ -109,9 +112,14 @@ fun InnerNoteScreen(
                     }
                     .clickable {
                         isEditClicked.value = !isEditClicked.value
-                        if(isEditClicked.value){
+                        if (isEditClicked.value) {
                             coroutineScope.launch {
-                                saveNote(newChar, fontSize.value.toString(), noteViewModel)
+                                if (originalChar != newChar)
+                                    saveNote(
+                                        originalChar,
+                                        fontSize.value.toString(),
+                                        noteViewModel
+                                    )
                             }
                         }
                     },
@@ -129,11 +137,10 @@ fun InnerNoteScreen(
                     .constrainAs(body) {
                         top.linkTo(topBar.bottom)
                     }
-                    .background(colorResource(id = R.color.almost_white))
+                    .background(colorResource(id = R.color.white))
                     .fillMaxSize(),
-                text = noteArg.noteContent
+                text = newChar
             )
-
         } else {
             Row(
                 modifier = Modifier
@@ -168,7 +175,6 @@ fun InnerNoteScreen(
                     textAlign = TextAlign.Center, fontSize = 14.sp, fontWeight = FontWeight.Bold
                 )
 
-
                 Text(
                     color = colorResource(id = R.color.white),
                     modifier = Modifier
@@ -183,12 +189,10 @@ fun InnerNoteScreen(
                     fontSize = 26.sp,
                     fontWeight = FontWeight.Bold
                 )
-
             }
 
             TextField(
                 modifier = Modifier
-
                     .fillMaxSize()
                     .constrainAs(body) {
                         top.linkTo(row.bottom)
@@ -207,7 +211,7 @@ fun InnerNoteScreen(
                     cursorColor = colorResource(R.color.black),
                     textColor = colorResource(R.color.black),
                     disabledTextColor = colorResource(R.color.white),
-                    backgroundColor = colorResource(R.color.almost_white),
+                    backgroundColor = colorResource(R.color.white),
                     focusedIndicatorColor = colorResource(R.color.white),
                     unfocusedIndicatorColor = colorResource(R.color.white),
                     disabledIndicatorColor = colorResource(R.color.white),

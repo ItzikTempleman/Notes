@@ -60,12 +60,12 @@ fun ArchivedScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(colorResource(id = R.color.purple))
+            .background(colorResource(id = R.color.turquoise))
     ) {
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(85.dp)
+                .height(55.dp)
         ) {
             val (backBtn, backText, titleText, deleteAll) = createRefs()
 
@@ -83,7 +83,6 @@ fun ArchivedScreen(
                 contentDescription = stringResource(id = R.string.back),
                 painter = painterResource(id = R.drawable.back),
             )
-
 
             Text(
                 modifier = Modifier
@@ -120,10 +119,10 @@ fun ArchivedScreen(
                     }
                     .padding(12.dp),
                 contentDescription = null,
-
                 painter = painterResource(id = R.drawable.recycle_bin),
             )
         }
+        
         Column(
             modifier = Modifier
                 .fillMaxWidth()

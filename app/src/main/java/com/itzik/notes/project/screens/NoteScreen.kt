@@ -90,7 +90,7 @@ fun NoteScreen(
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(id = R.color.purple))
+            .background(colorResource(id = R.color.turquoise))
     ) {
         val (
             backBtn,

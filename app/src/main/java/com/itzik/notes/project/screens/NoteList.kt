@@ -89,7 +89,7 @@ fun NoteListScreen(
             TopAppBar(
                 elevation = (-4).dp,
                 contentColor = colorResource(id = R.color.white),
-                backgroundColor = colorResource(id = R.color.purple),
+                backgroundColor = colorResource(id = R.color.turquoise),
                 title = {
                     ConstraintLayout(modifier.fillMaxWidth()) {
                         val (title, delete) = createRefs()
@@ -160,7 +160,7 @@ fun NoteListScreen(
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = colorResource(id = R.color.purple))
+                .background(color = colorResource(id = R.color.turquoise))
         ) {
             val (add)=createRefs()
             Scaffold(

@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -24,6 +25,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.rememberDismissState
+import androidx.compose.material.rememberSwipeableState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -42,8 +44,9 @@ import com.itzik.notes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import me.saket.swipe.rememberSwipeableActionsState
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun NotesLazyColumn(
     modifier: Modifier,
@@ -52,30 +55,48 @@ fun NotesLazyColumn(
     noteViewModel: NoteViewModel,
     coroutineScope: CoroutineScope,
 ) {
+    val swipeState = rememberSwipeableState(initialValue = 0)
     var noteList = notes
+
     LazyColumn(modifier = modifier.fillMaxSize()) {
+        coroutineScope.launch {
+            noteViewModel.getAllNotes().collect { updatedNotesList ->
+                Log.d("WOW", "Getting all notes")
+                //if (updatedNotesList.isNotEmpty()) {
+                Log.d("WOW", "updatedNoteList isn't empty")
+                noteList = updatedNotesList
+                //}
+            }
+        }
+
         items(noteList) { item ->
 
             val currentItem = rememberUpdatedState(newValue = item).value
             val dismissState = rememberDismissState(
                 confirmStateChange = { thisNote ->
 
-                    if (thisNote == DismissValue.DismissedToStart) {
-                        coroutineScope.launch {
-                            currentItem.isInTrashBin = true
-                            noteViewModel.archiveANote(currentItem)
-                           noteViewModel.getAllNotes().collect { updatedNotesList ->
-                               noteList=updatedNotesList
-                            }
+                    //if (thisNote == DismissValue.DismissedToStart) {
+                    coroutineScope.launch {
+                        currentItem.isInTrashBin = true
+                        noteViewModel.archiveANote(currentItem)
+                        swipeState.animateTo(0)
+                        Log.d("WOW", "after archiveNote")
+                        noteViewModel.getAllNotes().collect { updatedNotesList ->
+                            Log.d("WOW", "getAllNotes()")
+                            noteList = updatedNotesList
                         }
                     }
+                    //}
                     true
                 }
             )
 
             SwipeToDismiss(
+                modifier = Modifier
+                    .padding(vertical = 1.dp)
+                    .animateItemPlacement(),
                 state = dismissState,
-                directions = setOf( DismissDirection.EndToStart),
+                directions = setOf(DismissDirection.EndToStart),
                 dismissThresholds = { FractionalThreshold(0.2f) },
 
                 background = {
@@ -114,13 +135,14 @@ fun NotesLazyColumn(
                 },
                 dismissContent = {
                     Card(
-                        modifier = modifier.fillMaxWidth()
+                        modifier = modifier
+                            .fillMaxWidth()
                             .clickable {
                                 navHostController.currentBackStackEntry?.savedStateHandle?.set(
                                     key = "note",
                                     value = currentItem
                                 )
-                                navHostController.navigate(route = HomeGraph.InnerNote.route)
+                                navHostController.navigate(route = HomeGraph.NoteScreen.route)
                             },
                         elevation = animateDpAsState(targetValue = if (dismissState.dismissDirection != null) 4.dp else 0.dp).value
                     ) {

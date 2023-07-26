@@ -42,12 +42,14 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.itzik.notes.R
 import com.itzik.notes.project.models.MenuItem
 import com.itzik.notes.project.models.Note
 import com.itzik.notes.project.navigation.HomeGraph
 import com.itzik.notes.project.viewmodels.NoteViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -63,20 +65,13 @@ fun NoteListScreen(
     noteViewModel: NoteViewModel,
 ) {
     var noteList by remember { mutableStateOf(mutableListOf<Note>()) }
-    var deletedNoteList by remember { mutableStateOf(mutableListOf<Note>()) }
+    var isStateChanged by remember { mutableStateOf(false) }
     val scaffoldState = rememberScaffoldState()
 
 
     coroutineScope.launch {
         noteViewModel.getAllNotes().collect {
             noteList = it
-
-        }
-    }
-
-    coroutineScope.launch {
-        noteViewModel.getAllDeletedNotes().collect {
-            deletedNoteList = it
         }
     }
 

@@ -8,6 +8,8 @@ import com.itzik.notes.project.repositories.NoteRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
@@ -51,4 +53,15 @@ class NoteViewModel
     }
 
     suspend fun archiveANote(note: Note)= repository.archiveANote(note)
+}
+
+suspend fun saveNote(newChar: String, fontSize: String, noteViewModel: NoteViewModel) {
+    val time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
+    val note = Note(
+        noteContent = newChar,
+        timeStamp = time,
+        fontSize = fontSize.toInt(),
+        isInTrashBin = false
+    )
+    noteViewModel.saveNote(note)
 }

@@ -24,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.itzik.notes.R
 import com.itzik.notes.project.models.Note
@@ -41,7 +42,7 @@ fun ArchivedScreen(
     coroutineScope: CoroutineScope,
     modifier: Modifier,
     navHostController: NavHostController,
-    noteViewModel: NoteViewModel,
+    noteViewModel: NoteViewModel = viewModel(),
 ) {
     var deletedNoteList by remember { mutableStateOf(mutableListOf<Note>()) }
     val isDialogOpen = remember { mutableStateOf(false) }
@@ -122,7 +123,7 @@ fun ArchivedScreen(
                 painter = painterResource(id = R.drawable.recycle_bin),
             )
         }
-        
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()

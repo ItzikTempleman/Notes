@@ -1,24 +1,20 @@
 package com.itzik.notes.project.screens
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -32,11 +28,9 @@ import androidx.navigation.NavHostController
 import com.itzik.notes.R
 import com.itzik.notes.project.models.Note
 import com.itzik.notes.project.navigation.HomeGraph
-import com.itzik.notes.project.utils.saveNote
 import com.itzik.notes.project.viewmodels.NoteViewModel
-import fontSize
+import com.itzik.notes.project.viewmodels.saveNote
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnrememberedMutableState", "AutoboxingStateValueProperty")
@@ -47,8 +41,9 @@ fun InnerNoteScreen(
     navHostController: NavHostController,
     noteArg: Note,
 ) {
-    val originalChar by remember { mutableStateOf(noteArg.noteContent) }
+    var originalChar by remember { mutableStateOf(noteArg.noteContent) }
     var newChar by remember { mutableStateOf(originalChar) }
+
     val isEditClicked = mutableStateOf(false)
     ConstraintLayout(
         modifier = Modifier
@@ -113,14 +108,10 @@ fun InnerNoteScreen(
                     .clickable {
                         isEditClicked.value = !isEditClicked.value
                         if (isEditClicked.value) {
-                            coroutineScope.launch {
-                                if (originalChar != newChar)
-                                    saveNote(
-                                        originalChar,
-                                        fontSize.value.toString(),
-                                        noteViewModel
-                                    )
-                            }
+//                            coroutineScope.launch {
+                            // originalChar=newChar
+//                                  //  saveNote(newChar, com.itzik.notes.project.screens.getFontSize.value.toString(), noteViewModel
+//                            }
                         }
                     },
                 text = if (isEditClicked.value) stringResource(id = R.string.done) else stringResource(
@@ -197,9 +188,12 @@ fun InnerNoteScreen(
                     .constrainAs(body) {
                         top.linkTo(row.bottom)
                     },
-                value = newChar,
+                value = originalChar,
                 onValueChange = {
-                    newChar = it
+                    originalChar = it
+                    coroutineScope.launch {
+                         saveNote(newChar, fontSize.value.toString(), noteViewModel)
+                    }
                 },
                 textStyle = TextStyle.Default.copy(fontSize = fontSize.value.sp),
                 placeholder = {
@@ -221,3 +215,5 @@ fun InnerNoteScreen(
         }
     }
 }
+
+//Log.d("TAG", "originalChar: $originalChar, and newChar: $newChar")

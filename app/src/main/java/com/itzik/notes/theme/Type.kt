@@ -17,12 +17,12 @@ val Typography = Typography(
     button = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.W500,
-        fontSize = 14.sp
+        com.itzik.notes.project.screens.getFontSize = 14.sp
     ),
     caption = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,
-        fontSize = 12.sp
+        com.itzik.notes.project.screens.getFontSize = 12.sp
     )
     */
 )

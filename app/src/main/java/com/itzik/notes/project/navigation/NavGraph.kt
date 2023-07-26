@@ -1,6 +1,6 @@
 package com.itzik.notes.project.navigation
 
-import NoteScreen
+import com.itzik.notes.project.screens.NoteScreen
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -9,7 +9,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.itzik.notes.project.models.Note
 import com.itzik.notes.project.screens.ArchivedScreen
-import com.itzik.notes.project.screens.InnerNoteScreen
 import com.itzik.notes.project.screens.SplashScreen
 
 
@@ -51,18 +50,15 @@ fun SetupNavGraph(
             composable(route = HomeGraph.Notes.route) {
                 NoteListScreen(coroutineScope=coroutineScope, modifier = Modifier, navHostController, noteViewModel)
             }
+//            composable(route = HomeGraph.com.itzik.notes.project.screens.NoteScreen.route) {
+//                com.itzik.notes.project.screens.NoteScreen(navHostController = navHostController, noteViewModel =  noteViewModel, coroutineScope = coroutineScope, noteArg =noteArg)
+//            }
             composable(route = HomeGraph.NoteScreen.route) {
-                NoteScreen(
-                    navHostController = navHostController,
-                    noteViewModel =  noteViewModel, coroutineScope = coroutineScope, noteArg =null)
-            }
-            composable(route = HomeGraph.InnerNote.route) {
 
                  val noteArg= navHostController.previousBackStackEntry?.savedStateHandle?.get<Note>("note")
-                if (noteArg != null) {
-                    InnerNoteScreen(navHostController=navHostController,noteViewModel = noteViewModel, coroutineScope = coroutineScope, noteArg=noteArg)
-                    //NoteScreen(navHostController = navHostController, noteViewModel = noteViewModel, coroutineScope = coroutineScope,  noteArg =noteArg)
-                }
+                    //InnerNoteScreen(navHostController=navHostController,noteViewModel = noteViewModel, coroutineScope = coroutineScope, noteArg=noteArg)
+                    NoteScreen(navHostController = navHostController, noteViewModel = noteViewModel, coroutineScope = coroutineScope,  noteArg =noteArg)
+
             }
 
             composable(route = HomeGraph.Archived.route){
@@ -80,7 +76,7 @@ sealed class SplashGraph(val route: String) {
 sealed class HomeGraph(val route: String) {
     object Notes : HomeGraph(route = "noteList")
     object NoteScreen : HomeGraph(route = "note")
-    object InnerNote: HomeGraph(route = "innerNote")
+    //object InnerNote: HomeGraph(route = "innerNote")
     object Archived:HomeGraph(route = "archivedNotes")
 }
 

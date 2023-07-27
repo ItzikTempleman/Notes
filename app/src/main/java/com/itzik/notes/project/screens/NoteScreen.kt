@@ -50,7 +50,6 @@ fun NoteScreen(
     noteViewModel: NoteViewModel,
     coroutineScope: CoroutineScope,
 ) {
-
     var text by remember { mutableStateOf("")}
 
     if(note!=null) text =note.noteContent

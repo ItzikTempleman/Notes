@@ -192,7 +192,7 @@ fun InnerNoteScreen(
                 onValueChange = {
                     originalChar = it
                     coroutineScope.launch {
-                         saveNote(newChar, fontSize.value.toString(), noteViewModel)
+                         saveNote(newChar, fontSize.value.toString(), noteId, noteViewModel)
                     }
                 },
                 textStyle = TextStyle.Default.copy(fontSize = fontSize.value.sp),

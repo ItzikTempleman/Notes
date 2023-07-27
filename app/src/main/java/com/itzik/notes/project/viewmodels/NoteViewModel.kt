@@ -1,6 +1,5 @@
 package com.itzik.notes.project.viewmodels
 
-import androidx.compose.runtime.State
 import androidx.lifecycle.ViewModel
 import com.itzik.notes.project.models.Note
 import com.itzik.notes.project.repositories.NoteRepository
@@ -55,12 +54,13 @@ class NoteViewModel
     suspend fun archiveANote(note: Note)= repository.archiveANote(note)
 }
 
-suspend fun saveNote(newChar: String, fontSize: String, noteViewModel: NoteViewModel) {
+suspend fun saveNote(newChar: String, fontSize: Int, noteId: Int, noteViewModel: NoteViewModel) {
     val time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
     val note = Note(
+        id=noteId,
         noteContent = newChar,
         timeStamp = time,
-        fontSize = fontSize.toInt(),
+        fontSize = fontSize,
         isInTrashBin = false
     )
     noteViewModel.saveNote(note)

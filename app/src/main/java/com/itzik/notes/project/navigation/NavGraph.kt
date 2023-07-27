@@ -59,12 +59,12 @@ fun SetupNavGraph(
             }
 
             composable(route = HomeGraph.NoteScreen.route) {
-                val noteArg = navHostController.previousBackStackEntry?.savedStateHandle?.get<Note>("note")
+                val note = navHostController.previousBackStackEntry?.savedStateHandle?.get<Note>("note")
                 NoteScreen(
                     navHostController = navHostController,
                     noteViewModel = noteViewModel,
                     coroutineScope = coroutineScope,
-                    noteArg = noteArg
+                    note = note
                 )
             }
 
@@ -73,7 +73,7 @@ fun SetupNavGraph(
                     navHostController = navHostController,
                     noteViewModel = noteViewModel,
                     coroutineScope = coroutineScope,
-                    noteArg = null
+                    note = null
                 )
 
             }

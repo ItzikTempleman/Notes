@@ -53,6 +53,8 @@ class NoteViewModel
     }
 
     suspend fun archiveANote(note: Note)= repository.archiveANote(note)
+
+    suspend fun deleteNoteFromEditNote(note:Note)= repository.deleteNoteFromEditNote(note)
 }
 
 suspend fun saveNote(newChar: String, fontSize: String, noteViewModel: NoteViewModel) {
@@ -63,5 +65,6 @@ suspend fun saveNote(newChar: String, fontSize: String, noteViewModel: NoteViewM
         fontSize = fontSize.toInt(),
         isInTrashBin = false
     )
+    noteViewModel.deleteNoteFromEditNote(note)
     noteViewModel.saveNote(note)
 }

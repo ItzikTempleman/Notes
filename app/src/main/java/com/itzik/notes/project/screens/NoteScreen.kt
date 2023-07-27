@@ -41,7 +41,7 @@ import okhttp3.internal.wait
 
 
 val fontSize = mutableIntStateOf(16)
-
+var lastSavedText = ""
 @SuppressLint("AutoboxingStateValueProperty", "UnrememberedMutableState", "SuspiciousIndentation")
 @Composable
 fun NoteScreen(
@@ -50,150 +50,153 @@ fun NoteScreen(
     noteViewModel: NoteViewModel,
     coroutineScope: CoroutineScope,
 ) {
-    var text by remember { mutableStateOf("")}
+    var text by remember { mutableStateOf("") }
+    var currentEditedText by remember { mutableStateOf("") }
+    if (note != null) {
+        text = note.noteContent
+    }
 
-    if(note!=null) text =note.noteContent
+    ConstraintLayout(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colorResource(id = R.color.turquoise))
+    ) {
+        val (
+            backBtn,
+            backText,
+            fontSizeBox,
+            contentTextField,
+        ) = createRefs()
 
+        Icon(
+            tint = colorResource(id = R.color.white),
+            modifier = Modifier
+                .padding(vertical = 12.dp, horizontal = 8.dp)
+                .constrainAs(backBtn) {
+                    start.linkTo(parent.start)
+                    top.linkTo(parent.top)
+                }
+                .clickable {
+                    coroutineScope.launch {
+                        if (text.isNotBlank()  && text != lastSavedText) {
+                            saveNote(text, fontSize.value.toString(), noteViewModel)
+                            lastSavedText = text
+                           text = ""
+                        }
+                        navHostController.popBackStack()
+                    }
+                },
+            contentDescription = stringResource(id = R.string.back),
+            painter = painterResource(id = R.drawable.back),
+        )
+
+
+        Text(
+            color = colorResource(id = R.color.white),
+            modifier = Modifier
+                .constrainAs(backText) {
+                    start.linkTo(backBtn.end)
+                    top.linkTo(backBtn.top)
+                    bottom.linkTo(backBtn.bottom)
+                },
+            text = stringResource(id = R.string.notes),
+            fontSize = 14.sp
+        )
         ConstraintLayout(
             modifier = Modifier
-                .fillMaxSize()
-                .background(colorResource(id = R.color.turquoise))
+                .fillMaxWidth()
+                .padding(top = 8.dp)
+                .background(colorResource(id = R.color.white))
+                .height(56.dp)
+                .constrainAs(fontSizeBox) {
+                    top.linkTo(backText.bottom)
+                }
         ) {
-            val (
-                backBtn,
-                backText,
-                fontSizeBox,
-                contentTextField,
-            ) = createRefs()
-
-            Icon(
-                tint = colorResource(id = R.color.white),
+            val (text1, fontSizeText, text2) = createRefs()
+            Text(
+                color = colorResource(id = R.color.black),
                 modifier = Modifier
-                    .padding(vertical = 12.dp, horizontal = 8.dp)
-                    .constrainAs(backBtn) {
+                    .constrainAs(text1) {
                         start.linkTo(parent.start)
-                        top.linkTo(parent.top)
                     }
+                    .padding(top = 4.dp, start = 4.dp)
+                    .width(30.dp)
                     .clickable {
-                        coroutineScope.launch {
-                            if (text.isNotBlank()) {
-                                saveNote(text, fontSize.value.toString(), noteViewModel)
-                                text = ""
-                            }
-                            navHostController.popBackStack()
-                        }
+                        fontSize.value--
+                        if (fontSize.value % 2 != 0) fontSize.value--
+                        if (fontSize.value < 16) fontSize.value = 16
                     },
-                contentDescription = stringResource(id = R.string.back),
-                painter = painterResource(id = R.drawable.back),
+                text = stringResource(id = R.string.font_size),
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            )
+
+            Text(
+
+                color = colorResource(id = R.color.black),
+                modifier = Modifier
+                    .constrainAs(fontSizeText) {
+                        start.linkTo(text1.end)
+                    }
+                    .padding(top = 8.dp)
+                    .width(30.dp),
+                text = fontSize.value.toString(),
+                textAlign = TextAlign.Center, fontSize = 14.sp, fontWeight = FontWeight.Bold
             )
 
 
             Text(
-                color = colorResource(id = R.color.white),
+                color = colorResource(id = R.color.black),
                 modifier = Modifier
-                    .constrainAs(backText) {
-                        start.linkTo(backBtn.end)
-                        top.linkTo(backBtn.top)
-                        bottom.linkTo(backBtn.bottom)
-                    },
-                text = stringResource(id = R.string.notes),
-                fontSize = 14.sp
-            )
-            ConstraintLayout(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 8.dp)
-                    .background(colorResource(id = R.color.white))
-                    .height(56.dp)
-                    .constrainAs(fontSizeBox) {
-                        top.linkTo(backText.bottom)
+                    .constrainAs(text2) {
+                        start.linkTo(fontSizeText.end)
                     }
-            ) {
-                val (text1, fontSizeText, text2) = createRefs()
-                Text(
-                    color = colorResource(id = R.color.black),
-                    modifier = Modifier
-                        .constrainAs(text1) {
-                            start.linkTo(parent.start)
-                        }
-                        .padding(top = 4.dp, start = 4.dp)
-                        .width(30.dp)
-                        .clickable {
-                            fontSize.value--
-                            if (fontSize.value % 2 != 0) fontSize.value--
-                            if (fontSize.value < 16) fontSize.value = 16
-                        },
-                    text = stringResource(id = R.string.font_size),
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold
-                )
-
-                Text(
-
-                    color = colorResource(id = R.color.black),
-                    modifier = Modifier
-                        .constrainAs(fontSizeText) {
-                            start.linkTo(text1.end)
-                        }
-                        .padding(top = 8.dp)
-                        .width(30.dp),
-                    text = fontSize.value.toString(),
-                    textAlign = TextAlign.Center, fontSize = 14.sp, fontWeight = FontWeight.Bold
-                )
-
-
-                Text(
-                    color = colorResource(id = R.color.black),
-                    modifier = Modifier
-                        .constrainAs(text2) {
-                            start.linkTo(fontSizeText.end)
-                        }
-                        .width(30.dp)
-                        .clickable {
-                            fontSize.value++
-                            if (fontSize.value % 2 != 0) fontSize.value++
-                            if (fontSize.value > 42) fontSize.value = 42
-                        },
-                    text = stringResource(id = R.string.font_size),
-                    textAlign = TextAlign.Center,
-                    fontSize = 26.sp,
-                    fontWeight = FontWeight.Bold
-                )
-
-            }
-            TextField(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = 30.dp)
-                    .constrainAs(contentTextField) {
-                        top.linkTo(fontSizeBox.bottom)
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                        bottom.linkTo(parent.bottom)
+                    .width(30.dp)
+                    .clickable {
+                        fontSize.value++
+                        if (fontSize.value % 2 != 0) fontSize.value++
+                        if (fontSize.value > 42) fontSize.value = 42
                     },
-                value = text,
-                onValueChange = {
-                    text = it
-                },
-                textStyle = TextStyle.Default.copy(fontSize = fontSize.value.sp),
-                placeholder = {
-                    Text(
-                        text = stringResource(id = R.string.content),
-                    )
-                },
-                colors = TextFieldDefaults.textFieldColors(
-                    cursorColor = Color.Black,
-                    textColor = Color.Black,
-                    disabledTextColor = Color.White,
-                    backgroundColor = Color.White,
-                    focusedIndicatorColor = Color.White,
-                    unfocusedIndicatorColor = Color.White,
-                    disabledIndicatorColor = Color.White,
-                    focusedLabelColor = Color.White,
-                )
+                text = stringResource(id = R.string.font_size),
+                textAlign = TextAlign.Center,
+                fontSize = 26.sp,
+                fontWeight = FontWeight.Bold
             )
+
         }
+        TextField(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 30.dp)
+                .constrainAs(contentTextField) {
+                    top.linkTo(fontSizeBox.bottom)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    bottom.linkTo(parent.bottom)
+                },
+            value = text,
+            onValueChange = {
+                text = it
+            },
+            textStyle = TextStyle.Default.copy(fontSize = fontSize.value.sp),
+            placeholder = {
+                Text(
+                    text = stringResource(id = R.string.content),
+                )
+            },
+            colors = TextFieldDefaults.textFieldColors(
+                cursorColor = Color.Black,
+                textColor = Color.Black,
+                disabledTextColor = Color.White,
+                backgroundColor = Color.White,
+                focusedIndicatorColor = Color.White,
+                unfocusedIndicatorColor = Color.White,
+                disabledIndicatorColor = Color.White,
+                focusedLabelColor = Color.White,
+            )
+        )
     }
+}
 
 
 

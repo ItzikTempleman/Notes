@@ -19,10 +19,14 @@ interface NoteDao {
     @Query("DELETE FROM $NOTE_TABLE WHERE isInTrashBin=1")
     suspend fun emptyTrashBin()
 
+    @Query("DELETE FROM $NOTE_TABLE")
+    suspend fun deleteNoteFromEditNote(note:Note)
+
     @Insert (onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveNotesToTrashBin(notes: MutableList<Note>)
 
     @Insert (onConflict = OnConflictStrategy.REPLACE)
     fun archiveSingleNote(note: Note)
+
 
 }

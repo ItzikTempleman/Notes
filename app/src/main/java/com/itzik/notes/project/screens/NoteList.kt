@@ -77,6 +77,7 @@ fun NoteListScreen(
 
     Scaffold(
         contentColor = colorResource(id = R.color.white),
+
         modifier = modifier,
         scaffoldState = scaffoldState,
         drawerShape = customShape(),
@@ -136,7 +137,6 @@ fun NoteListScreen(
         drawerBackgroundColor = colorResource(id = R.color.almost_white),
         drawerContent = {
             DrawerBody(
-
                 items = listOf(
                     MenuItem(
                         modifier = modifier,
@@ -182,12 +182,11 @@ fun NoteListScreen(
                         .padding(12.dp),
 
                     onClick = {
-                        navHostController.navigate(HomeGraph.NoteScreen.route)
+                        navHostController.navigate(HomeGraph.NewNoteScreen.route)
                     },
                 backgroundColor= colorResource(id = R.color.turquoise),
                     shape = RoundedCornerShape(120.dp),
                 ) {
-
                     Icon(
                         contentDescription = "create note",
                         painter = painterResource(id = R.drawable.add_note),

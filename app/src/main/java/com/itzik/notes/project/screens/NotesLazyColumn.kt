@@ -61,11 +61,7 @@ fun NotesLazyColumn(
     LazyColumn(modifier = modifier.fillMaxSize()) {
         coroutineScope.launch {
             noteViewModel.getAllNotes().collect { updatedNotesList ->
-                Log.d("WOW", "Getting all notes")
-                //if (updatedNotesList.isNotEmpty()) {
-                Log.d("WOW", "updatedNoteList isn't empty")
                 noteList = updatedNotesList
-                //}
             }
         }
 
@@ -73,20 +69,14 @@ fun NotesLazyColumn(
 
             val currentItem = rememberUpdatedState(newValue = item).value
             val dismissState = rememberDismissState(
-                confirmStateChange = { thisNote ->
-
-                    //if (thisNote == DismissValue.DismissedToStart) {
+                confirmStateChange = {
                     coroutineScope.launch {
                         currentItem.isInTrashBin = true
                         noteViewModel.archiveANote(currentItem)
-                        swipeState.animateTo(0)
-                        Log.d("WOW", "after archiveNote")
                         noteViewModel.getAllNotes().collect { updatedNotesList ->
-                            Log.d("WOW", "getAllNotes()")
                             noteList = updatedNotesList
                         }
                     }
-                    //}
                     true
                 }
             )

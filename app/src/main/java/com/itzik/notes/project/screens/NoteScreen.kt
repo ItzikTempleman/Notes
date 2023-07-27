@@ -40,7 +40,7 @@ import kotlinx.coroutines.launch
 
 val fontSize = mutableIntStateOf(16)
 
-@SuppressLint("AutoboxingStateValueProperty", "UnrememberedMutableState")
+@SuppressLint("AutoboxingStateValueProperty", "UnrememberedMutableState", "SuspiciousIndentation")
 @Composable
 fun NoteScreen(
     noteArg: Note?,

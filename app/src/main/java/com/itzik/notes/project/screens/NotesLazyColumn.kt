@@ -1,5 +1,6 @@
 package com.itzik.notes.project.screens
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
@@ -48,6 +49,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import me.saket.swipe.rememberSwipeableActionsState
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun NotesLazyColumn(
@@ -62,15 +64,16 @@ fun NotesLazyColumn(
     val swipeState = rememberSwipeableState(initialValue = 0)
     var noteList = notes
 
+    coroutineScope.launch {
+        noteViewModel.getAllNotes().collect { updatedNotesList ->
+            noteList = updatedNotesList
+        }
+    }
+
     LazyColumn(
         modifier = modifier.fillMaxSize(),
-    
-        ) {
-        coroutineScope.launch {
-            noteViewModel.getAllNotes().collect { updatedNotesList ->
-                noteList = updatedNotesList
-            }
-        }
+        state = rememberLazyListState()
+    ) {
 
         items(noteList) { item ->
 
@@ -83,7 +86,7 @@ fun NotesLazyColumn(
                         noteViewModel.getAllNotes().collect { updatedNotesList ->
                             noteList = updatedNotesList
                         }
-                        isStateChanged=!isStateChanged
+                        isStateChanged = !isStateChanged
                     }
                     true
                 }

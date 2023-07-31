@@ -2,6 +2,7 @@ package com.itzik.notes.project.room_database
 
 import androidx.compose.runtime.State
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -19,7 +20,7 @@ interface NoteDao {
     @Query("DELETE FROM $NOTE_TABLE WHERE isInTrashBin=1")
     suspend fun emptyTrashBin()
 
-    @Query("DELETE FROM $NOTE_TABLE")
+    @Delete
     suspend fun deleteNoteFromEditNote(note:Note)
 
     @Insert (onConflict = OnConflictStrategy.REPLACE)

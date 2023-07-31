@@ -25,6 +25,7 @@ object AppModule {
     @Singleton
     fun provideNoteRepository(noteDao: NoteDao): NoteRepository = NoteRepositoryImp(noteDao)
 
+
     @Provides
     @Singleton
     fun provideDb(@ApplicationContext context: Context) = Room.databaseBuilder(

@@ -34,10 +34,12 @@ import com.itzik.notes.R
 import com.itzik.notes.project.models.Note
 
 import com.itzik.notes.project.viewmodels.NoteViewModel
-import com.itzik.notes.project.viewmodels.saveNote
+
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import okhttp3.internal.wait
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 
 val fontSize = mutableIntStateOf(16)
@@ -52,6 +54,7 @@ fun NoteScreen(
 ) {
     var text by remember { mutableStateOf("") }
     var currentEditedText by remember { mutableStateOf("") }
+    
     if (note != null) {
         text = note.noteContent
     }
@@ -79,6 +82,9 @@ fun NoteScreen(
                 .clickable {
                     coroutineScope.launch {
                         if (text.isNotBlank()  && text != lastSavedText) {
+                            if (note != null) {
+                                noteViewModel.deleteNoteFromEditNote(note)
+                            }
                             saveNote(text, fontSize.value.toString(), noteViewModel)
                             lastSavedText = text
                            text = ""
@@ -198,7 +204,16 @@ fun NoteScreen(
     }
 }
 
-
+suspend fun saveNote(newChar: String, fontSize: String, noteViewModel: NoteViewModel) {
+    val time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
+    val note = Note(
+        noteContent = newChar,
+        timeStamp = time,
+        fontSize = fontSize.toInt(),
+        isInTrashBin = false
+    )
+    noteViewModel.saveNote(note)
+}
 
 
 

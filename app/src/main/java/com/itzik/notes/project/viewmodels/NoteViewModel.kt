@@ -57,14 +57,3 @@ class NoteViewModel
     suspend fun deleteNoteFromEditNote(note:Note)= repository.deleteNoteFromEditNote(note)
 }
 
-suspend fun saveNote(newChar: String, fontSize: String, noteViewModel: NoteViewModel) {
-    val time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
-    val note = Note(
-        noteContent = newChar,
-        timeStamp = time,
-        fontSize = fontSize.toInt(),
-        isInTrashBin = false
-    )
-    noteViewModel.deleteNoteFromEditNote(note)
-    noteViewModel.saveNote(note)
-}

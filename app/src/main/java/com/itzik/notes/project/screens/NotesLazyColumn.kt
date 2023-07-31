@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Card
 import androidx.compose.material.DismissDirection
 import androidx.compose.material.DismissValue
@@ -20,6 +21,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FractionalThreshold
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Surface
 import androidx.compose.material.SwipeToDismiss
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
@@ -55,10 +57,15 @@ fun NotesLazyColumn(
     noteViewModel: NoteViewModel,
     coroutineScope: CoroutineScope,
 ) {
+
+    var isStateChanged by remember { mutableStateOf(false) }
     val swipeState = rememberSwipeableState(initialValue = 0)
     var noteList = notes
 
-    LazyColumn(modifier = modifier.fillMaxSize()) {
+    LazyColumn(
+        modifier = modifier.fillMaxSize(),
+    
+        ) {
         coroutineScope.launch {
             noteViewModel.getAllNotes().collect { updatedNotesList ->
                 noteList = updatedNotesList
@@ -76,6 +83,7 @@ fun NotesLazyColumn(
                         noteViewModel.getAllNotes().collect { updatedNotesList ->
                             noteList = updatedNotesList
                         }
+                        isStateChanged=!isStateChanged
                     }
                     true
                 }

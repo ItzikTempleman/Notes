@@ -55,7 +55,7 @@ import kotlinx.coroutines.launch
 
 @SuppressLint(
     "CoroutineCreationDuringComposition", "MutableCollectionMutableState",
-    "UnusedMaterialScaffoldPaddingParameter"
+    "UnusedMaterialScaffoldPaddingParameter", "SuspiciousIndentation"
 )
 @Composable
 fun NoteListScreen(
@@ -65,7 +65,6 @@ fun NoteListScreen(
     noteViewModel: NoteViewModel,
 ) {
     var noteList by remember { mutableStateOf(mutableListOf<Note>()) }
-    var isStateChanged by remember { mutableStateOf(false) }
     val scaffoldState = rememberScaffoldState()
 
 
@@ -152,6 +151,7 @@ fun NoteListScreen(
             )
         }
     ) {
+
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxSize()
@@ -171,7 +171,6 @@ fun NoteListScreen(
                     coroutineScope = coroutineScope
                 )
             }
-
 
             FloatingActionButton(
                     modifier = Modifier

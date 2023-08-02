@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Card
 import androidx.compose.material.DismissDirection
@@ -48,6 +49,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import me.saket.swipe.rememberSwipeableActionsState
+import kotlin.math.abs
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
@@ -60,20 +62,16 @@ fun NotesLazyColumn(
     coroutineScope: CoroutineScope,
 ) {
 
-    var isStateChanged by remember { mutableStateOf(false) }
-    val swipeState = rememberSwipeableState(initialValue = 0)
     var noteList = notes
 
-    coroutineScope.launch {
-        noteViewModel.getAllNotes().collect { updatedNotesList ->
-            noteList = updatedNotesList
-        }
-    }
+
 
     LazyColumn(
         modifier = modifier.fillMaxSize(),
         state = rememberLazyListState()
     ) {
+
+
 
         items(noteList) { item ->
 
@@ -86,7 +84,6 @@ fun NotesLazyColumn(
                         noteViewModel.getAllNotes().collect { updatedNotesList ->
                             noteList = updatedNotesList
                         }
-                        isStateChanged = !isStateChanged
                     }
                     true
                 }

@@ -42,6 +42,12 @@ class NoteViewModel
         repository.saveDeletedNotesToTrashBin(deletedNotesList)
     }
 
+
+    suspend fun retrieveNote(note: Note) {
+        note.isInTrashBin = false
+        repository.updateIsInTrashBib(note)
+    }
+
     suspend fun getAllDeletedNotes(): Flow<MutableList<Note>> {
         val deletedNoteList = flow {
             val updatedList = repository.getAllDeletedNotes()
@@ -52,8 +58,8 @@ class NoteViewModel
         return deletedNoteList
     }
 
-    suspend fun archiveANote(note: Note)= repository.archiveANote(note)
+    suspend fun archiveANote(note: Note) = repository.archiveANote(note)
 
-    suspend fun deleteNoteFromEditNote(note:Note)= repository.deleteNoteFromEditNote(note)
+    suspend fun deleteNoteFromEditNote(note: Note) = repository.deleteNoteFromEditNote(note)
 }
 

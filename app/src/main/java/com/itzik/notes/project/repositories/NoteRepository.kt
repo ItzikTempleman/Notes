@@ -12,4 +12,6 @@ interface NoteRepository {
 
     suspend fun deleteNoteFromEditNote(note:Note)
     suspend fun archiveANote(note: Note)
+
+    suspend fun updateIsInTrashBib(note: Note)
 }

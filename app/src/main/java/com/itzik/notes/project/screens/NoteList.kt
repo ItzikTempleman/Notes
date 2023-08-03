@@ -18,6 +18,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
@@ -121,7 +122,7 @@ fun NoteListScreen(
                 },
 
                 navigationIcon = {
-                    Icon(imageVector = Icons.Default.Menu, contentDescription = "",
+                    Icon(imageVector = Icons.Default.MoreVert, contentDescription = "",
                         modifier = Modifier
                             .clickable {
                                 coroutineScope.launch {

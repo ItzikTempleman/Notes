@@ -73,7 +73,8 @@ fun ArchivedScreen(
     modifier: Modifier,
     navHostController: NavHostController,
     noteViewModel: NoteViewModel = viewModel(),
-) {
+
+    ) {
 
     var deletedNoteList by remember { mutableStateOf(mutableListOf<Note>()) }
     val isDialogOpen = remember { mutableStateOf(false) }
@@ -219,7 +220,8 @@ fun ArchivedItem(
 
         DropdownMenu(
             expanded = expanded,
-            onDismissRequest = { expanded = false }
+            onDismissRequest = {
+                expanded = false }
         ) {
             DropdownMenuItem(
                 content = {
@@ -228,8 +230,7 @@ fun ArchivedItem(
                 onClick = {
                     coroutineScope.launch {
                         noteViewModel.deleteNoteFromEditNote(note)
-                        deletedNoteList.clear()
-                            // deletedNoteList.addAll(updatedArchivedNoteList )
+                        deletedNoteList.remove(note)
                     }
                 }
             )
@@ -238,7 +239,10 @@ fun ArchivedItem(
                     Text("Retrieve note")
                 },
                 onClick = {
-
+                    coroutineScope.launch {
+                        noteViewModel.retrieveNote(note)
+                        deletedNoteList.remove(note)
+                    }
                 }
             )
         }

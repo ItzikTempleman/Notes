@@ -85,12 +85,12 @@ fun NoteListScreen(
             TopAppBar(
                 elevation = (-4).dp,
                 contentColor = colorResource(id = R.color.white),
-                backgroundColor = colorResource(id = R.color.turquoise),
+                backgroundColor = colorResource(id = R.color.white),
                 title = {
                     ConstraintLayout(modifier.fillMaxWidth()) {
                         val (title, delete) = createRefs()
                         Text(
-                            color = colorResource(id = R.color.white),
+                            color = colorResource(id = R.color.blue_green),
                             modifier = Modifier
                                 .constrainAs(title) {
                                     end.linkTo(delete.start)
@@ -98,11 +98,11 @@ fun NoteListScreen(
                                 .padding(12.dp),
                             text = if (noteList.isNotEmpty()) stringResource(id = R.string.notes)
                             else stringResource(id = R.string.no_notes),
-                            fontSize = 14.sp
+                            fontSize = 20.sp
                         )
 
                         Icon(
-                            tint = colorResource(id = R.color.white),
+                            tint = colorResource(id = R.color.blue_green),
                             modifier = Modifier
                                 .constrainAs(delete) {
                                     end.linkTo(parent.end)
@@ -123,6 +123,7 @@ fun NoteListScreen(
 
                 navigationIcon = {
                     Icon(imageVector = Icons.Default.MoreVert, contentDescription = "",
+                        tint = colorResource(id = R.color.blue_green),
                         modifier = Modifier
                             .clickable {
                                 coroutineScope.launch {
@@ -134,7 +135,7 @@ fun NoteListScreen(
                 }
             )
         },
-        drawerBackgroundColor = colorResource(id = R.color.almost_white),
+        drawerBackgroundColor = colorResource(id = R.color.white),
         drawerContent = {
             DrawerBody(
                 items = listOf(
@@ -156,7 +157,7 @@ fun NoteListScreen(
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = colorResource(id = R.color.turquoise))
+                .background(color = colorResource(id = R.color.white))
         ) {
             val (add)=createRefs()
             Scaffold(
@@ -184,7 +185,7 @@ fun NoteListScreen(
                     onClick = {
                         navHostController.navigate(HomeGraph.NewNoteScreen.route)
                     },
-                backgroundColor= colorResource(id = R.color.turquoise),
+                backgroundColor= colorResource(id = R.color.blue_green),
                     shape = RoundedCornerShape(120.dp),
                 ) {
                     Icon(

@@ -98,13 +98,13 @@ fun ArchivedScreen(
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(colorResource(id = R.color.turquoise))
+                .background(colorResource(id = R.color.white))
                 .height(55.dp)
         ) {
             val (backBtn, backText, titleText, deleteAll) = createRefs()
 
             Icon(
-                tint = colorResource(id = R.color.white),
+                tint = colorResource(id = R.color.blue_green),
                 modifier = Modifier
                     .padding(top = 12.dp, start = 8.dp)
                     .constrainAs(backBtn) {
@@ -120,20 +120,20 @@ fun ArchivedScreen(
 
             Text(
                 modifier = Modifier
-                    .padding(top = 8.dp)
+                    .padding(top = 10.dp)
                     .constrainAs(backText) {
                         start.linkTo(backBtn.end)
                         top.linkTo(backBtn.top)
                         bottom.linkTo(backBtn.bottom)
                     },
                 text = stringResource(id = R.string.back_to_notes),
-                color = colorResource(id = R.color.white),
-                fontSize = 12.sp
+                color = colorResource(id = R.color.blue_green),
+                fontSize = 20.sp
             )
             Text(
                 text = stringResource(id = R.string.archived_notes),
-                fontSize = 14.sp,
-                color = colorResource(id = R.color.white),
+                fontSize = 20.sp,
+                color = colorResource(id = R.color.blue_green),
                 modifier = modifier
                     .constrainAs(titleText) {
                         end.linkTo(deleteAll.start)
@@ -142,7 +142,7 @@ fun ArchivedScreen(
                     .padding(12.dp)
             )
             Icon(
-                tint = colorResource(id = R.color.white),
+                tint = colorResource(id = R.color.blue_green),
                 modifier = Modifier
                     .constrainAs(deleteAll) {
                         end.linkTo(parent.end)

@@ -62,7 +62,7 @@ fun NoteScreen(
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(id = R.color.turquoise))
+            .background(colorResource(id = R.color.white))
     ) {
         val (
             backBtn,
@@ -72,7 +72,7 @@ fun NoteScreen(
         ) = createRefs()
 
         Icon(
-            tint = colorResource(id = R.color.white),
+            tint = colorResource(id = R.color.blue_green),
             modifier = Modifier
                 .padding(vertical = 12.dp, horizontal = 8.dp)
                 .constrainAs(backBtn) {
@@ -98,7 +98,7 @@ fun NoteScreen(
 
 
         Text(
-            color = colorResource(id = R.color.white),
+            color = colorResource(id = R.color.blue_green),
             modifier = Modifier
                 .constrainAs(backText) {
                     start.linkTo(backBtn.end)
@@ -106,7 +106,7 @@ fun NoteScreen(
                     bottom.linkTo(backBtn.bottom)
                 },
             text = stringResource(id = R.string.notes),
-            fontSize = 14.sp
+            fontSize = 20.sp
         )
         ConstraintLayout(
             modifier = Modifier
@@ -125,7 +125,7 @@ fun NoteScreen(
                     .constrainAs(text1) {
                         start.linkTo(parent.start)
                     }
-                    .padding(top = 4.dp, start = 4.dp)
+                    .padding(top = 4.dp, start = 18.dp)
                     .width(30.dp)
                     .clickable {
                         fontSize.value--

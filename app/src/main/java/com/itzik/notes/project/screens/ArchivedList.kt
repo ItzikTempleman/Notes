@@ -21,6 +21,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
@@ -81,6 +82,7 @@ fun ArchivedScreen(
     ) {
 
     var deletedNoteList by remember { mutableStateOf(mutableListOf<Note>()) }
+
     val isDialogOpen = remember { mutableStateOf(false) }
 
 
@@ -94,26 +96,31 @@ fun ArchivedScreen(
         }
     }
 
-    Column(
+    ConstraintLayout(
         modifier = modifier
             .fillMaxSize()
             .background(getGradientColor())
 
     ) {
+        val (topBar, lazyGrid, floatingActionButton) = createRefs()
         ConstraintLayout(
             modifier = Modifier
+                .constrainAs(topBar) {
+                    top.linkTo(parent.top)
+                }
                 .fillMaxWidth()
                 .height(55.dp)
         ) {
-            val (backBtn, backText, titleText, deleteAll) = createRefs()
+            val (backBtn, backText, titleText) = createRefs()
 
             Icon(
                 tint = colorResource(id = R.color.blue_green),
                 modifier = Modifier
-                    .padding(top = 12.dp, start = 8.dp)
+                    .padding(start = 8.dp)
                     .constrainAs(backBtn) {
                         start.linkTo(parent.start)
                         top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
                     }
                     .clickable {
                         navHostController.navigate(HomeGraph.Notes.route)
@@ -125,11 +132,10 @@ fun ArchivedScreen(
             Text(
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
-                    .padding(top = 10.dp)
                     .constrainAs(backText) {
                         start.linkTo(backBtn.end)
-                        top.linkTo(backBtn.top)
-                        bottom.linkTo(backBtn.bottom)
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
                     },
                 text = stringResource(id = R.string.back_to_notes),
                 color = colorResource(id = R.color.blue_green),
@@ -138,34 +144,26 @@ fun ArchivedScreen(
             Text(
                 fontWeight = FontWeight.Bold,
                 text = stringResource(id = R.string.archived_notes),
-                fontSize = 20.sp,
+                fontSize = 26.sp,
                 color = colorResource(id = R.color.blue_green),
                 modifier = modifier
                     .constrainAs(titleText) {
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
                         top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
                     }
                     .padding(12.dp)
-            )
-            Icon(
-                tint = colorResource(id = R.color.blue_green),
-                modifier = Modifier
-                    .constrainAs(deleteAll) {
-                        end.linkTo(parent.end)
-                        top.linkTo(parent.top)
-                    }
-                    .clickable {
-                        isDialogOpen.value = true
-                    }
-                    .padding(12.dp),
-                contentDescription = null,
-                imageVector = Icons.Default.DeleteForever,
             )
         }
 
         Column(
             modifier = Modifier
+                .constrainAs(lazyGrid) {
+                    top.linkTo(topBar.bottom)
+                    bottom.linkTo(parent.bottom)
+                }
+                .height(780.dp)
                 .fillMaxWidth()
         ) {
             LazyVerticalGrid(columns = GridCells.Fixed(2), content = {
@@ -174,15 +172,34 @@ fun ArchivedScreen(
                         deletedNoteList = deletedNoteList,
                         modifier = modifier,
                         note = it,
-                        navHostController = navHostController,
                         coroutineScope = coroutineScope,
                         noteViewModel = noteViewModel
                     )
                 }
             })
         }
+        FloatingActionButton(
+            modifier = Modifier
+                .constrainAs(floatingActionButton) {
+                    end.linkTo(parent.end)
+                    bottom.linkTo(parent.bottom)
+                }
+                .padding(12.dp),
 
+            onClick = {
+                isDialogOpen.value = true
+            },
+            backgroundColor = colorResource(id = R.color.blue_green),
+            shape = RoundedCornerShape(120.dp),
+        ) {
+            Icon(
+                contentDescription = null,
+                imageVector = Icons.Default.Delete,
+                tint = colorResource(id = R.color.white),
+            )
+        }
     }
+
 }
 
 
@@ -191,7 +208,6 @@ fun ArchivedItem(
     deletedNoteList: MutableList<Note>,
     modifier: Modifier,
     note: Note,
-    navHostController: NavHostController,
     noteViewModel: NoteViewModel,
     coroutineScope: CoroutineScope,
 ) {
@@ -239,7 +255,7 @@ fun ArchivedItem(
                 onClick = {
                     coroutineScope.launch {
                         noteViewModel.deleteNoteFromEditNote(note)
-                        deletedNoteList.remove(note)
+                        updatedArchivedNoteList.remove(note)
                     }
                 }
             )
@@ -250,7 +266,7 @@ fun ArchivedItem(
                 onClick = {
                     coroutineScope.launch {
                         noteViewModel.retrieveNote(note)
-                        deletedNoteList.remove(note)
+                        updatedArchivedNoteList.remove(note)
                     }
                 }
             )

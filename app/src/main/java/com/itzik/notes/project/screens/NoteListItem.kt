@@ -56,7 +56,7 @@ fun NoteItem(
             )
             Spacer(
                 modifier = Modifier.constrainAs(divider){
-                    top.linkTo(content.bottom)
+                    bottom.linkTo(parent.bottom)
                 }
                     .height(0.5.dp)
                     .fillMaxWidth()

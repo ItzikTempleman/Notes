@@ -36,6 +36,7 @@ import com.itzik.notes.project.utils.getGradientColor
 
 import com.itzik.notes.project.viewmodels.NoteViewModel
 
+
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import okhttp3.internal.wait
@@ -45,6 +46,7 @@ import java.time.format.DateTimeFormatter
 
 val fontSize = mutableIntStateOf(16)
 var lastSavedText = ""
+
 @SuppressLint("AutoboxingStateValueProperty", "UnrememberedMutableState", "SuspiciousIndentation")
 @Composable
 fun NoteScreen(
@@ -54,8 +56,8 @@ fun NoteScreen(
     coroutineScope: CoroutineScope,
 ) {
     var text by remember { mutableStateOf("") }
-    var currentEditedText by remember { mutableStateOf("") }
-    
+
+
     if (note != null) {
         text = note.noteContent
     }
@@ -63,67 +65,64 @@ fun NoteScreen(
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(getGradientColor())
     ) {
         val (
-            backBtn,
-            backText,
-            fontSizeBox,
+            topBar,
             contentTextField,
         ) = createRefs()
-
-        Icon(
-            tint = colorResource(id = R.color.blue_green),
-            modifier = Modifier
-                .padding(vertical = 12.dp, horizontal = 8.dp)
-                .constrainAs(backBtn) {
-                    start.linkTo(parent.start)
-                    top.linkTo(parent.top)
-                }
-                .clickable {
-                    coroutineScope.launch {
-                        if (text.isNotBlank() && text != lastSavedText) {
-                            if (note != null) {
-                                noteViewModel.deleteNoteFromEditNote(note)
-                            }
-                            saveNote(text, fontSize.value.toString(), noteViewModel)
-                            lastSavedText = text
-                            text = ""
-                        }
-                        navHostController.popBackStack()
-                    }
-                },
-            contentDescription = stringResource(id = R.string.back),
-            painter = painterResource(id = R.drawable.back),
-        )
-
-
-        Text(
-            color = colorResource(id = R.color.blue_green),
-            modifier = Modifier
-                .constrainAs(backText) {
-                    start.linkTo(backBtn.end)
-                    top.linkTo(backBtn.top)
-                    bottom.linkTo(backBtn.bottom)
-                },
-            text = stringResource(id = R.string.notes),
-            fontSize = 20.sp
-        )
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 8.dp)
-                .background(colorResource(id = R.color.white))
-                .height(56.dp)
-                .constrainAs(fontSizeBox) {
-                    top.linkTo(backText.bottom)
+                .height(90.dp)
+                .background(Color.White)
+                .constrainAs(topBar) {
+                    top.linkTo(parent.top)
                 }
         ) {
-            val (text1, fontSizeText, text2) = createRefs()
+            val (backBtn, backText, text1, fontSizeText, text2) = createRefs()
+            Icon(
+                tint = colorResource(id = R.color.blue_green),
+                modifier = Modifier
+                    .padding(vertical = 12.dp, horizontal = 8.dp)
+                    .constrainAs(backBtn) {
+                        start.linkTo(parent.start)
+                        top.linkTo(parent.top)
+                    }
+                    .clickable {
+                        coroutineScope.launch {
+                            if (text.isNotBlank() && text != lastSavedText) {
+                                if (note != null) {
+                                    noteViewModel.deleteNoteFromEditNote(note)
+                                }
+                                noteViewModel.updateNote(text, fontSize.value.toString())
+                                lastSavedText = text
+                                text = ""
+                            }
+                            navHostController.popBackStack()
+                        }
+                    },
+                contentDescription = stringResource(id = R.string.back),
+                painter = painterResource(id = R.drawable.back),
+            )
+
+            Text(
+                color = colorResource(id = R.color.blue_green),
+                modifier = Modifier
+                    .constrainAs(backText) {
+                        start.linkTo(backBtn.end)
+                        top.linkTo(backBtn.top)
+                        bottom.linkTo(backBtn.bottom)
+                    },
+                text = stringResource(id = R.string.notes),
+                fontSize = 20.sp
+            )
+
             Text(
                 color = colorResource(id = R.color.black),
                 modifier = Modifier
                     .constrainAs(text1) {
+                        top.linkTo(backBtn.bottom)
                         start.linkTo(parent.start)
                     }
                     .padding(top = 4.dp, start = 18.dp)
@@ -143,6 +142,7 @@ fun NoteScreen(
                 color = colorResource(id = R.color.black),
                 modifier = Modifier
                     .constrainAs(fontSizeText) {
+                        top.linkTo(backBtn.bottom)
                         start.linkTo(text1.end)
                     }
                     .padding(top = 8.dp)
@@ -151,11 +151,11 @@ fun NoteScreen(
                 textAlign = TextAlign.Center, fontSize = 14.sp, fontWeight = FontWeight.Bold
             )
 
-
             Text(
                 color = colorResource(id = R.color.black),
                 modifier = Modifier
                     .constrainAs(text2) {
+                        top.linkTo(backBtn.bottom)
                         start.linkTo(fontSizeText.end)
                     }
                     .width(30.dp)
@@ -171,12 +171,13 @@ fun NoteScreen(
             )
 
         }
+
         TextField(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(top = 30.dp)
                 .constrainAs(contentTextField) {
-                    top.linkTo(fontSizeBox.bottom)
+                    top.linkTo(topBar.bottom)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                     bottom.linkTo(parent.bottom)
@@ -195,7 +196,7 @@ fun NoteScreen(
                 cursorColor = Color.Black,
                 textColor = Color.Black,
                 disabledTextColor = Color.White,
-                backgroundColor = Color.White,
+                backgroundColor = Color.Transparent,
                 focusedIndicatorColor = Color.White,
                 unfocusedIndicatorColor = Color.White,
                 disabledIndicatorColor = Color.White,
@@ -205,16 +206,7 @@ fun NoteScreen(
     }
 }
 
-suspend fun saveNote(newChar: String, fontSize: String, noteViewModel: NoteViewModel) {
-    val time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
-    val note = Note(
-        noteContent = newChar,
-        timeStamp = time,
-        fontSize = fontSize.toInt(),
-        isInTrashBin = false
-    )
-    noteViewModel.saveNote(note)
-}
+
 
 
 

@@ -61,5 +61,17 @@ class NoteViewModel
     suspend fun archiveANote(note: Note) = repository.archiveANote(note)
 
     suspend fun deleteNoteFromEditNote(note: Note) = repository.deleteNoteFromEditNote(note)
+
+
+    suspend fun updateNote(newChar: String, fontSize: String) {
+        val time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
+        val note = Note(
+            noteContent = newChar,
+            timeStamp = time,
+            fontSize = fontSize.toInt(),
+            isInTrashBin = false
+        )
+       saveNote(note)
+    }
 }
 

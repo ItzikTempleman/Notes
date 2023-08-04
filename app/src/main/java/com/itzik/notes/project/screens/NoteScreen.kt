@@ -32,6 +32,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.itzik.notes.R
 import com.itzik.notes.project.models.Note
+import com.itzik.notes.project.utils.getGradientColor
 
 import com.itzik.notes.project.viewmodels.NoteViewModel
 
@@ -62,7 +63,7 @@ fun NoteScreen(
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(id = R.color.white))
+            .background(Color.White)
     ) {
         val (
             backBtn,
@@ -81,13 +82,13 @@ fun NoteScreen(
                 }
                 .clickable {
                     coroutineScope.launch {
-                        if (text.isNotBlank()  && text != lastSavedText) {
+                        if (text.isNotBlank() && text != lastSavedText) {
                             if (note != null) {
                                 noteViewModel.deleteNoteFromEditNote(note)
                             }
                             saveNote(text, fontSize.value.toString(), noteViewModel)
                             lastSavedText = text
-                           text = ""
+                            text = ""
                         }
                         navHostController.popBackStack()
                     }

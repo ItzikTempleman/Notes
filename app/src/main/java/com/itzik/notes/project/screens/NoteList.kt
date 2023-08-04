@@ -37,11 +37,13 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.BlendMode.Companion.Color
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Brush.Companion.linearGradient
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -83,20 +85,16 @@ fun NoteListScreen(
     }
 
     Scaffold(
-        contentColor = colorResource(id = R.color.white),
-
-        modifier = modifier,
         scaffoldState = scaffoldState,
         drawerShape = customShape(),
         topBar = {
             TopAppBar(
-                elevation = (-4).dp,
-                contentColor = colorResource(id = R.color.white),
-                backgroundColor = colorResource(id = R.color.white),
+                backgroundColor = colorResource(id = R.color.light_grey),
                 title = {
                     ConstraintLayout(modifier.fillMaxWidth()) {
                         val (title, delete) = createRefs()
                         Text(
+                            fontWeight = FontWeight.Bold,
                             color = colorResource(id = R.color.blue_green),
                             modifier = Modifier
                                 .constrainAs(title) {
@@ -122,7 +120,7 @@ fun NoteListScreen(
                                     }
                                 },
                             contentDescription = "delete all",
-                            painter = painterResource(id = R.drawable.deleted),
+                            painter = painterResource(id = R.drawable.recycle_bin),
                         )
                     }
 
@@ -142,7 +140,7 @@ fun NoteListScreen(
                 }
             )
         },
-        drawerBackgroundColor = colorResource(id = R.color.white),
+        drawerBackgroundColor = androidx.compose.ui.graphics.Color.White,
         drawerContent = {
             DrawerBody(
                 items = listOf(
@@ -162,6 +160,7 @@ fun NoteListScreen(
     ) {
         ConstraintLayout(
             modifier = Modifier
+
                 .fillMaxSize()
 
 
@@ -172,7 +171,7 @@ fun NoteListScreen(
                     .fillMaxSize()
             ) {
                 NotesLazyColumn(
-                    modifier = modifier,
+                    modifier = modifier.background(getGradientColor()),
                     noteViewModel = noteViewModel,
                     notes = noteList,
                     navHostController = navHostController,

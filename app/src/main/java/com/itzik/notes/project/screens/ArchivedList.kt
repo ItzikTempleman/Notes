@@ -29,6 +29,8 @@ import androidx.compose.material.icons.filled.AddCard
 import androidx.compose.material.icons.filled.Assessment
 import androidx.compose.material.icons.filled.AutoFixNormal
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.DeleteForever
 import androidx.compose.material.icons.filled.Details
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.KeyboardOptionKey
@@ -50,6 +52,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -93,7 +96,8 @@ fun ArchivedScreen(
 
     Column(
         modifier = modifier
-            .fillMaxSize().background(getGradientColor())
+            .fillMaxSize()
+            .background(getGradientColor())
 
     ) {
         ConstraintLayout(
@@ -119,6 +123,7 @@ fun ArchivedScreen(
             )
 
             Text(
+                fontWeight = FontWeight.Bold,
                 modifier = Modifier
                     .padding(top = 10.dp)
                     .constrainAs(backText) {
@@ -131,12 +136,14 @@ fun ArchivedScreen(
                 fontSize = 20.sp
             )
             Text(
+                fontWeight = FontWeight.Bold,
                 text = stringResource(id = R.string.archived_notes),
                 fontSize = 20.sp,
                 color = colorResource(id = R.color.blue_green),
                 modifier = modifier
                     .constrainAs(titleText) {
-                        end.linkTo(deleteAll.start)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
                         top.linkTo(parent.top)
                     }
                     .padding(12.dp)
@@ -153,7 +160,7 @@ fun ArchivedScreen(
                     }
                     .padding(12.dp),
                 contentDescription = null,
-                painter = painterResource(id = R.drawable.recycle_bin),
+                imageVector = Icons.Default.DeleteForever,
             )
         }
 
@@ -222,7 +229,8 @@ fun ArchivedItem(
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = {
-                expanded = false }
+                expanded = false
+            }
         ) {
             DropdownMenuItem(
                 content = {

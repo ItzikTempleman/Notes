@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
@@ -19,6 +21,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -44,7 +47,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 
-val fontSize = mutableIntStateOf(16)
+val fontSize = mutableIntStateOf(18)
 var lastSavedText = ""
 
 @SuppressLint("AutoboxingStateValueProperty", "UnrememberedMutableState", "SuspiciousIndentation")
@@ -71,105 +74,109 @@ fun NoteScreen(
             topBar,
             contentTextField,
         ) = createRefs()
-        ConstraintLayout(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(90.dp)
-                .background(Color.White)
-                .constrainAs(topBar) {
-                    top.linkTo(parent.top)
-                }
+        Card(modifier = Modifier
+            .fillMaxWidth()
+            .height(90.dp)
+            .background(Color.White).padding(4.dp).clip(RoundedCornerShape(8.dp))
+            .constrainAs(topBar) {
+                top.linkTo(parent.top)
+            }
+        , elevation = 4.dp
         ) {
-            val (backBtn, backText, text1, fontSizeText, text2) = createRefs()
-            Icon(
-                tint = colorResource(id = R.color.blue_green),
-                modifier = Modifier
-                    .padding(vertical = 12.dp, horizontal = 8.dp)
-                    .constrainAs(backBtn) {
-                        start.linkTo(parent.start)
-                        top.linkTo(parent.top)
-                    }
-                    .clickable {
-                        coroutineScope.launch {
-                            if (text.isNotBlank() && text != lastSavedText) {
-                                if (note != null) {
-                                    noteViewModel.deleteNoteFromEditNote(note)
-                                }
-                                noteViewModel.updateNote(text, fontSize.value.toString())
-                                lastSavedText = text
-                                text = ""
-                            }
-                            navHostController.popBackStack()
+            ConstraintLayout(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                val (backBtn, backText, minimizeText, fontSizeText, enhanceText) = createRefs()
+                Icon(
+                    tint = colorResource(id = R.color.blue_green),
+                    modifier = Modifier
+                        .padding(vertical = 12.dp, horizontal = 8.dp)
+                        .constrainAs(backBtn) {
+                            start.linkTo(parent.start)
+                            top.linkTo(parent.top)
                         }
-                    },
-                contentDescription = stringResource(id = R.string.back),
-                painter = painterResource(id = R.drawable.back),
-            )
+                        .clickable {
+                            coroutineScope.launch {
+                                if (text.isNotBlank() && text != lastSavedText) {
+                                    if (note != null) {
+                                        noteViewModel.deleteNoteFromEditNote(note)
+                                    }
+                                    noteViewModel.updateNote(text, fontSize.value.toString())
+                                    lastSavedText = text
+                                    text = ""
+                                }
+                                navHostController.popBackStack()
+                            }
+                        },
+                    contentDescription = stringResource(id = R.string.back),
+                    painter = painterResource(id = R.drawable.back),
+                )
 
-            Text(
-                color = colorResource(id = R.color.blue_green),
-                modifier = Modifier
-                    .constrainAs(backText) {
-                        start.linkTo(backBtn.end)
-                        top.linkTo(backBtn.top)
-                        bottom.linkTo(backBtn.bottom)
-                    },
-                text = stringResource(id = R.string.notes),
-                fontSize = 20.sp
-            )
+                Text(
+                    color = colorResource(id = R.color.blue_green),
+                    modifier = Modifier
+                        .constrainAs(backText) {
+                            start.linkTo(backBtn.end)
+                            top.linkTo(backBtn.top)
+                            bottom.linkTo(backBtn.bottom)
+                        },
+                    fontWeight=FontWeight.Bold,
+                    text = stringResource(id = R.string.notes),
+                    fontSize = 20.sp
+                )
 
-            Text(
-                color = colorResource(id = R.color.black),
-                modifier = Modifier
-                    .constrainAs(text1) {
-                        top.linkTo(backBtn.bottom)
-                        start.linkTo(parent.start)
-                    }
-                    .padding(top = 4.dp, start = 18.dp)
-                    .width(30.dp)
-                    .clickable {
-                        fontSize.value--
-                        if (fontSize.value % 2 != 0) fontSize.value--
-                        if (fontSize.value < 16) fontSize.value = 16
-                    },
-                text = stringResource(id = R.string.font_size),
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
-            )
+                Text(
+                    color = colorResource(id = R.color.blue_green),
+                    modifier = Modifier
+                        .constrainAs(minimizeText) {
+                            top.linkTo(backBtn.bottom)
+                            start.linkTo(parent.start)
+                        }
+                        .padding(top = 4.dp, start = 18.dp)
+                        .width(30.dp)
+                        .clickable {
+                            fontSize.value--
+                            if (fontSize.value % 2 != 0) fontSize.value--
+                            if (fontSize.value < 18) fontSize.value = 18
+                        },
+                    text = stringResource(id = R.string.font_size),
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
+                )
 
-            Text(
+                Text(
 
-                color = colorResource(id = R.color.black),
-                modifier = Modifier
-                    .constrainAs(fontSizeText) {
-                        top.linkTo(backBtn.bottom)
-                        start.linkTo(text1.end)
-                    }
-                    .padding(top = 8.dp)
-                    .width(30.dp),
-                text = fontSize.value.toString(),
-                textAlign = TextAlign.Center, fontSize = 14.sp, fontWeight = FontWeight.Bold
-            )
+                    color = colorResource(id = R.color.blue_green),
+                    modifier = Modifier
+                        .constrainAs(fontSizeText) {
+                            top.linkTo(backBtn.bottom)
+                            start.linkTo(minimizeText.end)
+                        }
+                        .padding(top = 8.dp)
+                        .width(30.dp),
+                    text = fontSize.value.toString(),
+                    textAlign = TextAlign.Center, fontSize = 14.sp, fontWeight = FontWeight.Bold
+                )
 
-            Text(
-                color = colorResource(id = R.color.black),
-                modifier = Modifier
-                    .constrainAs(text2) {
-                        top.linkTo(backBtn.bottom)
-                        start.linkTo(fontSizeText.end)
-                    }
-                    .width(30.dp)
-                    .clickable {
-                        fontSize.value++
-                        if (fontSize.value % 2 != 0) fontSize.value++
-                        if (fontSize.value > 42) fontSize.value = 42
-                    },
-                text = stringResource(id = R.string.font_size),
-                textAlign = TextAlign.Center,
-                fontSize = 26.sp,
-                fontWeight = FontWeight.Bold
-            )
-
+                Text(
+                    color = colorResource(id = R.color.blue_green),
+                    modifier = Modifier
+                        .constrainAs(enhanceText) {
+                            top.linkTo(backBtn.bottom)
+                            start.linkTo(fontSizeText.end)
+                        }
+                        .width(30.dp)
+                        .clickable {
+                            fontSize.value++
+                            if (fontSize.value % 2 != 0) fontSize.value++
+                            if (fontSize.value > 42) fontSize.value = 42
+                        },
+                    text = stringResource(id = R.string.font_size),
+                    textAlign = TextAlign.Center,
+                    fontSize = 26.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
         }
 
         TextField(
@@ -205,6 +212,7 @@ fun NoteScreen(
         )
     }
 }
+
 
 
 

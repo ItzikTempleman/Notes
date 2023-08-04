@@ -13,6 +13,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
@@ -30,9 +31,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.RoundRect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.BlendMode.Companion.Color
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Brush.Companion.linearGradient
 import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.colorResource
@@ -49,6 +53,7 @@ import com.itzik.notes.R
 import com.itzik.notes.project.models.MenuItem
 import com.itzik.notes.project.models.Note
 import com.itzik.notes.project.navigation.HomeGraph
+import com.itzik.notes.project.utils.getGradientColor
 import com.itzik.notes.project.viewmodels.NoteViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -58,6 +63,7 @@ import kotlinx.coroutines.launch
     "CoroutineCreationDuringComposition", "MutableCollectionMutableState",
     "UnusedMaterialScaffoldPaddingParameter", "SuspiciousIndentation"
 )
+
 @Composable
 fun NoteListScreen(
     coroutineScope: CoroutineScope,
@@ -65,6 +71,7 @@ fun NoteListScreen(
     navHostController: NavHostController,
     noteViewModel: NoteViewModel,
 ) {
+
     var noteList by remember { mutableStateOf(mutableListOf<Note>()) }
     val scaffoldState = rememberScaffoldState()
 
@@ -153,17 +160,16 @@ fun NoteListScreen(
             )
         }
     ) {
-
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = colorResource(id = R.color.white))
+
+
         ) {
             val (add)=createRefs()
             Scaffold(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(colorResource(id = R.color.white))
             ) {
                 NotesLazyColumn(
                     modifier = modifier,

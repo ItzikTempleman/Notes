@@ -58,6 +58,7 @@ import androidx.navigation.NavHostController
 import com.itzik.notes.R
 import com.itzik.notes.project.models.Note
 import com.itzik.notes.project.navigation.HomeGraph
+import com.itzik.notes.project.utils.getGradientColor
 import com.itzik.notes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -92,13 +93,12 @@ fun ArchivedScreen(
 
     Column(
         modifier = modifier
-            .fillMaxSize()
+            .fillMaxSize().background(getGradientColor())
 
     ) {
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(colorResource(id = R.color.white))
                 .height(55.dp)
         ) {
             val (backBtn, backText, titleText, deleteAll) = createRefs()
@@ -193,9 +193,9 @@ fun ArchivedItem(
     Card(
         modifier = modifier
             .clip(RoundedCornerShape(12.dp))
-            .padding(3.dp)
-            .height(120.dp)
-            .width(150.dp),
+            .padding(4.dp)
+            .height(100.dp)
+            .fillMaxWidth(),
         elevation = 4.dp
     ) {
         Text(
@@ -206,6 +206,7 @@ fun ArchivedItem(
             fontSize = 20.sp
         )
     }
+
     Box(
         modifier = Modifier
             .fillMaxWidth()

@@ -167,18 +167,18 @@ fun NoteListScreen(
             modifier = Modifier.fillMaxSize()
         ) {
             val (add) = createRefs()
-            NewNotesLazyColumn(
-                modifier = modifier.background(getGradientColor()).fillMaxSize(),
-                notes = noteList,
-                navHostController = navHostController,
-            )
-//            NotesLazyColumn(
+//            NewNotesLazyColumn(
 //                modifier = modifier.background(getGradientColor()).fillMaxSize(),
-//                noteViewModel = noteViewModel,
 //                notes = noteList,
 //                navHostController = navHostController,
-//                coroutineScope = coroutineScope
 //            )
+            NotesLazyColumn(
+                modifier = modifier.background(getGradientColor()).fillMaxSize(),
+                noteViewModel = noteViewModel,
+                notes = noteList,
+                navHostController = navHostController,
+                coroutineScope = coroutineScope
+            )
 
             FloatingActionButton(
                 modifier = Modifier

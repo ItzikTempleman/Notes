@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
+import androidx.compose.material.Card
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -73,10 +74,8 @@ fun NoteListScreen(
     navHostController: NavHostController,
     noteViewModel: NoteViewModel,
 ) {
-
     var noteList by remember { mutableStateOf(mutableListOf<Note>()) }
     val scaffoldState = rememberScaffoldState()
-
 
     coroutineScope.launch {
         noteViewModel.getAllNotes().collect {
@@ -88,57 +87,64 @@ fun NoteListScreen(
         scaffoldState = scaffoldState,
         drawerShape = customShape(),
         topBar = {
-            TopAppBar(
-                backgroundColor = colorResource(id = R.color.light_grey),
-                title = {
-                    ConstraintLayout(modifier.fillMaxWidth()) {
-                        val (title, delete) = createRefs()
-                        Text(
-                            fontWeight = FontWeight.Bold,
-                            color = colorResource(id = R.color.blue_green),
-                            modifier = Modifier
-                                .constrainAs(title) {
-                                    end.linkTo(delete.start)
-                                }
-                                .padding(12.dp),
-                            text = if (noteList.isNotEmpty()) stringResource(id = R.string.notes)
-                            else stringResource(id = R.string.no_notes),
-                            fontSize = 20.sp
-                        )
+            Card(
+                modifier.fillMaxWidth().wrapContentHeight().padding(2.dp)
+                    .clip(RoundedCornerShape(8.dp)),
+                elevation = 4.dp
+            ) {
+                TopAppBar(
+                    backgroundColor = androidx.compose.ui.graphics.Color.White,
+                    title = {
+                        ConstraintLayout(
+                            modifier=modifier.fillMaxWidth().padding(2.dp)
+                        ) {
+                            val (title, delete) = createRefs()
+                            Text(
+                                fontWeight = FontWeight.Bold,
+                                color = colorResource(id = R.color.blue_green),
+                                modifier = Modifier
+                                    .constrainAs(title) {
+                                        end.linkTo(delete.start)
+                                    }
+                                    .padding(12.dp),
+                                text = if (noteList.isNotEmpty()) stringResource(id = R.string.notes)
+                                else stringResource(id = R.string.no_notes),
+                                fontSize = 20.sp
+                            )
 
+                            Icon(
+                                tint = colorResource(id = R.color.blue_green),
+                                modifier = Modifier
+                                    .constrainAs(delete) {
+                                        end.linkTo(parent.end)
+                                    }
+                                    .padding(12.dp)
+                                    .clickable {
+                                        coroutineScope.launch {
+                                            noteViewModel.addNoteToTrashBin(noteList)
+                                            noteList = emptyList<Note>().toMutableList()
+                                        }
+                                    },
+                                contentDescription = null,
+                                painter = painterResource(id = R.drawable.recycle_bin),
+                            )
+                        }
+                    },
+                    navigationIcon = {
                         Icon(
+                            imageVector = Icons.Default.MoreVert, contentDescription = null,
                             tint = colorResource(id = R.color.blue_green),
                             modifier = Modifier
-                                .constrainAs(delete) {
-                                    end.linkTo(parent.end)
-                                }
-                                .padding(12.dp)
                                 .clickable {
                                     coroutineScope.launch {
-                                        noteViewModel.addNoteToTrashBin(noteList)
-                                        noteList = emptyList<Note>().toMutableList()
+                                        scaffoldState.drawerState.open()
                                     }
-                                },
-                            contentDescription = "delete all",
-                            painter = painterResource(id = R.drawable.recycle_bin),
+                                }
+                                .padding(start = 8.dp)
                         )
                     }
-
-                },
-
-                navigationIcon = {
-                    Icon(imageVector = Icons.Default.MoreVert, contentDescription = "",
-                        tint = colorResource(id = R.color.blue_green),
-                        modifier = Modifier
-                            .clickable {
-                                coroutineScope.launch {
-                                    scaffoldState.drawerState.open()
-                                }
-                            }
-                            .padding(start = 8.dp)
-                    )
-                }
-            )
+                )
+            }
         },
         drawerBackgroundColor = androidx.compose.ui.graphics.Color.White,
         drawerContent = {
@@ -146,7 +152,6 @@ fun NoteListScreen(
                 items = listOf(
                     MenuItem(
                         modifier = modifier,
-                        id = "Archived notes",
                         title = "Archived notes",
                         contentDescription = "",
                         vectorIcon = null,
@@ -159,94 +164,42 @@ fun NoteListScreen(
         }
     ) {
         ConstraintLayout(
-            modifier = Modifier
-
-                .fillMaxSize()
-
-
+            modifier = Modifier.fillMaxSize()
         ) {
-            val (add)=createRefs()
-            Scaffold(
-                modifier = Modifier
-                    .fillMaxSize()
-            ) {
-                NotesLazyColumn(
-                    modifier = modifier.background(getGradientColor()),
-                    noteViewModel = noteViewModel,
-                    notes = noteList,
-                    navHostController = navHostController,
-                    coroutineScope = coroutineScope
-                )
-            }
+            val (add) = createRefs()
+            NewNotesLazyColumn(
+                modifier = modifier.background(getGradientColor()).fillMaxSize(),
+                notes = noteList,
+                navHostController = navHostController,
+            )
+//            NotesLazyColumn(
+//                modifier = modifier.background(getGradientColor()).fillMaxSize(),
+//                noteViewModel = noteViewModel,
+//                notes = noteList,
+//                navHostController = navHostController,
+//                coroutineScope = coroutineScope
+//            )
 
             FloatingActionButton(
-                    modifier = Modifier
-                        .constrainAs(add) {
-                            end.linkTo(parent.end)
-                            bottom.linkTo(parent.bottom)
-                        }
-                        .padding(12.dp),
-
-                    onClick = {
-                        navHostController.navigate(HomeGraph.NewNoteScreen.route)
-                    },
-                backgroundColor= colorResource(id = R.color.blue_green),
-                    shape = RoundedCornerShape(120.dp),
-                ) {
-                    Icon(
-                        contentDescription = "create note",
-                        painter = painterResource(id = R.drawable.add_note),
-                        tint = colorResource(id = R.color.white),
-                    )
-                }
-
-
-        }
-    }
-}
-
-
-fun customShape() = object : Shape {
-    override fun createOutline(
-        size: Size,
-        layoutDirection: LayoutDirection,
-        density: Density,
-    ): Outline {
-        val roundRect = RoundRect(
-            15f,
-            150f,
-            550f,
-            280f,
-            CornerRadius(20f),
-            CornerRadius(20f),
-            CornerRadius(20f),
-            CornerRadius(20f)
-        )
-        return Outline.Rounded(roundRect)
-
-    }
-}
-
-@Composable
-fun DrawerBody(
-    items: List<MenuItem>,
-    modifier: Modifier = Modifier,
-    onClick: (MenuItem) -> Unit,
-) {
-    LazyColumn(modifier) {
-        items(items) { item ->
-            Row(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable {
-                        onClick(item)
+                    .constrainAs(add) {
+                        end.linkTo(parent.end)
+                        bottom.linkTo(parent.bottom)
                     }
-                    .padding(top = 70.dp, start = 16.dp)
+                    .padding(12.dp),
+                onClick = {
+                    navHostController.navigate(HomeGraph.NewNoteScreen.route)
+                },
+                backgroundColor = colorResource(id = R.color.blue_green),
+                shape = RoundedCornerShape(120.dp),
             ) {
-                item.vectorIcon?.let { Icon(imageVector = it, contentDescription = null) }
-                item.imageIcon?.let { Icon(painter = it, contentDescription = null) }
-                Text(text = item.title, modifier = Modifier.padding(horizontal = 8.dp))
+                Icon(
+                    contentDescription = null,
+                    painter = painterResource(id = R.drawable.add_note),
+                    tint = colorResource(id = R.color.white),
+                )
             }
         }
     }
 }
+

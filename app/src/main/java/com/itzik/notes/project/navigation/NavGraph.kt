@@ -79,6 +79,7 @@ fun SetupNavGraph(
             }
             composable(route = HomeGraph.Archived.route) {
                 ArchivedScreen(
+
                     coroutineScope = coroutineScope,
                     modifier = Modifier,
                     navHostController = navHostController,

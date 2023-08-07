@@ -11,7 +11,6 @@ import kotlinx.parcelize.Parcelize
 
 data class MenuItem(
     val title: String,
-    val id: String,
     val vectorIcon: ImageVector?,
     val imageIcon: Painter?,
     val contentDescription: String,

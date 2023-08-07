@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Divider
@@ -24,16 +25,16 @@ import com.itzik.notes.project.models.Note
 
 @Composable
 fun NoteItem(
-    note: Note,
+    note: Note
 ) {
         ConstraintLayout(
-            modifier = Modifier
+            modifier = Modifier.padding(4.dp)
                 .fillMaxWidth()
-                .height(60.dp)
+                .wrapContentHeight()
         ) {
-            val (content, time, divider) = createRefs()
+            val (content, time) = createRefs()
             Text(
-                color = colorResource(id = R.color.black),
+                color = colorResource(id = R.color.blue_green),
                 modifier = Modifier
                     .constrainAs(content) {
                         top.linkTo(parent.top)
@@ -44,7 +45,7 @@ fun NoteItem(
                 maxLines = 1
             )
 
-            Text(color = colorResource(id = R.color.black),
+            Text(color = colorResource(id = R.color.blue_green),
                 modifier = Modifier
                     .constrainAs(time) {
                         top.linkTo(parent.top)
@@ -52,16 +53,6 @@ fun NoteItem(
                     }
                     .padding(8.dp),
                 text = note.timeStamp,
-                maxLines = 1
-            )
-            Spacer(
-                modifier = Modifier.constrainAs(divider){
-                    bottom.linkTo(parent.bottom)
-                }
-                    .height(0.5.dp)
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp)
-                    .background(colorResource(id = R.color.black))
             )
         }
 }

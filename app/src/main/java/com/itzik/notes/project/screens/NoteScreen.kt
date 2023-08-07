@@ -108,7 +108,7 @@ fun NoteScreen(
                                 navHostController.popBackStack()
                             }
                         },
-                    contentDescription = stringResource(id = R.string.back),
+                    contentDescription = null,
                     painter = painterResource(id = R.drawable.back),
                 )
 

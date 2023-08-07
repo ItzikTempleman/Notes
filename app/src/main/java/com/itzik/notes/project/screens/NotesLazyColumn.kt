@@ -40,8 +40,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.itzik.notes.R
 import com.itzik.notes.project.models.Note
 import com.itzik.notes.project.navigation.HomeGraph
 import com.itzik.notes.project.viewmodels.NoteViewModel
@@ -55,6 +57,7 @@ import kotlin.math.abs
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun NotesLazyColumn(
+
     modifier: Modifier,
     notes: MutableList<Note>,
     navHostController: NavHostController,
@@ -64,17 +67,11 @@ fun NotesLazyColumn(
 
     var noteList = notes
 
-
-
     LazyColumn(
         modifier = modifier.fillMaxSize(),
         state = rememberLazyListState()
     ) {
-
-
-
-        items(noteList) { item ->
-
+        items(noteList) {  item ->
             val currentItem = rememberUpdatedState(newValue = item).value
             val dismissState = rememberDismissState(
                 confirmStateChange = {
@@ -83,6 +80,7 @@ fun NotesLazyColumn(
                         noteViewModel.archiveANote(currentItem)
                         noteViewModel.getAllNotes().collect { updatedNotesList ->
                             noteList = updatedNotesList
+                            Log.d("TAG", "notelist after swiping: ${noteList.size}")
                         }
                     }
                     true
@@ -91,11 +89,9 @@ fun NotesLazyColumn(
 
             SwipeToDismiss(
                 modifier = Modifier
-                    .padding(vertical = 1.dp)
                     .animateItemPlacement(),
                 state = dismissState,
                 directions = setOf(DismissDirection.EndToStart),
-                dismissThresholds = { FractionalThreshold(0.2f) },
 
                 background = {
                     val direction = dismissState.dismissDirection ?: return@SwipeToDismiss
@@ -103,8 +99,8 @@ fun NotesLazyColumn(
                     val color by animateColorAsState(
                         targetValue = when (dismissState.targetValue) {
                             DismissValue.Default -> Color.LightGray
-                            DismissValue.DismissedToEnd -> Color.Green
-                            DismissValue.DismissedToStart -> Color.Red
+                            DismissValue.DismissedToStart -> colorResource(id = R.color.yellow)
+                            DismissValue.DismissedToEnd -> Color.Transparent
                         }
                     )
 
@@ -134,6 +130,7 @@ fun NotesLazyColumn(
                 dismissContent = {
                     Card(
                         modifier = modifier
+                            .padding(vertical = 1.dp, horizontal = 3.dp)
                             .fillMaxWidth()
                             .clickable {
                                 navHostController.currentBackStackEntry?.savedStateHandle?.set(

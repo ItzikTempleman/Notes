@@ -53,6 +53,8 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.itzik.notes.R
+
+import com.itzik.notes.project.MockListScreen
 import com.itzik.notes.project.models.MenuItem
 import com.itzik.notes.project.models.Note
 import com.itzik.notes.project.navigation.HomeGraph
@@ -63,8 +65,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @SuppressLint(
-    "CoroutineCreationDuringComposition", "MutableCollectionMutableState",
-    "UnusedMaterialScaffoldPaddingParameter", "SuspiciousIndentation"
+    "CoroutineCreationDuringComposition",
+    "MutableCollectionMutableState",
+    "UnusedMaterialScaffoldPaddingParameter",
+    "SuspiciousIndentation"
 )
 
 @Composable
@@ -83,95 +87,81 @@ fun NoteListScreen(
         }
     }
 
-    Scaffold(
-        scaffoldState = scaffoldState,
-        drawerShape = customShape(),
-        topBar = {
-            Card(
-                modifier.fillMaxWidth().wrapContentHeight().padding(2.dp)
-                    .clip(RoundedCornerShape(8.dp)),
-                elevation = 4.dp
-            ) {
-                TopAppBar(
-                    backgroundColor = androidx.compose.ui.graphics.Color.White,
-                    title = {
-                        ConstraintLayout(
-                            modifier=modifier.fillMaxWidth().padding(2.dp)
-                        ) {
-                            val (title, delete) = createRefs()
-                            Text(
-                                fontWeight = FontWeight.Bold,
-                                color = colorResource(id = R.color.blue_green),
-                                modifier = Modifier
-                                    .constrainAs(title) {
-                                        end.linkTo(delete.start)
-                                    }
-                                    .padding(12.dp),
-                                text = if (noteList.isNotEmpty()) stringResource(id = R.string.notes)
-                                else stringResource(id = R.string.no_notes),
-                                fontSize = 20.sp
-                            )
+    Scaffold(scaffoldState = scaffoldState, drawerShape = customShape(), topBar = {
+        Card(
+            modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .padding(2.dp)
+                .clip(RoundedCornerShape(8.dp)), elevation = 4.dp
+        ) {
+            TopAppBar(backgroundColor = androidx.compose.ui.graphics.Color.White, title = {
+                ConstraintLayout(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(2.dp)
+                ) {
+                    val (title, delete) = createRefs()
+                    Text(fontWeight = FontWeight.Bold,
+                        color = colorResource(id = R.color.blue_green),
+                        modifier = Modifier
+                            .constrainAs(title) {
+                                end.linkTo(delete.start)
+                            }
+                            .padding(12.dp),
+                        text = if (noteList.isNotEmpty()) stringResource(id = R.string.notes)
+                        else stringResource(id = R.string.no_notes),
+                        fontSize = 20.sp)
 
-                            Icon(
-                                tint = colorResource(id = R.color.blue_green),
-                                modifier = Modifier
-                                    .constrainAs(delete) {
-                                        end.linkTo(parent.end)
-                                    }
-                                    .padding(12.dp)
-                                    .clickable {
-                                        coroutineScope.launch {
-                                            noteViewModel.addNoteToTrashBin(noteList)
-                                            noteList = emptyList<Note>().toMutableList()
-                                        }
-                                    },
-                                contentDescription = null,
-                                painter = painterResource(id = R.drawable.recycle_bin),
-                            )
-                        }
-                    },
-                    navigationIcon = {
-                        Icon(
-                            imageVector = Icons.Default.MoreVert, contentDescription = null,
-                            tint = colorResource(id = R.color.blue_green),
-                            modifier = Modifier
-                                .clickable {
-                                    coroutineScope.launch {
-                                        scaffoldState.drawerState.open()
-                                    }
+                    Icon(
+                        tint = colorResource(id = R.color.blue_green),
+                        modifier = Modifier
+                            .constrainAs(delete) {
+                                end.linkTo(parent.end)
+                            }
+                            .padding(12.dp)
+                            .clickable {
+                                coroutineScope.launch {
+                                    noteViewModel.addNoteToTrashBin(noteList)
+                                    noteList = emptyList<Note>().toMutableList()
                                 }
-                                .padding(start = 8.dp)
-                        )
-                    }
-                )
-            }
-        },
-        drawerBackgroundColor = androidx.compose.ui.graphics.Color.White,
-        drawerContent = {
-            DrawerBody(
-                items = listOf(
-                    MenuItem(
-                        modifier = modifier,
-                        title = "Archived notes",
-                        contentDescription = "",
-                        vectorIcon = null,
-                        imageIcon = painterResource(R.drawable.deleted_folder),
+                            },
+                        contentDescription = null,
+                        painter = painterResource(id = R.drawable.recycle_bin),
                     )
-                ), onClick = {
-                    navHostController.navigate(HomeGraph.Archived.route)
                 }
-            )
+            }, navigationIcon = {
+                Icon(imageVector = Icons.Default.MoreVert,
+                    contentDescription = null,
+                    tint = colorResource(id = R.color.blue_green),
+                    modifier = Modifier
+                        .clickable {
+                            coroutineScope.launch {
+                                scaffoldState.drawerState.open()
+                            }
+                        }
+                        .padding(start = 8.dp))
+            })
         }
-    ) {
+    }, drawerBackgroundColor = androidx.compose.ui.graphics.Color.White, drawerContent = {
+        DrawerBody(items = listOf(
+            MenuItem(
+                modifier = modifier,
+                title = "Archived notes",
+                contentDescription = "",
+                vectorIcon = null,
+                imageIcon = painterResource(R.drawable.deleted_folder),
+            )
+        ), onClick = {
+            navHostController.navigate(HomeGraph.Archived.route)
+        })
+    }) {
         ConstraintLayout(
             modifier = Modifier.fillMaxSize()
         ) {
             val (add) = createRefs()
-//            NewNotesLazyColumn(
-//                modifier = modifier.background(getGradientColor()).fillMaxSize(),
-//                notes = noteList,
-//                navHostController = navHostController,
-//            )
+
+
             NotesLazyColumn(
                 modifier = modifier.background(getGradientColor()).fillMaxSize(),
                 noteViewModel = noteViewModel,

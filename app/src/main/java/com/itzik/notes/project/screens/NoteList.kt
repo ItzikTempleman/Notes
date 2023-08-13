@@ -54,7 +54,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.itzik.notes.R
 
-import com.itzik.notes.project.MockListScreen
+
 import com.itzik.notes.project.models.MenuItem
 import com.itzik.notes.project.models.Note
 import com.itzik.notes.project.navigation.HomeGraph

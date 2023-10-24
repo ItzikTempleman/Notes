@@ -9,7 +9,7 @@ import javax.inject.Singleton
 class NoteRepositoryImp @Inject constructor(
 
     @Singleton
-    private val noteDao: NoteDao,
+    private val noteDao: NoteDao
 ) : NoteRepository {
     override suspend fun emptyTrashBin() = noteDao.emptyTrashBin()
     override suspend fun getAllNotes(): MutableList<Note> = noteDao.getNotes()

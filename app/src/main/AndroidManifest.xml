@@ -5,7 +5,6 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
-
     <application
         android:name=".project.main.BaseApp"
         android:allowBackup="false"
@@ -22,6 +21,7 @@
             android:name=".project.main.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.Notes">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

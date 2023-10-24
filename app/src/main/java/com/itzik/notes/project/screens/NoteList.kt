@@ -87,7 +87,10 @@ fun NoteListScreen(
         }
     }
 
-    Scaffold(scaffoldState = scaffoldState, drawerShape = customShape(), topBar = {
+    Scaffold(
+        scaffoldState = scaffoldState,
+        //drawerShape = customShape(),
+        topBar = {
         Card(
             modifier
                 .fillMaxWidth()
@@ -95,7 +98,7 @@ fun NoteListScreen(
                 .padding(2.dp)
                 .clip(RoundedCornerShape(8.dp)), elevation = 4.dp
         ) {
-            TopAppBar(backgroundColor = androidx.compose.ui.graphics.Color.White, title = {
+            TopAppBar(backgroundColor = colorResource(id = R.color.white), title = {
                 ConstraintLayout(
                     modifier = modifier
                         .fillMaxWidth()
@@ -131,7 +134,9 @@ fun NoteListScreen(
                     )
                 }
             }, navigationIcon = {
-                Icon(imageVector = Icons.Default.MoreVert,
+                Icon(imageVector =Icons.Default.Menu
+              //  Icons.Default.MoreVert
+                    ,
                     contentDescription = null,
                     tint = colorResource(id = R.color.blue_green),
                     modifier = Modifier
@@ -163,7 +168,9 @@ fun NoteListScreen(
 
 
             NotesLazyColumn(
-                modifier = modifier.background(getGradientColor()).fillMaxSize(),
+                modifier = modifier
+                    .background(getGradientColor())
+                    .fillMaxSize(),
                 noteViewModel = noteViewModel,
                 notes = noteList,
                 navHostController = navHostController,

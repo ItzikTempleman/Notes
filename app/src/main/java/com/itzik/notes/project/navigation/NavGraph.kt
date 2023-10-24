@@ -28,8 +28,7 @@ const val HOME = "homeGraph"
 fun SetupNavGraph(
     navHostController: NavHostController,
     noteViewModel: NoteViewModel,
-
-    coroutineScope: CoroutineScope,
+    coroutineScope: CoroutineScope
 ) {
     NavHost(
         navController = navHostController,

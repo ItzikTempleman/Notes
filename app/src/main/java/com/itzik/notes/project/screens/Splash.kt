@@ -39,7 +39,7 @@ fun SplashScreen(navHostController: NavHostController) {
         targetValue = if (startAnimation) 1f else 0f,
         animationSpec = tween(
             durationMillis = 0
-        )
+        ), label = ""
     )
 
     LaunchedEffect(key1 = true) {

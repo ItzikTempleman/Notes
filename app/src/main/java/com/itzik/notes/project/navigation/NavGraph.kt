@@ -19,8 +19,8 @@ import com.itzik.notes.project.screens.NoteListScreen
 import com.itzik.notes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
 
-const val SPLASH = "splashGraph"
-const val HOME = "homeGraph"
+const val SPLASH_GRAPH = "splashGraph"
+const val HOME_GRAPH = "homeGraph"
 
 
 @SuppressLint("SuspiciousIndentation")
@@ -32,12 +32,12 @@ fun SetupNavGraph(
 ) {
     NavHost(
         navController = navHostController,
-        startDestination = SPLASH
+        startDestination = SPLASH_GRAPH
     ) {
 
         navigation(
             startDestination = SplashGraph.Splash.route,
-            route = SPLASH
+            route = SPLASH_GRAPH
         ) {
             composable(route = SplashGraph.Splash.route) {
                 SplashScreen(navHostController)
@@ -46,7 +46,7 @@ fun SetupNavGraph(
 
         navigation(
             startDestination = HomeGraph.Notes.route,
-            route = HOME
+            route = HOME_GRAPH
         ) {
             composable(route = HomeGraph.Notes.route) {
                 NoteListScreen(

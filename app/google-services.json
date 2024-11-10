@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "933725058237",
+    "project_id": "mynotes-753d3",
+    "storage_bucket": "mynotes-753d3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:933725058237:android:919a418234289292ecb3d4",
+        "android_client_info": {
+          "package_name": "com.itzik.notes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "933725058237-j56atujmb21ifppr8qictjovu1th8t3u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.itzik.notes",
+            "certificate_hash": "b438b874b6de514eba26906681d8a3217f2e8477"
+          }
+        },
+        {
+          "client_id": "933725058237-pp5kf43hel2o4kc7tghrhrh34ho0st87.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBC6o6FgGE4c_84V1fjEbLVYuqevMlBJsQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "933725058237-pp5kf43hel2o4kc7tghrhrh34ho0st87.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

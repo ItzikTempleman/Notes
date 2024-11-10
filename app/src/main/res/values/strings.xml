@@ -1,0 +1,53 @@
+<resources>
+    <string name="app_name">MyNotes</string>
+
+    <string name="log_in" translatable="false">LOG IN</string>
+    <string name="email" translatable="false">Username</string>
+    <string name="password" translatable="false">Password</string>
+    <string name="register" translatable="false">REGISTER</string>
+    <string name="registration" translatable="false">Registration</string>
+    <string name="create_name" translatable="false">Name</string>
+    <string name="create_email" translatable="false">Email</string>
+    <string name="create_password" translatable="false">Password</string>
+    <string name="enter_phone_number" translatable="false">Phone Number</string>
+    <string name="create_user" translatable="false">CREATE USER</string>
+    <string name="full_name" translatable="false">Name</string>
+    <string name="user_email" translatable="false">Email</string>
+    <string name="log_out" translatable="false">Log out</string>
+    <string name="user_id" translatable="false">id</string>
+
+    <string name="user_info" translatable="false">Profile</string>
+    <string name="home" translatable="false">Home</string>
+    <string name="liked" translatable="false">Liked</string>
+    <string name="settings" translatable="false">Settings</string>
+    <string name="deleted_notes">Recently Deleted</string>
+    <string name="pinned_notes">Pinned notes\n</string>
+    <string name="new_note">New note</string>
+    <string name="liked_notes">Liked notes</string>
+    <string name="retrieve_note">Retrieve note</string>
+    <string name="delete_forever">Delete forever</string>
+    <string name="empty_trash_bin">Empty trash bin</string>
+    <string name="welcome">Welcome\n</string>
+    <string name="login_account">Login Account</string>
+    <string name="notes">Notes\n</string>
+    <string name="manage">MANAGE EVERY DAY</string>
+    <string name="dont_have">Don\'t have an account?</string>
+    <string name="forgot">Forgot password?</string>
+    <string name="select_gender">Gender</string>
+    <string name="D">D</string>
+    <string name="M">M</string>
+    <string name="Y">Y</string>
+    <string name="enter_birthdate">Date of birth</string>
+    <string name="trash_bin">Trash bin</string>
+    <string name="search_images">Search a wallpaper</string>
+    <string name="edit_profile_image">Edit profile image</string>
+    <string name="remove_profile_image">Remove profile image</string>
+    <string name="edit">Edit</string>
+    <string name="done">Done</string>
+    <string name="reset_screen">Reset Password\n</string>
+    <string name="enter_code_sent_to_you">Enter SMS code received </string>
+    <string name="your_email">Enter account email </string>
+    <string name="enter_new_password">Enter new password</string>
+    <string name="delete_all_notes">Delete all notes</string>
+    <string name="reset_wallpaper">Reset wallpaper\n</string>
+</resources>

@@ -10,15 +10,15 @@ plugins {
 
 
 android {
-    namespace = "com.itzik.notes"
+    namespace = "com.itzik.notes_"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.itzik.notes"
+        applicationId = "com.itzik.notes_"
         minSdk = 29
         targetSdk = 34
-        versionCode = 8
-        versionName = "8.0"
+        versionCode = 11
+        versionName = "11.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

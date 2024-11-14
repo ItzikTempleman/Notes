@@ -84,6 +84,7 @@ fun HomeScreen(
         )
     }
 
+
     LaunchedEffect(userId) {
         userViewModel.fetchUserById(userId)
         noteViewModel.updateUserIdForNewLogin()
@@ -92,7 +93,7 @@ fun HomeScreen(
     }
 
     LaunchedEffect(user) {
-        isViewGrid = user?.isViewGrid ?: false
+        isViewGrid = user?.isViewGrid == true
         imageSelected = user?.selectedWallpaper ?: ""
     }
 
@@ -127,6 +128,7 @@ fun HomeScreen(
             contentScale = ContentScale.Crop
         )
 
+
         HomeScreenTopBar(
             modifier = Modifier
                 .constrainAs(topRow) {
@@ -144,6 +146,7 @@ fun HomeScreen(
                 userViewModel.updateViewType(isViewGrid)
             },
             isViewGrid = mutableStateOf(isViewGrid),
+            user =user
         )
 
         SortDropDownMenu(

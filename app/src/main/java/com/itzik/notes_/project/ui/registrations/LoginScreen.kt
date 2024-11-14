@@ -74,6 +74,8 @@ fun LoginScreen(
     var isPasswordError by remember { mutableStateOf(false) }
     var isPasswordVisible by remember { mutableStateOf(false) }
 
+    val tempUser = getMockUser()
+
     var isButtonEnabled by remember {
         mutableStateOf(false)
     }
@@ -345,7 +347,6 @@ fun LoginScreen(
             text = stringResource(id = R.string.dont_have),
         )
 
-
         TextButton(
             onClick = {
                 rootNavController.navigate(Screen.Registration.route)
@@ -363,6 +364,7 @@ fun LoginScreen(
             )
         }
 
+
         TextButton(
             modifier = Modifier.constrainAs(loginAsGuest) {
                 top.linkTo(signUpBtn.top)
@@ -372,10 +374,17 @@ fun LoginScreen(
             },
             onClick = {
                 coroutineScope.launch {
-                    val tempUser = getMockUser()
-                    tempUser.isLoggedIn = true
-                    userViewModel?.updateIsLoggedIn(tempUser)
-                    userViewModel?.registerUser(tempUser)
+                    val existingAdminUser = userViewModel?.getAdminUserIfExists(tempUser.email)
+
+                    if (existingAdminUser != null) {
+                        // If admin user exists, log into that user
+                        existingAdminUser.isLoggedIn = true
+                        userViewModel.updateIsLoggedIn(existingAdminUser)
+                    } else {
+                        // If admin user doesn't exist, create and log in
+                        tempUser.isLoggedIn = true
+                        userViewModel?.registerUser(tempUser)
+                    }
                     rootNavController.navigate(Screen.Home.route)
                 }
             }

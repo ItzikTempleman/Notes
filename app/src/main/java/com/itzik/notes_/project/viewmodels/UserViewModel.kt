@@ -8,10 +8,12 @@ import com.itzik.notes_.project.model.User
 import com.itzik.notes_.project.model.WallpaperResponse
 import com.itzik.notes_.project.repositories.AppRepositoryInterface
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.Period
@@ -76,6 +78,9 @@ class UserViewModel @Inject constructor(
         return user
     }
 
+    fun getAdminUserIfExists(email: String): User? {
+        return privateLoggedInUsersList.value.find { it.email == email }
+    }
 
     fun fetchViewType(userId: String) {
         viewModelScope.launch {

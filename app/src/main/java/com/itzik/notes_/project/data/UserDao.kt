@@ -45,5 +45,4 @@ interface UserDao {
 
     @Query("SELECT isViewGrid FROM $USER_TABLE WHERE userId=:userId")
     suspend fun fetchViewType(userId: String): Boolean
-
 }

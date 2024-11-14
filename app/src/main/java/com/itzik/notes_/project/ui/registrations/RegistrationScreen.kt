@@ -139,7 +139,7 @@ fun RegistrationScreen(
         )
 
                 CustomOutlinedTextField(
-                    fieldNUmber=0,
+                    fieldNumber =0,
                     doesInstructionsHintExist=true,
                     value = name,
                     onValueChange = {
@@ -159,7 +159,7 @@ fun RegistrationScreen(
                     )
 
                 CustomOutlinedTextField(
-                    fieldNUmber=1,
+                    fieldNumber=1,
                     doesInstructionsHintExist=true,
                     value = createEmail,
                     onValueChange = {
@@ -181,7 +181,7 @@ fun RegistrationScreen(
                     )
 
                 CustomOutlinedTextField(
-                    fieldNUmber=2,
+                    fieldNumber=2,
                     doesInstructionsHintExist=true,
                     value = createPassword,
                     onValueChange = {
@@ -207,7 +207,7 @@ fun RegistrationScreen(
                     )
 
                 CustomOutlinedTextField(
-                    fieldNUmber=3,
+                    fieldNumber=3,
                     doesInstructionsHintExist=true,
                     value = createPhoneNumber,
                     onValueChange = {
@@ -394,7 +394,6 @@ fun RegistrationScreen(
             Text(
                 fontSize = 20.sp,
                 text = stringResource(R.string.create_user)
-
             )
         }
     }

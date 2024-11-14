@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -32,8 +33,8 @@ import com.itzik.notes_.project.ui.registrations.RegistrationInstructionsScreen
 
 @Composable
 fun CustomOutlinedTextField(
-    fieldNUmber:Int?=null,
-    doesInstructionsHintExist: Boolean?=null,
+    fieldNumber: Int? = null,
+    doesInstructionsHintExist: Boolean? = null,
     invokedFunction: (() -> Unit)? = null,
     value: String,
     onValueChange: ((String) -> Unit)? = null,
@@ -46,9 +47,10 @@ fun CustomOutlinedTextField(
     visualTransformation: VisualTransformation = VisualTransformation.None,
     isPasswordIconShowing: ((Boolean) -> Unit)? = null,
     isPasswordToggleClicked: Boolean? = null,
-    isSingleLine:Boolean=true,
+    isSingleLine: Boolean = true,
+    isFieldOpenState: Boolean=false
 ) {
-
+    var isFieldOpen = isFieldOpenState
     Card(
         modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(Color.White),
@@ -113,24 +115,27 @@ fun CustomOutlinedTextField(
                 isError = isError,
                 keyboardOptions = KeyboardOptions(keyboardType = keyboardType)
             )
-            if(doesInstructionsHintExist == true){
+            if (doesInstructionsHintExist == true) {
                 Row(
-                    modifier= Modifier.fillMaxWidth().padding(4.dp),
+                    modifier = Modifier
+                        .fillMaxWidth().height(24.dp)
+                        .padding(4.dp),
                     horizontalArrangement = Arrangement.End
                 ) {
                     GenericIconButton(
-                        modifier = Modifier.size(30.dp),
+                        modifier = Modifier.size(20.dp),
                         onClick = {
-                            RegistrationInstructionsScreen(
-                                isFieldOpen = true,
-                                modifier = Modifier,
-                                selectedFieldNUmber =fieldNUmber
-                            )
+                            isFieldOpen = true
                         },
                         imageVector = Icons.Default.QuestionMark,
-                        colorNumber = 2
+                        colorNumber = 1
                     )
                 }
+            }
+            if (isFieldOpen) {
+                RegistrationInstructionsScreen(
+                    selectedFieldNUmber = fieldNumber
+                )
             }
         }
     }
@@ -138,11 +143,14 @@ fun CustomOutlinedTextField(
 
 @Composable
 fun EmptyStateMessage(
-    modifier:Modifier,
-    screenDescription:String?=""
+    modifier: Modifier,
+    screenDescription: String? = ""
 ) {
     Text(
-        modifier = modifier, fontSize = 40.sp, color = Color.Gray, text = "No $screenDescription notes"
+        modifier = modifier,
+        fontSize = 40.sp,
+        color = Color.Gray,
+        text = "No $screenDescription notes"
     )
 }
 

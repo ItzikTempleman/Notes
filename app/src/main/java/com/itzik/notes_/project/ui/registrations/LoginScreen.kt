@@ -76,6 +76,7 @@ fun LoginScreen(
 
     val tempUser = getMockUser()
 
+
     var isButtonEnabled by remember {
         mutableStateOf(false)
     }
@@ -377,11 +378,11 @@ fun LoginScreen(
                     val existingAdminUser = userViewModel?.getAdminUserIfExists(tempUser.email)
 
                     if (existingAdminUser != null) {
-                        // If admin user exists, log into that user
+                        // Admin user exists; just log in.
                         existingAdminUser.isLoggedIn = true
                         userViewModel.updateIsLoggedIn(existingAdminUser)
                     } else {
-                        // If admin user doesn't exist, create and log in
+                        // Admin user doesn't exist; create and log in.
                         tempUser.isLoggedIn = true
                         userViewModel?.registerUser(tempUser)
                     }

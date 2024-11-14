@@ -78,9 +78,14 @@ class UserViewModel @Inject constructor(
         return user
     }
 
-    fun getAdminUserIfExists(email: String): User? {
-        return privateLoggedInUsersList.value.find { it.email == email }
+    suspend fun getAdminUserIfExists(email: String): User? {
+        return try {
+            repo.getTempUserForVerification(email)
+        } catch (e: Exception) {
+            null
+        }
     }
+
 
     fun fetchViewType(userId: String) {
         viewModelScope.launch {

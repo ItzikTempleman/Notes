@@ -61,10 +61,10 @@ fun HomeScreenTopBar(
                 top.linkTo(parent.top)
                 bottom.linkTo(parent.bottom)
             },
-            color = colorResource(R.color.fire_red),
+            color = Color.Red,
             fontWeight = FontWeight.Bold,
-            fontSize = 20.sp,
-            text = if (user?.userName == "Admin user") "Guest account. cannot save notes" else ""
+            fontSize = 24.sp,
+            text = if (user?.userName == "Guest") "Guest" else ""
         )
         GenericIconButton(
             modifier = Modifier

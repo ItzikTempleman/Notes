@@ -34,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.VisualTransformation
@@ -91,7 +92,6 @@ fun ProfileScreen(
                     }
                 }
             }
-
         ConstraintLayout(
             modifier = Modifier.fillMaxSize()
 
@@ -103,9 +103,9 @@ fun ProfileScreen(
                     .background(gradientBrush(false))
             ) {}
             ProfileImage(imageBoxModifier = Modifier.constrainAs(imageContainer) {
-                    top.linkTo(parent.top, margin = 8.dp)
-                    start.linkTo(parent.start, margin = 8.dp)
-                }, imageUri = user?.profileImage, onImageSelected = {
+                top.linkTo(parent.top, margin = 8.dp)
+                start.linkTo(parent.start, margin = 8.dp)
+            }, imageUri = user?.profileImage, onImageSelected = {
                 imagePickerLauncher.launch("image/*")
             }, onRemoveImage = {
                 userViewModel.updateUserField(profileImage = "")
@@ -113,19 +113,31 @@ fun ProfileScreen(
                 start.linkTo(imageContainer.end)
                 bottom.linkTo(imageContainer.bottom)
             })
-
-            TextButton(modifier = Modifier
-                .constrainAs(editButton) {
-                    top.linkTo(parent.top)
-                    end.linkTo(parent.end)
+            if (user!!.userName != "Guest") {
+                TextButton(modifier = Modifier
+                    .constrainAs(editButton) {
+                        top.linkTo(parent.top)
+                        end.linkTo(parent.end)
+                    }
+                    .padding(8.dp), onClick = {
+                    isEditable = !isEditable
+                }) {
+                    Text(
+                        text = if (isEditable) stringResource(R.string.done)
+                        else stringResource(R.string.edit),
+                        color = Color.Black,
+                    )
                 }
-                .padding(8.dp), onClick = {
-                isEditable = !isEditable
-            }) {
+            } else {
                 Text(
-                    text = if (isEditable) stringResource(R.string.done)
-                    else stringResource(R.string.edit),
-                    color = Color.Black,
+                    color = Color.Red,
+                    text = "Cannot edit guest details",
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(8.dp)
+                        .constrainAs(editButton) {
+                            top.linkTo(parent.top)
+                            end.linkTo(parent.end)
+                        }, fontSize = 20.sp
                 )
             }
 
@@ -215,7 +227,6 @@ fun ProfileScreen(
                                     imageVector = Icons.Outlined.Save, contentDescription = null
                                 )
                             }
-
                         } else {
                             user?.phoneNumber?.let {
                                 ProfileFieldRow(
@@ -254,7 +265,7 @@ fun ProfileScreen(
                             bottom.linkTo(parent.bottom)
                         }
                         .fillMaxWidth(),
-                    onItemSelected = { it ->
+                    onItemSelected = {
                         when (it) {
                             BottomScreenOption.TRASH -> {
                                 bottomBarNavController.navigate(Screen.DeletedNotesScreen.route)

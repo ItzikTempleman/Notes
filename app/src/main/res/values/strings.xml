@@ -4,7 +4,7 @@
     <string name="log_in" translatable="false">LOG IN</string>
     <string name="email" translatable="false">Username</string>
     <string name="password" translatable="false">Password</string>
-    <string name="register" translatable="false">REGISTER</string>
+    <string name="register" translatable="false">MUST REGISTER FIRST</string>
     <string name="registration" translatable="false">Registration</string>
     <string name="create_name" translatable="false">Name</string>
     <string name="create_email" translatable="false">Email</string>

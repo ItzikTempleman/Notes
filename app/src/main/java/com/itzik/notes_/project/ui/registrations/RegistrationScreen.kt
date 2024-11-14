@@ -135,7 +135,7 @@ fun RegistrationScreen(
             fontFamily = FontFamily.SansSerif,
             fontStyle = FontStyle.Italic,
             color = colorResource(R.color.darker_blue),
-            text = stringResource(id = R.string.register)
+            text = stringResource(id = R.string.registration)
         )
 
                 CustomOutlinedTextField(

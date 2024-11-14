@@ -171,7 +171,7 @@ fun CustomOutlinedTextField(
                             0 -> "Full name, each containing at least two letters"
                             1 -> "Valid format: \"x@x.x\""
                             2 -> "\"Xx3*\" Upper case, lower case, number and special symbol"
-                            3 -> "10 digit number- optional '+' for country code"
+                            3 -> "10-12 digits number: optional '+' for country code"
                             else -> ""
                         },
                         fontSize = 16.sp,

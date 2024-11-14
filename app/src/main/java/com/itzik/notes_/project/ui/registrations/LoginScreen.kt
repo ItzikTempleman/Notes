@@ -46,9 +46,11 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.itzik.notes_.R
+import com.itzik.notes_.project.model.User
 
 import com.itzik.notes_.project.ui.composable_elements.CustomOutlinedTextField
 import com.itzik.notes_.project.ui.navigation.Screen
+import com.itzik.notes_.project.utils.getMockUser
 import com.itzik.notes_.project.utils.gradientBrush
 import com.itzik.notes_.project.viewmodels.UserViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -80,288 +82,312 @@ fun LoginScreen(
         isButtonEnabled = email.isNotBlank() && password.isNotBlank()
     }
 
-        ConstraintLayout(
+    ConstraintLayout(
+        modifier = Modifier
+            .fillMaxWidth()
+
+    ) {
+        val (loginTextTop, loginTextLine, loginTextBottom, loginText, emailTF, passwordTF, forgotPassword, loginBtn, orText, googleBtn, verticalLine, facebookBtn, doNotHaveText, signUpBtn, loginAsGuest) = createRefs()
+        Box(
             modifier = Modifier
+                .fillMaxSize()
+                .background(gradientBrush(true))
+        ) {}
+
+        Text(
+            modifier = Modifier
+                .constrainAs(loginTextTop) {
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    bottom.linkTo(loginTextLine.top)
+                }
+                .padding(top = 150.dp),
+            fontSize = 36.sp,
+            fontFamily = FontFamily.SansSerif,
+            fontStyle = FontStyle.Italic,
+            color = colorResource(R.color.darker_blue),
+            text = stringResource(id = R.string.notes)
+        )
+
+        HorizontalDivider(
+            modifier = Modifier
+                .constrainAs(loginTextLine) {
+                    top.linkTo(loginTextTop.bottom, margin = (-20).dp)
+                }
+                .padding(horizontal = 125.dp),
+            thickness = 1.dp,
+            color = colorResource(R.color.darker_blue)
+        )
+
+        Text(
+            modifier = Modifier
+                .constrainAs(loginTextBottom) {
+                    top.linkTo(loginTextLine.bottom)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                },
+            fontSize = 20.sp,
+            color = colorResource(R.color.darker_blue),
+            text = stringResource(id = R.string.manage)
+        )
+
+
+        Text(
+            modifier = Modifier
+                .constrainAs(loginText) {
+                    top.linkTo(loginTextLine.bottom)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }
+                .padding(40.dp),
+            fontSize = 22.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.Black,
+            text = stringResource(id = R.string.login_account)
+        )
+
+        CustomOutlinedTextField(
+            value = email,
+            onValueChange = {
+                email = it
+                updateButtonState(email, password)
+            },
+            label = emailLabelMessage,
+            modifier = Modifier
+                .constrainAs(emailTF) {
+                    top.linkTo(loginText.bottom)
+                }
                 .fillMaxWidth()
+                .padding(20.dp),
+            leftImageVector = Icons.Default.Email,
+            isError = isEmailError,
+            visualTransformation = VisualTransformation.None,
+        )
+
+        CustomOutlinedTextField(
+            value = password,
+            onValueChange = {
+                password = it
+                updateButtonState(email, password)
+            },
+            label = passwordLabelMessage,
+            modifier = Modifier
+                .constrainAs(passwordTF) {
+                    top.linkTo(emailTF.bottom)
+                }
+                .fillMaxWidth()
+                .padding(20.dp),
+            leftImageVector = if (isPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+            isError = isPasswordError,
+            keyboardType = KeyboardType.Password,
+            isPasswordToggleClicked = isPasswordVisible,
+            isPasswordIconShowing = {
+                isPasswordVisible = !isPasswordVisible
+            },
+            visualTransformation = if (isPasswordVisible) VisualTransformation.None
+            else PasswordVisualTransformation(),
+        )
+
+        TextButton(
+            onClick = {
+                rootNavController.navigate(Screen.ResetPassword.route)
+            },
+            modifier = Modifier
+                .constrainAs(forgotPassword) {
+                    top.linkTo(passwordTF.bottom)
+                    start.linkTo(parent.start)
+                }
+                .padding(start = 20.dp),
 
             ) {
-            val (loginTextTop, loginTextLine, loginTextBottom, lognText, emailTF, passwordTF, forgotPassword, loginBtn, orText, googleBtn, verticalLine, facebookBtn, doNotHaveText, signUpBtn) = createRefs()
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(gradientBrush(true))
-            ) {}
             Text(
-                modifier = Modifier
-                    .constrainAs(loginTextTop) {
-                        top.linkTo(parent.top)
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                        bottom.linkTo(loginTextLine.top)
-                    }
-                    .padding(top = 150.dp),
-                fontSize = 36.sp,
-                fontFamily = FontFamily.SansSerif,
-                fontStyle = FontStyle.Italic,
-                color = colorResource(R.color.darker_blue),
-                text = stringResource(id = R.string.notes)
+                text = stringResource(R.string.forgot)
             )
+        }
 
-            HorizontalDivider(
-                modifier = Modifier
-                    .constrainAs(loginTextLine) {
-                        top.linkTo(loginTextTop.bottom, margin = (-20).dp)
+        Button(
+            enabled = isButtonEnabled,
+            shape = RoundedCornerShape(12.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = colorResource(R.color.darker_blue)
+            ),
+            modifier = Modifier
+                .constrainAs(loginBtn) {
+                    top.linkTo(forgotPassword.bottom)
+                }
+                .fillMaxWidth()
+                .height(90.dp)
+                .padding(20.dp),
+            onClick = {
+                if (userViewModel != null) {
+                    if (!userViewModel.validateEmail(email)) {
+                        isEmailError = true
+                        emailLabelMessage = "Invalid username / email format"
+                    } else {
+                        isEmailError = false
+                        emailLabelMessage = emailText
                     }
-                    .padding(horizontal = 125.dp),
-                thickness = 1.dp,
-                color = colorResource(R.color.darker_blue)
-            )
-
-            Text(
-                modifier = Modifier
-                    .constrainAs(loginTextBottom) {
-                        top.linkTo(loginTextLine.bottom)
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                    },
-                fontSize = 20.sp,
-                color = colorResource(R.color.darker_blue),
-                text = stringResource(id = R.string.manage)
-            )
-
-
-            Text(
-                modifier = Modifier
-                    .constrainAs(lognText) {
-                        top.linkTo(loginTextLine.bottom)
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
+                }
+                if (userViewModel != null) {
+                    if (!userViewModel.validatePassword(password)) {
+                        isPasswordError = true
+                        passwordLabelMessage =
+                            "Enter symbols of type format X, x, $ , 1"
+                    } else {
+                        isPasswordError = false
+                        passwordLabelMessage = passwordText
                     }
-                    .padding(40.dp),
-                fontSize = 22.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.Black,
-                text = stringResource(id = R.string.login_account)
-            )
-
-            CustomOutlinedTextField(
-                value = email,
-                onValueChange = {
-                    email = it
-                    updateButtonState(email, password)
-                },
-                label = emailLabelMessage,
-                modifier = Modifier
-                    .constrainAs(emailTF) {
-                        top.linkTo(lognText.bottom)
-                    }
-                    .fillMaxWidth()
-                    .padding(20.dp),
-                leftImageVector = Icons.Default.Email,
-                isError = isEmailError,
-                visualTransformation = VisualTransformation.None,
-            )
-
-            CustomOutlinedTextField(
-                value = password,
-                onValueChange = {
-                    password = it
-                    updateButtonState(email, password)
-                },
-                label = passwordLabelMessage,
-                modifier = Modifier
-                    .constrainAs(passwordTF) {
-                        top.linkTo(emailTF.bottom)
-                    }
-                    .fillMaxWidth()
-                    .padding(20.dp),
-                leftImageVector = if (isPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-                isError = isPasswordError,
-                keyboardType = KeyboardType.Password,
-                isPasswordToggleClicked = isPasswordVisible,
-                isPasswordIconShowing = {
-                    isPasswordVisible = !isPasswordVisible
-                },
-                visualTransformation = if (isPasswordVisible) VisualTransformation.None
-                else PasswordVisualTransformation(),
-            )
-
-            TextButton(
-                onClick = {
-                    rootNavController.navigate(Screen.ResetPassword.route)
-                },
-                modifier = Modifier
-                    .constrainAs(forgotPassword) {
-                        top.linkTo(passwordTF.bottom)
-                        start.linkTo(parent.start)
-                    }
-                    .padding(start = 20.dp),
-
-                ) {
-                Text(
-                    text = stringResource(R.string.forgot)
-                )
-            }
-
-            Button(
-                enabled = isButtonEnabled,
-                shape = RoundedCornerShape(12.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = colorResource(R.color.darker_blue)
-                ),
-                modifier = Modifier
-                    .constrainAs(loginBtn) {
-                        top.linkTo(forgotPassword.bottom)
-                    }
-                    .fillMaxWidth()
-                    .height(90.dp)
-                    .padding(20.dp),
-                onClick = {
-                    if (userViewModel != null) {
-                        if (!userViewModel.validateEmail(email)) {
-                            isEmailError = true
-                            emailLabelMessage = "Invalid username / email format"
-                        } else {
-                            isEmailError = false
-                            emailLabelMessage = emailText
-                        }
-                    }
-                    if (userViewModel != null) {
-                        if (!userViewModel.validatePassword(password)) {
-                            isPasswordError = true
-                            passwordLabelMessage =
-                                "Enter symbols of type format X, x, $ , 1"
-                        } else {
-                            isPasswordError = false
-                            passwordLabelMessage = passwordText
-                        }
-                    }
-                    if (userViewModel != null) {
-                        if (userViewModel.validateEmail(email) && userViewModel.validatePassword(
+                }
+                if (userViewModel != null) {
+                    if (userViewModel.validateEmail(email) && userViewModel.validatePassword(
+                            password
+                        )
+                    ) {
+                        coroutineScope.launch {
+                            userViewModel.getUserFromUserNameAndPassword(
+                                email,
                                 password
                             )
-                        ) {
-                            coroutineScope.launch {
-                                userViewModel.getUserFromUserNameAndPassword(
-                                    email,
-                                    password
-                                )
-                                    .collect { user ->
-                                        if (user != null) {
-                                            user.isLoggedIn = true
-                                            userViewModel.updateIsLoggedIn(user)
-                                            rootNavController.popBackStack()
-                                            rootNavController.navigate(Screen.Home.route)
-                                        } else {
-                                            Log.e(
-                                                "LoginScreen",
-                                                "Invalid credentials or user not found"
-                                            )
-                                        }
+                                .collect { user ->
+                                    if (user != null) {
+                                        user.isLoggedIn = true
+                                        userViewModel.updateIsLoggedIn(user)
+                                        rootNavController.popBackStack()
+                                        rootNavController.navigate(Screen.Home.route)
+                                    } else {
+                                        Log.e(
+                                            "LoginScreen",
+                                            "Invalid credentials or user not found"
+                                        )
                                     }
-                            }
-                        } else {
-                            Log.e("LoginScreen", "Invalid email or password format")
+                                }
                         }
+                    } else {
+                        Log.e("LoginScreen", "Invalid email or password format")
                     }
                 }
-            ) {
-                Text(
-                    fontSize = 20.sp,
-                    text = stringResource(id = R.string.log_in)
-                )
             }
-
+        ) {
             Text(
-                modifier = Modifier.constrainAs(orText) {
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    top.linkTo(loginBtn.bottom)
-                },
-                text = "OR",
-                fontSize = 14.sp
+                fontSize = 20.sp,
+                text = stringResource(id = R.string.log_in)
             )
+        }
 
-            IconButton(
-                modifier = Modifier
-                    .constrainAs(facebookBtn) {
-                        top.linkTo(orText.bottom)
-                        end.linkTo(verticalLine.start)
-                    }
-                    .size(60.dp)
-                    .padding(12.dp),
-                onClick = {
+        Text(
+            modifier = Modifier.constrainAs(orText) {
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+                top.linkTo(loginBtn.bottom)
+            },
+            text = "OR",
+            fontSize = 14.sp
+        )
 
+        IconButton(
+            modifier = Modifier
+                .constrainAs(facebookBtn) {
+                    top.linkTo(orText.bottom)
+                    end.linkTo(verticalLine.start)
                 }
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.facebook_logo),
-                    contentDescription = null,
-                    tint = Color.Unspecified
-                )
-            }
+                .size(60.dp)
+                .padding(12.dp),
+            onClick = {
 
-            VerticalDivider(
-                modifier = Modifier.constrainAs(verticalLine) {
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                },
-                color = Color.Transparent
+            }
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.facebook_logo),
+                contentDescription = null,
+                tint = Color.Unspecified
             )
+        }
 
-            IconButton(
-                modifier = Modifier
-                    .constrainAs(googleBtn) {
-                        top.linkTo(orText.bottom)
-                        start.linkTo(verticalLine.end)
-                    }
-                    .size(60.dp)
-                    .padding(12.dp),
-                onClick = {
+        VerticalDivider(
+            modifier = Modifier.constrainAs(verticalLine) {
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            },
+            color = Color.Transparent
+        )
 
+        IconButton(
+            modifier = Modifier
+                .constrainAs(googleBtn) {
+                    top.linkTo(orText.bottom)
+                    start.linkTo(verticalLine.end)
                 }
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.google_logo),
-                    contentDescription = null,
-                    tint = Color.Unspecified
-                )
+                .size(60.dp)
+                .padding(12.dp),
+            onClick = {
+
             }
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.google_logo),
+                contentDescription = null,
+                tint = Color.Unspecified
+            )
+        }
 
 
+        Text(
+            modifier = Modifier
+                .constrainAs(doNotHaveText) {
+                    top.linkTo(facebookBtn.bottom)
+                    end.linkTo(parent.end)
+                    start.linkTo(parent.start)
+                },
+            fontWeight = FontWeight.Bold,
+            color = Color.Black,
+            fontSize = 18.sp,
+            text = stringResource(id = R.string.dont_have),
+        )
+
+
+        TextButton(
+            onClick = {
+                rootNavController.navigate(Screen.Registration.route)
+            },
+            modifier = Modifier
+                .constrainAs(signUpBtn) {
+                    top.linkTo(doNotHaveText.bottom)
+                    end.linkTo(parent.end)
+                    start.linkTo(parent.start)
+                }
+        ) {
             Text(
-                modifier = Modifier
-                    .constrainAs(doNotHaveText) {
-                        top.linkTo(facebookBtn.bottom)
-                        end.linkTo(parent.end)
-                        start.linkTo(parent.start)
-                    },
-                fontWeight = FontWeight.Bold,
-                color = Color.Black,
-                fontSize = 18.sp,
-                text = stringResource(id = R.string.dont_have),
+                fontSize = 22.sp,
+                text = stringResource(id = R.string.register),
             )
+        }
 
-
-            TextButton(
-                onClick = {
-                    rootNavController.navigate(Screen.Registration.route)
-                },
-                modifier = Modifier
-                    .constrainAs(signUpBtn) {
-                        top.linkTo(doNotHaveText.bottom)
-                        end.linkTo(parent.end)
-                        start.linkTo(parent.start)
-                    }
-            ) {
-                Text(
-                    fontSize = 22.sp,
-                    text = stringResource(id = R.string.register),
-                )
+        TextButton(
+            modifier = Modifier.constrainAs(loginAsGuest) {
+                top.linkTo(signUpBtn.top)
+                bottom.linkTo(signUpBtn.bottom)
+                start.linkTo(signUpBtn.end)
+                end.linkTo(parent.end)
+            },
+            onClick = {
+                coroutineScope.launch {
+                    val tempUser = getMockUser()
+                    tempUser.isLoggedIn = true
+                    userViewModel?.updateIsLoggedIn(tempUser)
+                    userViewModel?.registerUser(tempUser)
+                    rootNavController.navigate(Screen.Home.route)
+                }
             }
+        ) {
+            Text(
+                fontSize = 14.sp,
+                text = stringResource(R.string.login_as_guest),
+                color = Color.Red
+            )
         }
     }
-
+}
 
 
 @Preview(showBackground = true, device = "spec:width=412dp,height=932dp")

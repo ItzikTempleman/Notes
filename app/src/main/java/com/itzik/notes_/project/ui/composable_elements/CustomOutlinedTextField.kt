@@ -1,12 +1,18 @@
 package com.itzik.notes_.project.ui.composable_elements
 
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.QuestionMark
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -22,9 +28,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.itzik.notes_.project.ui.registrations.RegistrationInstructionsScreen
 
 @Composable
 fun CustomOutlinedTextField(
+    fieldNUmber:Int?=null,
+    doesInstructionsHintExist: Boolean?=null,
     invokedFunction: (() -> Unit)? = null,
     value: String,
     onValueChange: ((String) -> Unit)? = null,
@@ -104,6 +113,25 @@ fun CustomOutlinedTextField(
                 isError = isError,
                 keyboardOptions = KeyboardOptions(keyboardType = keyboardType)
             )
+            if(doesInstructionsHintExist == true){
+                Row(
+                    modifier= Modifier.fillMaxWidth().padding(4.dp),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    GenericIconButton(
+                        modifier = Modifier.size(30.dp),
+                        onClick = {
+                            RegistrationInstructionsScreen(
+                                isFieldOpen = true,
+                                modifier = Modifier,
+                                selectedFieldNUmber =fieldNUmber
+                            )
+                        },
+                        imageVector = Icons.Default.QuestionMark,
+                        colorNumber = 2
+                    )
+                }
+            }
         }
     }
 }

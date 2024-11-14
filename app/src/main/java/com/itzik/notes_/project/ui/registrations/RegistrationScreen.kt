@@ -138,8 +138,9 @@ fun RegistrationScreen(
             text = stringResource(id = R.string.register)
         )
 
-
                 CustomOutlinedTextField(
+                    fieldNUmber=0,
+                    doesInstructionsHintExist=true,
                     value = name,
                     onValueChange = {
                         name = it
@@ -154,12 +155,12 @@ fun RegistrationScreen(
                         .padding(20.dp),
                     leftImageVector = Icons.Default.Person,
                     isError = nameError,
-                    visualTransformation = VisualTransformation.None,
-
-
+                    visualTransformation = VisualTransformation.None
                     )
 
                 CustomOutlinedTextField(
+                    fieldNUmber=1,
+                    doesInstructionsHintExist=true,
                     value = createEmail,
                     onValueChange = {
                         createEmail = it
@@ -180,6 +181,8 @@ fun RegistrationScreen(
                     )
 
                 CustomOutlinedTextField(
+                    fieldNUmber=2,
+                    doesInstructionsHintExist=true,
                     value = createPassword,
                     onValueChange = {
                         createPassword = it
@@ -204,6 +207,8 @@ fun RegistrationScreen(
                     )
 
                 CustomOutlinedTextField(
+                    fieldNUmber=3,
+                    doesInstructionsHintExist=true,
                     value = createPhoneNumber,
                     onValueChange = {
                         createPhoneNumber = it

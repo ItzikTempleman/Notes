@@ -18,7 +18,7 @@ import com.itzik.notes_.R
 @Composable
 fun GenericIconButton(
     modifier: Modifier = Modifier,
-    onClick: () -> Unit,
+    onClick: @Composable () -> Unit,
     imageVector: ImageVector,
     iconSize: Modifier = Modifier.size(32.dp),
     colorNumber: Int,

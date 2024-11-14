@@ -90,7 +90,7 @@ fun LoginScreen(
             .fillMaxWidth()
 
     ) {
-        val (loginTextTop, loginTextLine, loginTextBottom, loginText, emailTF, passwordTF, forgotPassword, loginBtn, orText, googleBtn, verticalLine, facebookBtn, doNotHaveText, signUpBtn, loginAsGuest) = createRefs()
+        val (loginTextTop, loginTextLine, loginTextBottom, loginText, emailTF, passwordTF, loginBtn, orText, doNotHaveText, signUpBtn, loginAsGuest) = createRefs()
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -192,22 +192,7 @@ fun LoginScreen(
             else PasswordVisualTransformation(),
         )
 
-        TextButton(
-            onClick = {
-                rootNavController.navigate(Screen.ResetPassword.route)
-            },
-            modifier = Modifier
-                .constrainAs(forgotPassword) {
-                    top.linkTo(passwordTF.bottom)
-                    start.linkTo(parent.start)
-                }
-                .padding(start = 20.dp),
 
-            ) {
-            Text(
-                text = stringResource(R.string.forgot)
-            )
-        }
 
         Button(
             enabled = isButtonEnabled,
@@ -217,7 +202,7 @@ fun LoginScreen(
             ),
             modifier = Modifier
                 .constrainAs(loginBtn) {
-                    top.linkTo(forgotPassword.bottom)
+                    top.linkTo(passwordTF.bottom)
                 }
                 .fillMaxWidth()
                 .height(90.dp)
@@ -278,67 +263,12 @@ fun LoginScreen(
             )
         }
 
-        Text(
-            modifier = Modifier.constrainAs(orText) {
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-                top.linkTo(loginBtn.bottom)
-            },
-            text = "OR",
-            fontSize = 14.sp
-        )
-
-        IconButton(
-            modifier = Modifier
-                .constrainAs(facebookBtn) {
-                    top.linkTo(orText.bottom)
-                    end.linkTo(verticalLine.start)
-                }
-                .size(60.dp)
-                .padding(12.dp),
-            onClick = {
-
-            }
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.facebook_logo),
-                contentDescription = null,
-                tint = Color.Unspecified
-            )
-        }
-
-        VerticalDivider(
-            modifier = Modifier.constrainAs(verticalLine) {
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            },
-            color = Color.Transparent
-        )
-
-        IconButton(
-            modifier = Modifier
-                .constrainAs(googleBtn) {
-                    top.linkTo(orText.bottom)
-                    start.linkTo(verticalLine.end)
-                }
-                .size(60.dp)
-                .padding(12.dp),
-            onClick = {
-
-            }
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.google_logo),
-                contentDescription = null,
-                tint = Color.Unspecified
-            )
-        }
 
 
         Text(
             modifier = Modifier
                 .constrainAs(doNotHaveText) {
-                    top.linkTo(facebookBtn.bottom)
+                    top.linkTo(loginBtn.bottom)
                     end.linkTo(parent.end)
                     start.linkTo(parent.start)
                 },
@@ -365,24 +295,30 @@ fun LoginScreen(
             )
         }
 
+        Text(
+            modifier = Modifier.constrainAs(orText) {
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+                top.linkTo(signUpBtn.bottom)
+            },
+            text = "OR",
+            fontSize = 14.sp
+        )
 
         TextButton(
             modifier = Modifier.constrainAs(loginAsGuest) {
-                top.linkTo(signUpBtn.top)
-                bottom.linkTo(signUpBtn.bottom)
-                start.linkTo(signUpBtn.end)
+                top.linkTo(orText.bottom)
+                start.linkTo(parent.start)
                 end.linkTo(parent.end)
-            },
+            }.padding(8.dp),
             onClick = {
                 coroutineScope.launch {
                     val existingAdminUser = userViewModel?.getAdminUserIfExists(tempUser.email)
 
                     if (existingAdminUser != null) {
-                        // Admin user exists; just log in.
                         existingAdminUser.isLoggedIn = true
                         userViewModel.updateIsLoggedIn(existingAdminUser)
                     } else {
-                        // Admin user doesn't exist; create and log in.
                         tempUser.isLoggedIn = true
                         userViewModel?.registerUser(tempUser)
                     }
@@ -391,9 +327,9 @@ fun LoginScreen(
             }
         ) {
             Text(
-                fontSize = 14.sp,
+                fontSize = 24.sp,
                 text = stringResource(R.string.login_as_guest),
-                color = Color.Red
+                color = colorResource(R.color.deep_ocean_blue)
             )
         }
     }

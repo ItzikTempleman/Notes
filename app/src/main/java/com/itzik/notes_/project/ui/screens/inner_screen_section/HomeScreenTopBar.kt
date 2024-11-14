@@ -61,7 +61,7 @@ fun HomeScreenTopBar(
                 top.linkTo(parent.top)
                 bottom.linkTo(parent.bottom)
             },
-            color = Color.Red,
+            color = colorResource(R.color.deep_ocean_blue),
             fontWeight = FontWeight.Bold,
             fontSize = 24.sp,
             text = if (user?.userName == "Guest") "Guest" else ""

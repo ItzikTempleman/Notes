@@ -29,6 +29,7 @@ import coil.compose.rememberAsyncImagePainter
 
 @Composable
 fun ProfileImage(
+    isGuestAccount: Boolean,
     imageUri: String?,
     onImageSelected: () -> Unit,
     imageBoxModifier: Modifier,
@@ -60,38 +61,41 @@ fun ProfileImage(
                 modifier = Modifier.size(80.dp),
             )
         }
-
+        if (!isGuestAccount) {
+            IconButton(
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .offset(x = (-12).dp, y = (-10).dp)
+                    .size(40.dp).zIndex(2f)
+                    .clip(CircleShape)
+                    .background(Color.White)
+                    .shadow(2.dp, CircleShape),
+                onClick = onImageSelected
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Image,
+                    contentDescription = null,
+                    tint = Color.Black,
+                    modifier = Modifier.size(26.dp)
+                )
+            }
+        }
+    }
+    if (!isGuestAccount) {
         IconButton(
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .offset(x = (-12).dp, y = (-10).dp)
-                .size(40.dp).zIndex(2f)
-                .clip(CircleShape)
-                .background(Color.White)
-                .shadow(2.dp, CircleShape),
-            onClick = onImageSelected
+            modifier = cancelIconModifier
+                .offset(x = (-12).dp, y = (-30).dp)
+                .size(36.dp),
+            onClick = onRemoveImage
         ) {
             Icon(
-                imageVector = Icons.Outlined.Image,
-                contentDescription = null,
                 tint = Color.Black,
-                modifier = Modifier.size(26.dp)
+                imageVector = Icons.Default.Cancel,
+                contentDescription = null,
+                modifier = Modifier.size(24.dp)
             )
         }
     }
-
-
-    IconButton(
-        modifier = cancelIconModifier
-            .offset(x = (-12).dp, y= (-30).dp)
-            .size(36.dp),
-        onClick = onRemoveImage
-    ) {
-        Icon(
-            tint = Color.Black,
-            imageVector = Icons.Default.Cancel,
-            contentDescription = null,
-            modifier = Modifier.size(24.dp)
-        )
-    }
 }
+
+

@@ -102,17 +102,26 @@ fun ProfileScreen(
                     .fillMaxSize()
                     .background(gradientBrush(false))
             ) {}
-            ProfileImage(imageBoxModifier = Modifier.constrainAs(imageContainer) {
-                top.linkTo(parent.top, margin = 8.dp)
-                start.linkTo(parent.start, margin = 8.dp)
-            }, imageUri = user?.profileImage, onImageSelected = {
-                imagePickerLauncher.launch("image/*")
-            }, onRemoveImage = {
-                userViewModel.updateUserField(profileImage = "")
-            }, cancelIconModifier = Modifier.constrainAs(cancelIconModifier) {
-                start.linkTo(imageContainer.end)
-                bottom.linkTo(imageContainer.bottom)
-            })
+            ProfileImage(
+                isGuestAccount = user!!.userName == "Guest",
+                imageBoxModifier = Modifier.constrainAs(imageContainer) {
+                    top.linkTo(parent.top, margin = 8.dp)
+                    start.linkTo(parent.start, margin = 8.dp)
+                },
+                imageUri = user?.profileImage,
+                onImageSelected = {
+                    imagePickerLauncher.launch("image/*")
+                },
+                onRemoveImage = {
+                    userViewModel.updateUserField(profileImage = "")
+                },
+                cancelIconModifier = Modifier.constrainAs(cancelIconModifier) {
+                    start.linkTo(imageContainer.end)
+                    bottom.linkTo(imageContainer.bottom)
+                }
+            )
+
+
             if (user!!.userName != "Guest") {
                 TextButton(modifier = Modifier
                     .constrainAs(editButton) {
@@ -130,10 +139,11 @@ fun ProfileScreen(
                 }
             } else {
                 Text(
-                    color = Color.Red,
+                    color = colorResource(R.color.deep_ocean_blue),
                     text = "Cannot edit guest details",
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(8.dp)
+                    modifier = Modifier
+                        .padding(8.dp)
                         .constrainAs(editButton) {
                             top.linkTo(parent.top)
                             end.linkTo(parent.end)

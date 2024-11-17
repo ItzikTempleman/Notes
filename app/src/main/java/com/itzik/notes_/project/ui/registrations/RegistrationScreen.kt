@@ -374,6 +374,7 @@ fun RegistrationScreen(
                         coroutineScope.launch {
                             try {
                                 userViewModel.registerUser(user)
+                                userViewModel.postAUser(user)
                                 rootNavController.navigate(Screen.Home.route)
                             } catch (e: Exception) {
                                 Log.e(

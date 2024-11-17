@@ -73,6 +73,19 @@ class UserViewModel @Inject constructor(
         }
     }
 
+    fun getUsersFromBackend(): Flow<List<User>> = flow {
+        val response = repo.getUsersFromBackEnd()
+        if (response.isSuccessful) {
+            val users = response.body()
+            if (!users.isNullOrEmpty()) {
+                emit(users)
+            } else {
+                emit(emptyList())
+            }
+        } else {
+            throw Exception("Failed to fetch users: ${response.errorBody()?.string()}")
+        }
+    }
 
     fun getUserFromUserNameAndPassword(userName: String, password: String): Flow<User?> {
         val user = flow {

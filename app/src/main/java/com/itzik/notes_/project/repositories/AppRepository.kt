@@ -28,7 +28,7 @@ class AppRepository @Inject constructor(
 ) : AppRepositoryInterface {
 
     override suspend fun insertUserIntoBackEnd(user: User) = usersAndNotesService.postAUser(user)
-    override suspend fun getUsers(): Response<List<User>> = usersAndNotesService.getUsers()
+    override suspend fun getUsersFromBackEnd(): Response<List<User>> = usersAndNotesService.getUsersFromBackEnd()
 
     override suspend fun insertUser(user: User) = userDao.insertUser(user)
     override suspend fun fetchLoggedInUsers() = userDao.fetchLoggedInUsers()

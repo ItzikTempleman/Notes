@@ -14,5 +14,5 @@ interface UsersAndNotesService {
 
 
     @GET("/api")
-    suspend fun getUsers() : Response<List<User>>
+    suspend fun getUsersFromBackEnd() : Response<List<User>>
 }

@@ -6,6 +6,7 @@ import com.itzik.notes_.project.model.User
 import com.itzik.notes_.project.model.WallpaperResponse
 import com.itzik.notes_.project.requests.WallpaperService
 import com.itzik.notes_.project.model.Note
+import com.itzik.notes_.project.requests.UsersAndNotesService
 import retrofit2.Response
 import javax.inject.Inject
 import javax.inject.Named
@@ -21,27 +22,43 @@ class AppRepository @Inject constructor(
     @Named("wallpaper_service")
     @Singleton
     private val wallpaperService: WallpaperService,
+    @Named("my_backend_service")
+    @Singleton
+    private val usersAndNotesService: UsersAndNotesService,
 ) : AppRepositoryInterface {
+
+    override suspend fun insertUserIntoBackEnd(user: User) = usersAndNotesService.postAUser(user)
+    override suspend fun getUsers(): Response<List<User>> = usersAndNotesService.getUsers()
 
     override suspend fun insertUser(user: User) = userDao.insertUser(user)
     override suspend fun fetchLoggedInUsers() = userDao.fetchLoggedInUsers()
     override suspend fun getUserFromEmailAndPassword(email: String, password: String) =
         userDao.getUserFromEmailAndPassword(email, password)
 
-    override suspend fun getTempUserForVerification(email: String)=userDao.getTempUserForVerification(email)
+    override suspend fun getTempUserForVerification(email: String) =
+        userDao.getTempUserForVerification(email)
 
     override suspend fun updateIsLoggedIn(user: User) = userDao.updateIsLoggedIn(user)
 
     override suspend fun updateUserFields(
         userId: String,
         email: String?,
-        profileImage:String?,
+        profileImage: String?,
         phoneNumber: String?,
         password: String?,
         selectedWallpaper: String?
-    ) = userDao.updateUserFields(userId, email, profileImage, phoneNumber, password, selectedWallpaper)
+    ) = userDao.updateUserFields(
+        userId,
+        email,
+        profileImage,
+        phoneNumber,
+        password,
+        selectedWallpaper
+    )
 
-    override suspend fun getWallpaperListByQuery(query: String): Response<WallpaperResponse> = wallpaperService.getWallpaperListBySearchQuery(searchQuery = query)
+    override suspend fun getWallpaperListByQuery(query: String): Response<WallpaperResponse> =
+        wallpaperService.getWallpaperListBySearchQuery(searchQuery = query)
+
     override suspend fun getUserById(userId: String): User = userDao.getUserById(userId)
     override suspend fun updateViewType(userId: String, isViewGrid: Boolean) =
         userDao.updateViewType(userId, isViewGrid)

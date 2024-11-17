@@ -7,6 +7,13 @@ import retrofit2.Response
 
 
 interface AppRepositoryInterface {
+
+
+    suspend fun insertUserIntoBackEnd(user:User)
+    suspend fun getUsers(): Response<List<User>>
+
+
+
     suspend fun insertUser(user: User)
     suspend fun fetchLoggedInUsers(): MutableList<User>
     suspend fun getUserFromEmailAndPassword(email: String, password: String): User

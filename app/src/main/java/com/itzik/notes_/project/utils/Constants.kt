@@ -11,6 +11,7 @@ object Constants {
     const val BASE_URL = "https://pixabay.com/"
     const val API_KEY_VALUE = "46102404-ad517a06d05ad3776aea392e3"
 
+    const val MY_BACKEND_BASE_URL = "https://my-notes-app-itzik-0c1e8b06170b.herokuapp.com/"
 }
 fun reverseDateFormat(date: String): String {
     val localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"))

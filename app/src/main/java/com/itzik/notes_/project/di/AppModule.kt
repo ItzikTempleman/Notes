@@ -8,8 +8,10 @@ import com.itzik.notes_.project.data.NoteDao
 import com.itzik.notes_.project.data.UserDao
 import com.itzik.notes_.project.repositories.AppRepository
 import com.itzik.notes_.project.repositories.AppRepositoryInterface
+import com.itzik.notes_.project.requests.UsersAndNotesService
 import com.itzik.notes_.project.requests.WallpaperService
 import com.itzik.notes_.project.utils.Constants.BASE_URL
+import com.itzik.notes_.project.utils.Constants.MY_BACKEND_BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,8 +33,9 @@ object AppModule {
         @Named("user_dao") userDao: UserDao,
         @Named("note_dao") noteDao: NoteDao,
         @Named("wallpaper_service") wallpaperService: WallpaperService,
+        @Named("my_backend_service") usersAndNotesService: UsersAndNotesService,
     ): AppRepositoryInterface {
-        return AppRepository(userDao, noteDao,wallpaperService )
+        return AppRepository(userDao, noteDao,wallpaperService , usersAndNotesService)
     }
 
     @Provides
@@ -63,6 +66,15 @@ object AppModule {
             Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create())
                 .client(OkHttpClient.Builder().build()).build()
         return retrofit.create(WallpaperService::class.java)
+    }
+
+    @Provides
+    @Named("my_backend_service")
+    fun provideBackEndRetrofit(): UsersAndNotesService {
+        val retrofit =
+            Retrofit.Builder().baseUrl(MY_BACKEND_BASE_URL).addConverterFactory(GsonConverterFactory.create())
+                .client(OkHttpClient.Builder().build()).build()
+        return retrofit.create(UsersAndNotesService::class.java)
     }
 }
 

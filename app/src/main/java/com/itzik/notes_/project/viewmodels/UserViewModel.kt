@@ -62,6 +62,18 @@ class UserViewModel @Inject constructor(
         }
     }
 
+
+    fun postAUser(user: User) {
+        viewModelScope.launch {
+            try {
+                repo.insertUserIntoBackEnd(user)
+            } catch (_: Exception) {
+                null
+            }
+        }
+    }
+
+
     fun getUserFromUserNameAndPassword(userName: String, password: String): Flow<User?> {
         val user = flow {
             val updatedUser = repo.getUserFromEmailAndPassword(userName, password)
@@ -184,8 +196,8 @@ class UserViewModel @Inject constructor(
     }
 
 
-    fun  updateUserField(
-        profileImage:String?=null,
+    fun updateUserField(
+        profileImage: String? = null,
         newEmail: String? = null,
         newPhoneNumber: String? = null,
         newPassword: String? = null,
@@ -195,7 +207,7 @@ class UserViewModel @Inject constructor(
             privateUser.value?.let { user ->
                 val updatedUser = user.copy(
                     userId = user.userId,
-                    profileImage= (profileImage?:user.profileImage),
+                    profileImage = (profileImage ?: user.profileImage),
                     email = (newEmail ?: user.email),
                     phoneNumber = (newPhoneNumber ?: user.phoneNumber),
                     password = (newPassword ?: user.password),
@@ -203,7 +215,7 @@ class UserViewModel @Inject constructor(
                 )
                 repo.updateUserFields(
                     userId = user.userId,
-                    profileImage= profileImage.toString(),
+                    profileImage = profileImage.toString(),
                     email = updatedUser.email,
                     phoneNumber = updatedUser.phoneNumber,
                     password = updatedUser.password,

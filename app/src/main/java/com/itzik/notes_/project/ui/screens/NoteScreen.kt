@@ -1,6 +1,7 @@
 package com.itzik.notes_.project.ui.screens
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
@@ -67,6 +68,8 @@ fun NoteScreen(
             coroutineScope.launch {
                 note.content = textFieldValue.annotatedString.text
                 noteViewModel.saveNote(note)
+                Log.d("TAG","userId: ${note.userId}")
+               // noteViewModel.insertNoteIntoBackEnd(note=note, userId= note.userId)
             }
         }
         bottomBarNavController.popBackStack()
@@ -109,6 +112,8 @@ fun NoteScreen(
                     coroutineScope.launch {
                         note.content = textFieldValue.text
                         noteViewModel.saveNote(note)
+                        Log.d("TAG"," bottom function of userId: ${note.userId}")
+                       // noteViewModel.insertNoteIntoBackEnd(note=note, userId= note.userId)
                     }
                 }
                 bottomBarNavController.popBackStack()

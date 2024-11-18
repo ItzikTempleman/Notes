@@ -53,8 +53,14 @@ class NoteViewModel @Inject constructor(
         val users = repo.fetchLoggedInUsers()
         val loggedInUser = users.firstOrNull { it.isLoggedIn }
         userId = loggedInUser?.userId ?: ""
-
     }
+
+
+    suspend fun insertNoteIntoBackEnd(userId: String, note: Note) =
+        repo.insertNoteIntoBackEnd(userId, note)
+
+
+
 
     suspend fun updateSelectedNoteContent(
         newChar: String,
@@ -87,6 +93,7 @@ class NoteViewModel @Inject constructor(
     fun fontWeightToInt(fontWeight: FontWeight): Int {
         return fontWeight.weight
     }
+
     fun intToFontWeight(fontWeightInt: Int): FontWeight {
         return when (fontWeightInt) {
             700 -> FontWeight.Bold
@@ -184,7 +191,7 @@ class NoteViewModel @Inject constructor(
         privateDeletedNoteList.value = notes
     }
 
-     fun fetchStarredNotes() = viewModelScope.launch {
+    fun fetchStarredNotes() = viewModelScope.launch {
         val starredNotes = repo.fetchStarredNotes(userId = userId)
         privateStarredNoteList.value = starredNotes
 
@@ -213,7 +220,7 @@ class NoteViewModel @Inject constructor(
         fetchNotesForUser(userId)
     }
 
-     fun unLikeNote(note: Note) {
+    fun unLikeNote(note: Note) {
         viewModelScope.launch {
             val updatedNote = note.copy(isStarred = false)
             repo.updateNote(updatedNote)

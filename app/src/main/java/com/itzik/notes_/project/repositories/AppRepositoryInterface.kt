@@ -9,10 +9,11 @@ import retrofit2.Response
 interface AppRepositoryInterface {
 
 
-    suspend fun insertUserIntoBackEnd(user:User)
+    suspend fun insertUserIntoBackEnd(user: User)
     suspend fun getUsersFromBackEnd(): Response<List<User>>
 
-
+    suspend fun insertNoteIntoBackEnd(userId: String, note: Note)
+    suspend fun getNotesFromBackEnd(userId: String): Response<List<Note>>
 
     suspend fun insertUser(user: User)
     suspend fun fetchLoggedInUsers(): MutableList<User>
@@ -22,10 +23,10 @@ interface AppRepositoryInterface {
     suspend fun updateUserFields(
         userId: String,
         email: String? = null,
-        profileImage:String?=null,
+        profileImage: String? = null,
         phoneNumber: String? = null,
         password: String? = null,
-        selectedWallpaper: String?=null,
+        selectedWallpaper: String? = null,
     )
 
     suspend fun getUserById(userId: String): User

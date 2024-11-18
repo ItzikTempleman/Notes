@@ -10,19 +10,17 @@ import retrofit2.http.Path
 
 interface UsersAndNotesService {
 
-
-    @POST("/api/users")
+    @POST("api/users")
     suspend fun postAUser(@Body user: User)
 
-    @GET("/api/users")
+    @GET("api/users")
     suspend fun getUsersFromBackEnd(): Response<List<User>>
 
-    @POST("/api/notes")
+    @POST("api/notes")
     suspend fun postANoteForUser(@Body note: Note)
 
     @GET("/api/notes/user/{userId}")
     suspend fun getAllNotesForUser(
         @Path("userId") userId: String
     ): Response<List<Note>>
-
 }

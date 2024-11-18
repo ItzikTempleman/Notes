@@ -69,7 +69,6 @@ fun NoteScreen(
                 note.content = textFieldValue.annotatedString.text
                 noteViewModel.saveNote(note)
                 Log.d("TAG","userId: ${note.userId}")
-               // noteViewModel.insertNoteIntoBackEnd(note=note, userId= note.userId)
             }
         }
         bottomBarNavController.popBackStack()
@@ -112,8 +111,6 @@ fun NoteScreen(
                     coroutineScope.launch {
                         note.content = textFieldValue.text
                         noteViewModel.saveNote(note)
-                        Log.d("TAG"," bottom function of userId: ${note.userId}")
-                       // noteViewModel.insertNoteIntoBackEnd(note=note, userId= note.userId)
                     }
                 }
                 bottomBarNavController.popBackStack()

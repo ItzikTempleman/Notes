@@ -12,7 +12,7 @@ interface AppRepositoryInterface {
     suspend fun insertUserIntoBackEnd(user: User)
     suspend fun getUsersFromBackEnd(): Response<List<User>>
 
-    suspend fun insertNoteIntoBackEnd(userId: String, note: Note)
+    suspend fun insertNoteIntoBackEnd(note: Note)
     suspend fun getNotesFromBackEnd(userId: String): Response<List<Note>>
 
     suspend fun insertUser(user: User)

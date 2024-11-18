@@ -14,16 +14,11 @@ interface UsersAndNotesService {
     @POST("/api/users")
     suspend fun postAUser(@Body user: User)
 
-
     @GET("/api/users")
     suspend fun getUsersFromBackEnd(): Response<List<User>>
 
-
-    @POST("/api/notes/user/{userId}")
-    suspend fun postANoteForUser(
-        @Path("userId") userId: String,
-        @Body note: Note
-    )
+    @POST("/api/notes")
+    suspend fun postANoteForUser(@Body note: Note)
 
     @GET("/api/notes/user/{userId}")
     suspend fun getAllNotesForUser(

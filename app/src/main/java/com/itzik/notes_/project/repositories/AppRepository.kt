@@ -29,7 +29,7 @@ class AppRepository @Inject constructor(
 
     override suspend fun insertUserIntoBackEnd(user: User) = usersAndNotesService.postAUser(user)
     override suspend fun getUsersFromBackEnd(): Response<List<User>> = usersAndNotesService.getUsersFromBackEnd()
-    override suspend fun insertNoteIntoBackEnd(userId: String, note: Note) = usersAndNotesService.postANoteForUser(userId, note)
+    override suspend fun insertNoteIntoBackEnd(note: Note) = usersAndNotesService.postANoteForUser(note)
     override suspend fun getNotesFromBackEnd(userId: String): Response<List<Note>> = usersAndNotesService.getAllNotesForUser(userId)
 
 

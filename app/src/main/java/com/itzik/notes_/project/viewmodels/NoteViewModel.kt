@@ -56,12 +56,6 @@ class NoteViewModel @Inject constructor(
     }
 
 
-    suspend fun insertNoteIntoBackEnd(userId: String, note: Note) =
-        repo.insertNoteIntoBackEnd(userId, note)
-
-
-
-
     suspend fun updateSelectedNoteContent(
         newChar: String,
         userId: String,
@@ -121,6 +115,7 @@ class NoteViewModel @Inject constructor(
 
         if (matchingNoteToPreviousVersion == null) {
             repo.saveNote(noteToSave)
+            repo.insertNoteIntoBackEnd(noteToSave)
         } else {
             updateSelectedNoteContent(
                 userId = note.userId,

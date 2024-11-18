@@ -38,19 +38,22 @@ class MainActivity : ComponentActivity() {
             val userId = user.firstOrNull()?.userId ?: ""
 
             LaunchedEffect(userId) {
+
                 if (userId.isNotEmpty()) {
                     noteViewModel.fetchNotesForUser(userId)
                 }
             }
-            NotesTheme {
-                RootNavHost(
-                    userId = userId,
-                    noteViewModel = noteViewModel,
-                    userViewModel = userViewModel,
-                    coroutineScope = coroutineScope,
-                    rootNavController = navController
-                )
-            }
+
+
+                NotesTheme {
+                    RootNavHost(
+                        userId = userId,
+                        noteViewModel = noteViewModel,
+                        userViewModel = userViewModel,
+                        coroutineScope = coroutineScope,
+                        rootNavController = navController
+                    )
+                }
         }
     }
 }

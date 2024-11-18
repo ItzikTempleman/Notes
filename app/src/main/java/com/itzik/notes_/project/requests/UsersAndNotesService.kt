@@ -1,10 +1,12 @@
 package com.itzik.notes_.project.requests
 
+import com.itzik.notes_.project.model.Note
 import com.itzik.notes_.project.model.User
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface UsersAndNotesService {
 
@@ -13,6 +15,19 @@ interface UsersAndNotesService {
     suspend fun postAUser(@Body user: User)
 
 
-    @GET("/api")
-    suspend fun getUsersFromBackEnd() : Response<List<User>>
+    @GET("/api/users")
+    suspend fun getUsersFromBackEnd(): Response<List<User>>
+
+
+    @POST("/api/notes/user/{userId}")
+    suspend fun postANoteForUser(
+        @Path("userId") userId: String,
+        @Body note: Note
+    )
+
+    @GET("/api/notes/user/{userId}")
+    suspend fun getAllNotesForUser(
+        @Path("userId") userId: String
+    ): Response<List<Note>>
+
 }

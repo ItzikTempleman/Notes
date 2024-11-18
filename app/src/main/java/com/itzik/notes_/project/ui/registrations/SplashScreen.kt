@@ -31,7 +31,6 @@ fun SplashScreen(
 ) {
     val loggedInUsers by userViewModel.publicLoggedInUsersList.collectAsState()
 
-
     LaunchedEffect(loggedInUsers) {
         delay(1500)
         if (loggedInUsers.isNotEmpty() && loggedInUsers.first().isLoggedIn) {
@@ -42,6 +41,29 @@ fun SplashScreen(
             rootNavController.navigate(AUTHENTICATION)
         }
     }
+
+//    LaunchedEffect(loggedInUsers) {
+//        delay(1500)
+//
+//        if (loggedInUsers.isEmpty()) {
+//            userViewModel.getUsersFromBackend().collect { backendUsers ->
+//                if (backendUsers.isNotEmpty()) {
+//                    backendUsers.forEach { userViewModel.registerUser(it) }
+//                }
+//            }
+//        }
+//
+//        val refreshedUsers = userViewModel.publicLoggedInUsersList.value
+//
+//        if (refreshedUsers.isNotEmpty() && refreshedUsers.firstOrNull { it.isLoggedIn } != null) {
+//            rootNavController.popBackStack()
+//            rootNavController.navigate(HOME)
+//        } else {
+//            rootNavController.popBackStack()
+//            rootNavController.navigate(AUTHENTICATION)
+//        }
+//    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()

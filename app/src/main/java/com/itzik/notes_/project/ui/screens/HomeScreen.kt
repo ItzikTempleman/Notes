@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
@@ -36,6 +37,7 @@ import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.itzik.notes_.R
 import com.itzik.notes_.project.model.Note
+import com.itzik.notes_.project.model.User
 import com.itzik.notes_.project.ui.composable_elements.EmptyStateMessage
 import com.itzik.notes_.project.ui.composable_elements.GenericFloatingActionButton
 import com.itzik.notes_.project.ui.composable_elements.SortDropDownMenu
@@ -74,7 +76,9 @@ fun HomeScreen(
     var imageSelected by remember {
         mutableStateOf("")
     }
-
+    var allBackendUsers by remember {
+        mutableStateOf(emptyList<User>())
+    }
 
     val combinedList by remember(pinnedNoteList, noteList) {
         mutableStateOf(
@@ -84,18 +88,28 @@ fun HomeScreen(
         )
     }
 
+    LaunchedEffect(userId, user) {
+        launch {
+            userViewModel.fetchUserById(userId)
+            noteViewModel.updateUserIdForNewLogin()
+            userViewModel.fetchViewType(userId)
+        }
 
-    LaunchedEffect(userId) {
-        userViewModel.fetchUserById(userId)
-        noteViewModel.updateUserIdForNewLogin()
-        userViewModel.fetchViewType(userId)
+        launch {
+            userViewModel.getUsersFromBackend().collect {
+                allBackendUsers = it
+            }
+        }
 
+        launch {
+            user?.let {
+                isViewGrid = it.isViewGrid
+                imageSelected = it.selectedWallpaper
+            }
+        }
     }
 
-    LaunchedEffect(user) {
-        isViewGrid = user?.isViewGrid == true
-        imageSelected = user?.selectedWallpaper ?: ""
-    }
+    val usernames = allBackendUsers.map { it.userName }.joinToString(", ")
 
     BackHandler {}
 
@@ -103,13 +117,13 @@ fun HomeScreen(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        val (topRow, backgroundImage, noteLazyColumn, newNoteBtn, emptyStateMessage) = createRefs()
+        val (backgroundImage, topRow, noteLazyColumn, newNoteBtn, emptyStateMessage) = createRefs()
 
 
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(if(!isViewGrid) gradientBrush(false) else gradientBrush(true))
+                .background(if (!isViewGrid) gradientBrush(false) else gradientBrush(true))
         ) {}
 
 
@@ -146,7 +160,7 @@ fun HomeScreen(
                 userViewModel.updateViewType(isViewGrid)
             },
             isViewGrid = mutableStateOf(isViewGrid),
-            user =user
+            user = user
         )
 
         SortDropDownMenu(

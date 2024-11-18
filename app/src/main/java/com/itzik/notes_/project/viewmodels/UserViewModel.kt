@@ -34,6 +34,16 @@ class UserViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             fetchLoggedInUsers()
+//           val localUsers= repo.fetchLoggedInUsers()
+//            if(localUsers.isEmpty()){
+//                getUsersFromBackend().collect{backendUsers ->
+//                    backendUsers.forEach{
+//                        repo.insertUser(it)
+//                    }
+//                }
+//            }else {
+//                privateLoggedInUsersList.value = localUsers
+//            }
         }
     }
 
@@ -74,18 +84,20 @@ class UserViewModel @Inject constructor(
     }
 
     fun getUsersFromBackend(): Flow<List<User>> = flow {
-        val response = repo.getUsersFromBackEnd()
-        if (response.isSuccessful) {
-            val users = response.body()
-            if (!users.isNullOrEmpty()) {
-                emit(users)
+        try {
+            val response = repo.getUsersFromBackEnd()
+            if (response.isSuccessful) {
+                val users = response.body()
+                emit(users ?: emptyList())
             } else {
-                emit(emptyList())
+                throw Exception("Failed to fetch users: ${response.errorBody()?.string()}")
             }
-        } else {
-            throw Exception("Failed to fetch users: ${response.errorBody()?.string()}")
+        } catch (e: Exception) {
+            Log.e("UserViewModel", "Error fetching backend users", e)
+            emit(emptyList())
         }
     }
+
 
     fun getUserFromUserNameAndPassword(userName: String, password: String): Flow<User?> {
         val user = flow {

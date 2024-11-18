@@ -1,16 +1,20 @@
 package com.itzik.notes_.project.viewmodels
 
+import android.util.Log
 import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import com.itzik.notes_.project.repositories.AppRepositoryInterface
 import com.itzik.notes_.project.utils.Constants.NAX_PINNED_NOTES
 import com.itzik.notes_.project.model.Note
 import com.itzik.notes_.project.model.Note.Companion.getCurrentTime
+import com.itzik.notes_.project.utils.Constants.MY_BACKEND_BASE_URL
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -115,7 +119,23 @@ class NoteViewModel @Inject constructor(
 
         if (matchingNoteToPreviousVersion == null) {
             repo.saveNote(noteToSave)
-            repo.insertNoteIntoBackEnd(noteToSave)
+            try {
+                // Manually construct and log the request
+                val requestBody = Gson().toJson(noteToSave) // Convert Note object to JSON string
+                val url = "${MY_BACKEND_BASE_URL}api/notes" // Manually construct the full URL
+
+                Log.d("NoteViewModel", "Request URL: $url")
+                Log.d("NoteViewModel", "Request Body: $requestBody")
+
+                // Make the actual network call
+                repo.insertNoteIntoBackEnd(noteToSave)
+
+                Log.d("NoteViewModel", "Note posted successfully.")
+            } catch (e: HttpException) {
+                Log.e("NoteViewModel", "HTTP error: ${e.code()} - ${e.response()?.errorBody()?.string()}")
+            } catch (e: Exception) {
+                Log.e("NoteViewModel", "Unexpected error: ${e.localizedMessage}")
+            }
         } else {
             updateSelectedNoteContent(
                 userId = note.userId,

@@ -18,6 +18,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Named
@@ -35,7 +36,7 @@ object AppModule {
         @Named("wallpaper_service") wallpaperService: WallpaperService,
         @Named("my_backend_service") usersAndNotesService: UsersAndNotesService,
     ): AppRepositoryInterface {
-        return AppRepository(userDao, noteDao,wallpaperService , usersAndNotesService)
+        return AppRepository(userDao, noteDao, wallpaperService, usersAndNotesService)
     }
 
     @Provides
@@ -71,8 +72,10 @@ object AppModule {
     @Provides
     @Named("my_backend_service")
     fun provideBackEndRetrofit(): UsersAndNotesService {
+
         val retrofit =
-            Retrofit.Builder().baseUrl(MY_BACKEND_BASE_URL).addConverterFactory(GsonConverterFactory.create())
+            Retrofit.Builder().baseUrl(MY_BACKEND_BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
                 .client(OkHttpClient.Builder().build()).build()
         return retrofit.create(UsersAndNotesService::class.java)
     }

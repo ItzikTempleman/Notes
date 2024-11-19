@@ -97,10 +97,25 @@ class UserViewModel @Inject constructor(
         return user
     }
 
-    fun getUserFromUserNameAndPasswordFromOnline(userName: String, password: String): Flow<User?> {
 
+    fun getUserFromUserNameAndPasswordFromOnline(userName: String, password: String): Flow<User> {
+        val onlineUser = flow {
+            val response = repo.getUserFromUserNameAndPasswordFromOnline(userName, password)
+            if (response.isSuccessful) {
+                val responseBody = response.body()
+                if (responseBody != null) {
+                    emit(responseBody)
+                } else {
+                    Log.d("TAG", response.message())
+                }
+                return@flow
+            } else {
+                Log.d("TAG", response.message())
+            }
+            return@flow
+        }
+        return onlineUser
     }
-
 
     suspend fun getAdminUserIfExists(email: String): User? {
         return try {

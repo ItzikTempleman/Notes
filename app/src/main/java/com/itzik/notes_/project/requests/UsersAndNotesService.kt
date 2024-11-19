@@ -16,6 +16,8 @@ interface UsersAndNotesService {
     @GET("api/users")
     suspend fun getUsersFromBackEnd(): Response<List<User>>
 
+    @GET("api/authenticate")
+    suspend fun getUserFromUserNameAndPasswordFromOnline(userName:String, password:String): Response<User>
 
 
     @POST("/api/notes")

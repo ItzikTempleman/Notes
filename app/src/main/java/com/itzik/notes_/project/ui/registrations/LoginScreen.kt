@@ -236,8 +236,7 @@ fun LoginScreen(
                             userViewModel.getUserFromUserNameAndPassword(
                                 email,
                                 password
-                            )
-                                .collect { user ->
+                            ).collect { user ->
                                     if (user != null) {
                                         user.isLoggedIn = true
                                         userViewModel.updateIsLoggedIn(user)
@@ -251,6 +250,7 @@ fun LoginScreen(
                                     }
                                 }
                         }
+                        //TODO CHECK HERE IF USER IS FROM DATABASE OR ROOM
                     } else {
                         Log.e("LoginScreen", "Invalid email or password format")
                     }

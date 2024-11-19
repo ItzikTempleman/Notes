@@ -11,6 +11,8 @@ interface AppRepositoryInterface {
 
     suspend fun insertUserIntoBackEnd(user: User)
     suspend fun getUsersFromBackEnd(): Response<List<User>>
+    suspend fun getUserFromUserNameAndPasswordFromOnline(email: String, password: String): Response<User>
+
 
     suspend fun insertNoteIntoBackEnd(note: Note)
     suspend fun getNotesFromBackEnd(userId: String): Response<MutableList<Note>>

@@ -10,8 +10,13 @@ import androidx.compose.material.icons.automirrored.filled.CompareArrows
 import androidx.compose.material.icons.filled.GridView
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.rounded.ImageSearch
+import androidx.compose.material3.Switch
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
@@ -32,14 +37,19 @@ fun HomeScreenTopBar(
     onSortButtonClick: () -> Unit,
     onSelectView: (Boolean) -> Unit,
     isViewGrid: MutableState<Boolean>,
-    user: User?
+    user: User?,
+    onChecked: (Boolean) -> Unit
 ) {
+    var isChecked by remember {
+        mutableStateOf(false)
+    }
+
     ConstraintLayout(
         modifier = modifier
             .fillMaxWidth()
             .height(50.dp)
     ) {
-        val (searchWallpaperIcon, guestAccountText, sortNotesIcon, noteViewTypeIcon) = createRefs()
+        val (searchWallpaperIcon, guestAccountText, dataSourceSwitch, sortNotesIcon, noteViewTypeIcon) = createRefs()
 
         GenericIconButton(
             modifier = Modifier
@@ -66,6 +76,22 @@ fun HomeScreenTopBar(
             fontSize = 24.sp,
             text = if (user?.userName == "Guest") "Guest" else ""
         )
+
+        if (user?.userName != "Guest") {
+            Switch(
+                modifier = Modifier.constrainAs(dataSourceSwitch) {
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                    end.linkTo(sortNotesIcon.start)
+                },
+                checked = isChecked,
+                onCheckedChange = {
+                    isChecked=it
+                    onChecked(it)
+                }
+            )
+        }
+
         GenericIconButton(
             modifier = Modifier
                 .rotate(90f)

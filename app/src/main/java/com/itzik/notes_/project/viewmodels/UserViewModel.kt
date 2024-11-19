@@ -34,16 +34,6 @@ class UserViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             fetchLoggedInUsers()
-//           val localUsers= repo.fetchLoggedInUsers()
-//            if(localUsers.isEmpty()){
-//                getUsersFromBackend().collect{backendUsers ->
-//                    backendUsers.forEach{
-//                        repo.insertUser(it)
-//                    }
-//                }
-//            }else {
-//                privateLoggedInUsersList.value = localUsers
-//            }
         }
     }
 
@@ -107,13 +97,10 @@ class UserViewModel @Inject constructor(
         return user
     }
 
-    fun getTempUserForVerification(userName: String): Flow<User> {
-        val user = flow {
-            val updatedUser = repo.getTempUserForVerification(userName)
-            emit(updatedUser)
-        }
-        return user
+    fun getUserFromUserNameAndPasswordFromOnline(userName: String, password: String): Flow<User?> {
+
     }
+
 
     suspend fun getAdminUserIfExists(email: String): User? {
         return try {

@@ -9,10 +9,15 @@ import com.itzik.notes_.project.repositories.AppRepositoryInterface
 import com.itzik.notes_.project.utils.Constants.NAX_PINNED_NOTES
 import com.itzik.notes_.project.model.Note
 import com.itzik.notes_.project.model.Note.Companion.getCurrentTime
+import com.itzik.notes_.project.model.WallpaperResponse
 import com.itzik.notes_.project.utils.Constants.MY_BACKEND_BASE_URL
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import javax.inject.Inject
@@ -43,6 +48,7 @@ class NoteViewModel @Inject constructor(
 
     private val privateDeletedNoteList = MutableStateFlow<MutableList<Note>>(mutableListOf())
     val publicDeletedNoteList: StateFlow<MutableList<Note>> get() = privateDeletedNoteList
+
 
     var userId = ""
 
@@ -120,21 +126,20 @@ class NoteViewModel @Inject constructor(
         if (matchingNoteToPreviousVersion == null) {
             repo.saveNote(noteToSave)
             try {
-                // Manually construct and log the request
-                val requestBody = Gson().toJson(noteToSave) // Convert Note object to JSON string
-                val url = "${MY_BACKEND_BASE_URL}api/notes" // Manually construct the full URL
-
-                Log.d("NoteViewModel", "Request URL: $url")
-                Log.d("NoteViewModel", "Request Body: $requestBody")
-
-                // Make the actual network call
+                val requestBody = Gson().toJson(noteToSave)
+                val url = "${MY_BACKEND_BASE_URL}api/notes"
+                Log.d(
+                    "TAG",
+                    "Request URL: $url, and request Body: $requestBody, Note posted successfully"
+                )
                 repo.insertNoteIntoBackEnd(noteToSave)
-
-                Log.d("NoteViewModel", "Note posted successfully.")
-            } catch (e: HttpException) {
-                Log.e("NoteViewModel", "HTTP error: ${e.code()} - ${e.response()?.errorBody()?.string()}")
+            } catch (httpE: HttpException) {
+                Log.e(
+                    "TAG",
+                    "HTTP error: ${httpE.code()} - ${httpE.response()?.errorBody()?.string()}"
+                )
             } catch (e: Exception) {
-                Log.e("NoteViewModel", "Unexpected error: ${e.localizedMessage}")
+                Log.e("TAG", "Unexpected error: ${e.localizedMessage}")
             }
         } else {
             updateSelectedNoteContent(
@@ -166,6 +171,28 @@ class NoteViewModel @Inject constructor(
             privateNoteList.value = mutableListOf()
         }
     }
+
+fun fetchOnlineNotes(userId: String): Flow<MutableList<Note>> {
+    val notes = flow {
+        val response = repo.getNotesFromBackEnd(userId)
+
+        if (response.isSuccessful) {
+            val responseBody = response.body()
+            if (responseBody != null) {
+                emit(responseBody)
+            } else {
+                Log.d("TAG", response.message())
+                emit(mutableListOf())
+            }
+            return@flow
+        } else {
+            Log.d("TAG", response.message())
+            emit(mutableListOf())
+        }
+        return@flow
+    }
+    return notes
+}
 
     suspend fun setTrash(note: Note) {
         note.isInTrash = true

@@ -21,9 +21,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
@@ -52,7 +54,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 
-@SuppressLint("UnrememberedMutableState")
+@SuppressLint("UnrememberedMutableState", "MutableCollectionMutableState")
 
 @Composable
 fun HomeScreen(
@@ -73,6 +75,12 @@ fun HomeScreen(
         mutableStateOf(false)
     }
 
+    var isChecked by remember {
+        mutableStateOf(false)
+    }
+
+    var onlineNotes = remember { mutableStateListOf<Note>() }
+
     var imageSelected by remember {
         mutableStateOf("")
     }
@@ -80,19 +88,25 @@ fun HomeScreen(
         mutableStateOf(emptyList<User>())
     }
 
-    val combinedList by remember(pinnedNoteList, noteList) {
+    val combinedList by remember(isChecked, pinnedNoteList, noteList) {
         mutableStateOf(
-            (pinnedNoteList + noteList.filter { note ->
-                !pinnedNoteList.contains(note) && !note.isInTrash && note.userId == userId
-            }).distinctBy { it.noteId }
+            if (isChecked) {
+                onlineNotes
+            } else {
+                (pinnedNoteList + noteList.filter { note ->
+                    !pinnedNoteList.contains(note) && !note.isInTrash && note.userId == userId
+                }).distinctBy { it.noteId }
+            }
         )
     }
+
 
     LaunchedEffect(userId, user) {
         launch {
             userViewModel.fetchUserById(userId)
             noteViewModel.updateUserIdForNewLogin()
             userViewModel.fetchViewType(userId)
+            noteViewModel.fetchOnlineNotes(userId)
         }
 
         launch {
@@ -109,7 +123,7 @@ fun HomeScreen(
         }
     }
 
-    val usernames = allBackendUsers.map { it.userName }.joinToString(", ")
+    // val usernames = allBackendUsers.map { it.userName }.joinToString(", ")
 
     BackHandler {}
 
@@ -160,7 +174,17 @@ fun HomeScreen(
                 userViewModel.updateViewType(isViewGrid)
             },
             isViewGrid = mutableStateOf(isViewGrid),
-            user = user
+            user = user,
+            onChecked = {
+                isChecked = it
+                if (isChecked) {
+                    coroutineScope.launch {
+                        noteViewModel.fetchOnlineNotes(userId).collect {
+                            onlineNotes = it as SnapshotStateList<Note>
+                        }
+                    }
+                }
+            }
         )
 
         SortDropDownMenu(

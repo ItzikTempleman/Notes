@@ -13,7 +13,8 @@ interface AppRepositoryInterface {
     suspend fun getUsersFromBackEnd(): Response<List<User>>
 
     suspend fun insertNoteIntoBackEnd(note: Note)
-    suspend fun getNotesFromBackEnd(userId: String): Response<List<Note>>
+    suspend fun getNotesFromBackEnd(userId: String): Response<MutableList<Note>>
+
 
     suspend fun insertUser(user: User)
     suspend fun fetchLoggedInUsers(): MutableList<User>

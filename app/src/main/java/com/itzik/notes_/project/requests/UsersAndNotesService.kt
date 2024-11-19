@@ -16,6 +16,8 @@ interface UsersAndNotesService {
     @GET("api/users")
     suspend fun getUsersFromBackEnd(): Response<List<User>>
 
+
+
     @POST("/api/notes")
     suspend fun postANoteForUser(@Body note: Note)
 
@@ -23,5 +25,6 @@ interface UsersAndNotesService {
     @GET("/api/notes/user/{userId}")
     suspend fun getAllNotesForUser(
         @Path("userId") userId: String
-    ): Response<List<Note>>
+    ): Response<MutableList<Note>>
+
 }

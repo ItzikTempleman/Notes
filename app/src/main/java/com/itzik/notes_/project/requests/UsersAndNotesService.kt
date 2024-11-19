@@ -7,6 +7,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface UsersAndNotesService {
 
@@ -17,7 +18,10 @@ interface UsersAndNotesService {
     suspend fun getUsersFromBackEnd(): Response<List<User>>
 
     @GET("api/authenticate")
-    suspend fun getUserFromUserNameAndPasswordFromOnline(userName:String, password:String): Response<User>
+    suspend fun getUserFromUserNameAndPasswordFromOnline(
+        @Query("email") userName: String,
+        @Query("password") password: String
+    ): Response<User>
 
 
     @POST("/api/notes")

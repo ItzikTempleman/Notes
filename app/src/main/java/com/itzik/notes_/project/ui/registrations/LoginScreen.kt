@@ -232,25 +232,42 @@ fun LoginScreen(
                             password
                         )
                     ) {
+//                        coroutineScope.launch {
+//                            userViewModel.getUserFromUserNameAndPassword(
+//                                email,
+//                                password
+//                            ).collect { user ->
+//                                    if (user != null) {
+//                                        user.isLoggedIn = true
+//                                        userViewModel.updateIsLoggedIn(user)
+//                                        rootNavController.popBackStack()
+//                                        rootNavController.navigate(Screen.Home.route)
+//                                    } else {
+//                                        Log.e(
+//                                            "LoginScreen",
+//                                            "Invalid credentials or user not found"
+//                                        )
+//                                    }
+//                                }
+//                        }
                         coroutineScope.launch {
-                            userViewModel.getUserFromUserNameAndPassword(
+                            userViewModel.getUserFromUserNameAndPasswordFromOnline(
                                 email,
                                 password
                             ).collect { user ->
-                                    if (user != null) {
-                                        user.isLoggedIn = true
-                                        userViewModel.updateIsLoggedIn(user)
-                                        rootNavController.popBackStack()
-                                        rootNavController.navigate(Screen.Home.route)
-                                    } else {
-                                        Log.e(
-                                            "LoginScreen",
-                                            "Invalid credentials or user not found"
-                                        )
-                                    }
+                                if (true) {
+                                    user.isLoggedIn = true
+                                    userViewModel.updateIsLoggedIn(user)
+                                    rootNavController.popBackStack()
+                                    rootNavController.navigate(Screen.Home.route)
+                                } else {
+                                    Log.e(
+                                        "LoginScreen",
+                                        "Invalid credentials or user not found"
+                                    )
                                 }
+                            }
                         }
-                        //TODO CHECK HERE IF USER IS FROM DATABASE OR ROOM
                     } else {
                         Log.e("LoginScreen", "Invalid email or password format")
                     }

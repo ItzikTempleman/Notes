@@ -23,6 +23,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -76,6 +79,10 @@ fun LoginScreen(
 
     val tempUser = getMockUser()
 
+    var user: State<User?>? = null
+    if (userViewModel != null) {
+        user = userViewModel.publicUser.collectAsState()
+    }
 
     var isButtonEnabled by remember {
         mutableStateOf(false)
@@ -232,39 +239,44 @@ fun LoginScreen(
                             password
                         )
                     ) {
-//                        coroutineScope.launch {
-//                            userViewModel.getUserFromUserNameAndPassword(
-//                                email,
-//                                password
-//                            ).collect { user ->
-//                                    if (user != null) {
-//                                        user.isLoggedIn = true
-//                                        userViewModel.updateIsLoggedIn(user)
-//                                        rootNavController.popBackStack()
-//                                        rootNavController.navigate(Screen.Home.route)
-//                                    } else {
-//                                        Log.e(
-//                                            "LoginScreen",
-//                                            "Invalid credentials or user not found"
-//                                        )
-//                                    }
-//                                }
-//                        }
+                        if (user != null) {
                         coroutineScope.launch {
-                            userViewModel.getUserFromUserNameAndPasswordFromOnline(
+                            userViewModel.getUserFromUserNameAndPassword(
                                 email,
                                 password
                             ).collect { user ->
-                                if (true) {
-                                    user.isLoggedIn = true
-                                    userViewModel.updateIsLoggedIn(user)
-                                    rootNavController.popBackStack()
-                                    rootNavController.navigate(Screen.Home.route)
-                                } else {
-                                    Log.e(
-                                        "LoginScreen",
-                                        "Invalid credentials or user not found"
-                                    )
+                                    if (user != null) {
+                                        user.isLoggedIn = true
+                                        userViewModel.updateIsLoggedIn(user)
+                                        rootNavController.popBackStack()
+                                        rootNavController.navigate(Screen.Home.route)
+                                    } else {
+                                        Log.e(
+                                            "LoginScreen",
+                                            "Invalid credentials or user not found"
+                                        )
+                                    }
+                                }
+                        }
+                        } else {
+                            coroutineScope.launch {
+                                userViewModel.getUserFromUserNameAndPasswordFromOnline(
+                                    email,
+                                    password
+                                ).collect { newOnlineUser ->
+                                    if (true) {
+                                        newOnlineUser.isLoggedIn = true
+                                        userViewModel.registerUser(newOnlineUser)
+                                        userViewModel.postAUser(newOnlineUser)
+                                        userViewModel.updateIsLoggedIn(newOnlineUser)
+                                        rootNavController.popBackStack()
+                                        rootNavController.navigate(Screen.Home.route)
+                                    } else {
+                                        Log.e(
+                                            "LoginScreen",
+                                            "Invalid credentials or user not found"
+                                        )
+                                    }
                                 }
                             }
                         }
@@ -323,11 +335,13 @@ fun LoginScreen(
         )
 
         TextButton(
-            modifier = Modifier.constrainAs(loginAsGuest) {
-                top.linkTo(orText.bottom)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            }.padding(8.dp),
+            modifier = Modifier
+                .constrainAs(loginAsGuest) {
+                    top.linkTo(orText.bottom)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }
+                .padding(8.dp),
             onClick = {
                 coroutineScope.launch {
                     val existingAdminUser = userViewModel?.getAdminUserIfExists(tempUser.email)

@@ -75,11 +75,12 @@ fun HomeScreen(
         mutableStateOf(false)
     }
 
+
     var isChecked by remember {
         mutableStateOf(false)
     }
 
-    var onlineNotes = remember { mutableStateListOf<Note>() }
+   var onlineNotes = remember { mutableStateListOf<Note>() }
 
     var imageSelected by remember {
         mutableStateOf("")
@@ -87,6 +88,7 @@ fun HomeScreen(
     var allBackendUsers by remember {
         mutableStateOf(emptyList<User>())
     }
+
 
     val combinedList by remember(isChecked, pinnedNoteList, noteList) {
         mutableStateOf(

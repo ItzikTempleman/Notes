@@ -238,7 +238,8 @@ fun LoginScreen(
                     if (userViewModel.validateEmail(email) && userViewModel.validatePassword(
                             password
                         )
-                    ) {
+                    )
+                    {
                         if (user != null) {
                         coroutineScope.launch {
                             userViewModel.getUserFromUserNameAndPassword(
@@ -259,29 +260,29 @@ fun LoginScreen(
                                 }
                         }
                         } else {
-                            coroutineScope.launch {
-                                userViewModel.getUserFromUserNameAndPasswordFromOnline(
-                                    email,
-                                    password
-                                ).collect { newOnlineUser ->
-                                    if (true) {
-                                        newOnlineUser.isLoggedIn = true
-                                        userViewModel.registerUser(newOnlineUser)
-                                        userViewModel.postAUser(newOnlineUser)
-                                        userViewModel.updateIsLoggedIn(newOnlineUser)
-                                        rootNavController.popBackStack()
-                                        rootNavController.navigate(Screen.Home.route)
-                                    } else {
-                                        Log.e(
-                                            "LoginScreen",
-                                            "Invalid credentials or user not found"
-                                        )
-                                    }
+                        coroutineScope.launch {
+                            userViewModel.getUserFromUserNameAndPasswordFromOnline(
+                                email,
+                                password
+                            ).collect { newOnlineUser ->
+                                if (true) {
+                                    userViewModel.registerUser(newOnlineUser)
+                                    newOnlineUser.isLoggedIn = true
+                                    userViewModel.postAUser(newOnlineUser)
+                                    userViewModel.updateIsLoggedIn(newOnlineUser)
+                                    rootNavController.popBackStack()
+                                    rootNavController.navigate(Screen.Home.route)
+                                } else {
+                                    Log.e(
+                                        "TAG", "Invalid credentials or user not found"
+                                    )
                                 }
                             }
                         }
-                    } else {
-                        Log.e("LoginScreen", "Invalid email or password format")
+                        }
+                    }
+                    else {
+                        Log.e("TAG", "Invalid email or password format")
                     }
                 }
             }

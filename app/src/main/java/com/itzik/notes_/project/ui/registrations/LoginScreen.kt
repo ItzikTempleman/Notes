@@ -80,6 +80,7 @@ fun LoginScreen(
     val tempUser = getMockUser()
 
     var user: State<User?>? = null
+
     if (userViewModel != null) {
         user = userViewModel.publicUser.collectAsState()
     }
@@ -238,50 +239,44 @@ fun LoginScreen(
                     if (userViewModel.validateEmail(email) && userViewModel.validatePassword(
                             password
                         )
-                    )
-                    {
-                        if (user != null) {
-                        coroutineScope.launch {
-                            userViewModel.getUserFromUserNameAndPassword(
-                                email,
-                                password
-                            ).collect { user ->
-                                    if (user != null) {
-                                        user.isLoggedIn = true
-                                        userViewModel.updateIsLoggedIn(user)
-                                        rootNavController.popBackStack()
-                                        rootNavController.navigate(Screen.Home.route)
-                                    } else {
-                                        Log.e(
-                                            "LoginScreen",
-                                            "Invalid credentials or user not found"
-                                        )
-                                    }
-                                }
-                        }
-                        } else {
-                        coroutineScope.launch {
-                            userViewModel.getUserFromUserNameAndPasswordFromOnline(
-                                email,
-                                password
-                            ).collect { newOnlineUser ->
-                                if (true) {
-                                    userViewModel.registerUser(newOnlineUser)
-                                    newOnlineUser.isLoggedIn = true
-                                    userViewModel.postAUser(newOnlineUser)
-                                    userViewModel.updateIsLoggedIn(newOnlineUser)
+                    ) {
+
+                            coroutineScope.launch {
+                                userViewModel.getUserFromUserNameAndPasswordFromOnline(
+                                    email,
+                                    password
+                                ).collect { user ->
+                                    user.isLoggedIn = true
+                                    userViewModel.updateIsLoggedIn(user)
+                                    userViewModel.postAUser(user)
+                                    userViewModel.registerUser(user)
                                     rootNavController.popBackStack()
                                     rootNavController.navigate(Screen.Home.route)
-                                } else {
-                                    Log.e(
-                                        "TAG", "Invalid credentials or user not found"
-                                    )
                                 }
-                            }
+
+
                         }
-                        }
-                    }
-                    else {
+//                        if (user != null) {
+//                            coroutineScope.launch {
+//                                userViewModel.getUserFromUserNameAndPassword(
+//                                    email,
+//                                    password
+//                                ).collect { user ->
+//                                    if (user != null) {
+//                                        user.isLoggedIn = true
+//                                        userViewModel.updateIsLoggedIn(user)
+//                                        rootNavController.popBackStack()
+//                                        rootNavController.navigate(Screen.Home.route)
+//                                    } else {
+//                                        Log.e(
+//                                            "LoginScreen",
+//                                            "Invalid credentials or user not found"
+//                                        )
+//                                    }
+//                                }
+//                            }
+//                        }
+                    } else {
                         Log.e("TAG", "Invalid email or password format")
                     }
                 }

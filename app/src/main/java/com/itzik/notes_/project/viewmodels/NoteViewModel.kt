@@ -105,6 +105,8 @@ class NoteViewModel @Inject constructor(
         }
     }
 
+
+
     fun updateUserIdForNewLogin() {
         viewModelScope.launch {
             fetchCurrentLoggedInUserId()

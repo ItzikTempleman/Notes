@@ -121,7 +121,7 @@ fun RegistrationScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(gradientBrush(true))
+                .background(colorResource(R.color.very_light_gray))
         ) {}
         Text(
             modifier = Modifier

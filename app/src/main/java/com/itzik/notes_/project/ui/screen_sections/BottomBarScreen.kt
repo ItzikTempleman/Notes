@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
@@ -23,6 +24,7 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.itzik.notes_.R
 
 import com.itzik.notes_.project.ui.navigation.Screen
 import com.itzik.notes_.project.utils.gradientBrush
@@ -39,7 +41,7 @@ fun BottomBarScreen(
         modifier = Modifier
             .fillMaxWidth()
             .height(60.dp)
-            .background(Color.White)
+            .background(colorResource(R.color.very_light_gray))
     ) {
         Row(
             modifier = Modifier
@@ -75,7 +77,7 @@ fun BottomBarItem(
     Box(
         modifier = Modifier.size(50.dp)
             .clip(CircleShape)
-            .background(gradientBrush(false))
+            .background(colorResource(R.color.very_light_gray))
         .clickable {
                 navController.navigate(screen.route) {
                     popUpTo(navController.graph.findStartDestination().id)

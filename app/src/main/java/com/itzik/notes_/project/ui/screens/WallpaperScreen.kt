@@ -77,7 +77,7 @@ fun WallpaperScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(gradientBrush(false))
+                .background(colorResource(R.color.very_light_gray))
         ) {}
 
         Card(

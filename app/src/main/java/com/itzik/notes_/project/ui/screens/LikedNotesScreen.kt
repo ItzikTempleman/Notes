@@ -18,10 +18,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.itzik.notes_.R
 
 import com.itzik.notes_.project.ui.composable_elements.EmptyStateMessage
 import com.itzik.notes_.project.ui.composable_elements.swipe_to_action.GenericLazyColumn
@@ -54,7 +56,7 @@ fun LikedNotesScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(gradientBrush(false))
+                .background(colorResource(R.color.very_light_gray))
         ) {}
 
         Icon(

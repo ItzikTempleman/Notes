@@ -75,12 +75,13 @@ fun HomeScreen(
         mutableStateOf(false)
     }
 
-
     var isChecked by remember {
         mutableStateOf(false)
     }
 
-   var onlineNotes = remember { mutableStateListOf<Note>() }
+    var onlineNotes = remember {
+        mutableStateListOf<Note>()
+    }
 
     var imageSelected by remember {
         mutableStateOf("")
@@ -135,13 +136,14 @@ fun HomeScreen(
     ) {
         val (backgroundImage, topRow, noteLazyColumn, newNoteBtn, emptyStateMessage) = createRefs()
 
-
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(if (!isViewGrid) gradientBrush(false) else gradientBrush(true))
+                .background(
+                    colorResource(R.color.very_light_gray)
+                   // if (!isViewGrid) gradientBrush(false) else gradientBrush(true)
+                )
         ) {}
-
 
         Image(
             painter = rememberAsyncImagePainter(
@@ -157,7 +159,6 @@ fun HomeScreen(
                 .fillMaxWidth(),
             contentScale = ContentScale.Crop
         )
-
 
         HomeScreenTopBar(
             modifier = Modifier
@@ -179,13 +180,13 @@ fun HomeScreen(
             user = user,
             onChecked = {
                 isChecked = it
-                if (isChecked) {
-                    coroutineScope.launch {
-                        noteViewModel.fetchOnlineNotes(userId).collect {
-                            onlineNotes = it as SnapshotStateList<Note>
-                        }
-                    }
-                }
+//                if (isChecked) {
+//                    coroutineScope.launch {
+//                        noteViewModel.fetchOnlineNotes(userId).collect {
+//                            onlineNotes = it as SnapshotStateList<Note>
+//                        }
+//                    }
+//                }
             }
         )
 
@@ -322,8 +323,6 @@ fun HomeScreen(
             )
         }
 
-
-
         if (combinedList.isEmpty()) {
             EmptyStateMessage(modifier = Modifier
                 .zIndex(4f)
@@ -332,7 +331,8 @@ fun HomeScreen(
                     end.linkTo(parent.end)
                     bottom.linkTo(parent.bottom)
                     top.linkTo(topRow.bottom)
-                })
+                }
+            )
         }
     }
 }

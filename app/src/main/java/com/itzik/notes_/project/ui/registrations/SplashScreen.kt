@@ -15,7 +15,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.navigation.NavHostController
+import com.itzik.notes_.R
 
 import com.itzik.notes_.project.ui.navigation.Graph.AUTHENTICATION
 import com.itzik.notes_.project.ui.navigation.Graph.HOME
@@ -67,7 +69,7 @@ fun SplashScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(gradientBrush(false))
+            .background(colorResource(R.color.very_light_gray))
     ) {}
     Column(
         modifier = Modifier

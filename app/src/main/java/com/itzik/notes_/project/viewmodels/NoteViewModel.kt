@@ -65,7 +65,7 @@ class NoteViewModel @Inject constructor(
     }
 
 
-    
+
     suspend fun updateSelectedNoteContent(newChar: String, userId: String, noteId: Int? = 0, isPinned: Boolean, isStarred: Boolean, fontSize: Int, fontColor: Int, fontWeight: Int) {
         privateNote.value = privateNote.value.copy(fontSize = fontSize, userId = userId, fontColor = fontColor, isPinned = isPinned, isStarred = isStarred, content = newChar, time = getCurrentTime(), fontWeight = fontWeight)
         if (noteId != null) { privateNote.value.noteId = noteId }
@@ -79,12 +79,12 @@ class NoteViewModel @Inject constructor(
         val matchingNoteToPreviousVersion = noteList.find { it.noteId == note.noteId }
         if (matchingNoteToPreviousVersion == null) {
             repo.saveNote(noteToSave)
-            try {
-                val requestBody = Gson().toJson(noteToSave)
-                val url = "${MY_BACKEND_BASE_URL}api/notes"
-                Log.d("TAG", "Request URL: $url, and request Body: $requestBody, Note posted successfully")
-                repo.insertNoteIntoBackEnd(noteToSave)
-            } catch (httpE: HttpException) { Log.e("TAG", "HTTP error: ${httpE.code()} - ${httpE.response()?.errorBody()?.string()}") } catch (e: Exception) { Log.e("TAG", "Unexpected error: ${e.localizedMessage}") }
+//            try {
+//                val requestBody = Gson().toJson(noteToSave)
+//                val url = "${MY_BACKEND_BASE_URL}api/notes"
+//                Log.d("TAG", "Request URL: $url, and request Body: $requestBody, Note posted successfully")
+//                repo.insertNoteIntoBackEnd(noteToSave)
+//            } catch (httpE: HttpException) { Log.e("TAG", "HTTP error: ${httpE.code()} - ${httpE.response()?.errorBody()?.string()}") } catch (e: Exception) { Log.e("TAG", "Unexpected error: ${e.localizedMessage}") }
         } else {
             updateSelectedNoteContent(userId = note.userId, newChar = note.content, isPinned = note.isPinned, isStarred = note.isStarred, fontSize = note.fontSize, fontColor = note.fontColor, fontWeight = note.fontWeight)
         }

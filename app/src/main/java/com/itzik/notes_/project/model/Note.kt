@@ -11,6 +11,7 @@ import com.itzik.notes_.project.utils.Constants.NOTE_TABLE
 import kotlinx.parcelize.Parcelize
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.UUID
 
 @Parcelize
 @Entity(
@@ -25,8 +26,8 @@ import java.time.format.DateTimeFormatter
 )
 
 data class Note(
-    @PrimaryKey(autoGenerate = true)
-    var noteId: Int = 0,
+    @PrimaryKey(autoGenerate = false)
+    var noteId: String = UUID.randomUUID().toString(),
     var content: String,
     var time: String = getCurrentTime(),
     var isInTrash: Boolean = false,

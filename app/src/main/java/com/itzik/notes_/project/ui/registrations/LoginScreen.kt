@@ -241,42 +241,42 @@ fun LoginScreen(
                             password
                         )
                     ) {
-
-                            coroutineScope.launch {
-                                userViewModel.getUserFromUserNameAndPasswordFromOnline(
-                                    email,
-                                    password
-                                ).collect { user ->
-                                    user.isLoggedIn = true
-                                    userViewModel.updateIsLoggedIn(user)
-                                    userViewModel.postAUser(user)
-                                    userViewModel.registerUser(user)
-                                    rootNavController.popBackStack()
-                                    rootNavController.navigate(Screen.Home.route)
-                                }
-
-
-                        }
-//                        if (user != null) {
+//
 //                            coroutineScope.launch {
-//                                userViewModel.getUserFromUserNameAndPassword(
+//                                userViewModel.getUserFromUserNameAndPasswordFromOnline(
 //                                    email,
 //                                    password
 //                                ).collect { user ->
-//                                    if (user != null) {
-//                                        user.isLoggedIn = true
-//                                        userViewModel.updateIsLoggedIn(user)
-//                                        rootNavController.popBackStack()
-//                                        rootNavController.navigate(Screen.Home.route)
-//                                    } else {
-//                                        Log.e(
-//                                            "LoginScreen",
-//                                            "Invalid credentials or user not found"
-//                                        )
-//                                    }
+//                                    user.isLoggedIn = true
+//                                    userViewModel.updateIsLoggedIn(user)
+//                                    userViewModel.postAUser(user)
+//                                    userViewModel.registerUser(user)
+//                                    rootNavController.popBackStack()
+//                                    rootNavController.navigate(Screen.Home.route)
 //                                }
-//                            }
+//
+//
 //                        }
+                        if (user != null) {
+                            coroutineScope.launch {
+                                userViewModel.getUserFromUserNameAndPassword(
+                                    email,
+                                    password
+                                ).collect { user ->
+                                    if (user != null) {
+                                        user.isLoggedIn = true
+                                        userViewModel.updateIsLoggedIn(user)
+                                        rootNavController.popBackStack()
+                                        rootNavController.navigate(Screen.Home.route)
+                                    } else {
+                                        Log.e(
+                                            "LoginScreen",
+                                            "Invalid credentials or user not found"
+                                        )
+                                    }
+                                }
+                            }
+                        }
                     } else {
                         Log.e("TAG", "Invalid email or password format")
                     }

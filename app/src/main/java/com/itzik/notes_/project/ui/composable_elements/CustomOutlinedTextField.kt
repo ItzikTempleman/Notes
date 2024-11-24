@@ -13,12 +13,19 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Divider
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Block
+import androidx.compose.material.icons.filled.EventNote
+import androidx.compose.material.icons.filled.HourglassEmpty
 import androidx.compose.material.icons.filled.QuestionMark
+import androidx.compose.material.icons.filled.SpeakerNotesOff
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -28,9 +35,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
@@ -153,7 +163,7 @@ fun CustomOutlinedTextField(
                         top.linkTo(topCard.bottom)
                     }
                     .height(44.dp),
-                    horizontalArrangement = Arrangement.Start
+                horizontalArrangement = Arrangement.Start
             ) {
                 GenericIconButton(
                     modifier = Modifier
@@ -188,11 +198,23 @@ fun CustomOutlinedTextField(
 fun EmptyStateMessage(
     modifier: Modifier, screenDescription: String? = ""
 ) {
-    Text(
+    Row(
         modifier = modifier,
-        fontSize = 40.sp,
-        color = Color.Gray,
-        text = "No $screenDescription notes"
-    )
+        horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = Icons.Default.EventNote,
+            contentDescription = null,
+            tint = Color.Black
+        )
+
+        Text(
+            modifier = Modifier.padding(start = 8.dp),
+            fontSize = 20.sp,
+            color = Color.Black,
+            text = "No $screenDescription notes"
+        )
+    }
 }
 

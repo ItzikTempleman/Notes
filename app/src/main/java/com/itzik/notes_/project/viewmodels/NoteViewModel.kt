@@ -58,7 +58,6 @@ class NoteViewModel @Inject constructor(
         }
     }
 
-
     private suspend fun fetchCurrentLoggedInUserId() {
         val users = repo.fetchLoggedInUsers()
         val loggedInUser = users.firstOrNull { it.isLoggedIn }
@@ -66,96 +65,33 @@ class NoteViewModel @Inject constructor(
     }
 
 
-    suspend fun updateSelectedNoteContent(
-        newChar: String,
-        userId: String,
-        noteId: Int? = 0,
-        isPinned: Boolean,
-        isStarred: Boolean,
-        fontSize: Int,
-        fontColor: Int,
-        fontWeight: Int
-    ) {
-
-        privateNote.value = privateNote.value.copy(
-            fontSize = fontSize,
-            userId = userId,
-            fontColor = fontColor,
-            isPinned = isPinned,
-            isStarred = isStarred,
-            content = newChar,
-            time = getCurrentTime(),
-            fontWeight = fontWeight
-        )
-
-        if (noteId != null) {
-            privateNote.value.noteId = noteId
-        }
+    
+    suspend fun updateSelectedNoteContent(newChar: String, userId: String, noteId: Int? = 0, isPinned: Boolean, isStarred: Boolean, fontSize: Int, fontColor: Int, fontWeight: Int) {
+        privateNote.value = privateNote.value.copy(fontSize = fontSize, userId = userId, fontColor = fontColor, isPinned = isPinned, isStarred = isStarred, content = newChar, time = getCurrentTime(), fontWeight = fontWeight)
+        if (noteId != null) { privateNote.value.noteId = noteId }
         repo.updateNote(privateNote.value)
     }
 
-    fun fontWeightToInt(fontWeight: FontWeight): Int {
-        return fontWeight.weight
-    }
-
-    fun intToFontWeight(fontWeightInt: Int): FontWeight {
-        return when (fontWeightInt) {
-            700 -> FontWeight.Bold
-            else -> FontWeight.Normal
-        }
-    }
-
-
-
-    fun updateUserIdForNewLogin() {
-        viewModelScope.launch {
-            fetchCurrentLoggedInUserId()
-        }
-    }
-
     suspend fun saveNote(note: Note) {
-        if (userId.isEmpty()) {
-            fetchCurrentLoggedInUserId()
-        }
-
+        if (userId.isEmpty()) { fetchCurrentLoggedInUserId() }
         val noteToSave = note.copy(userId = userId)
-
         val noteList = repo.fetchNotes(userId)
-        val matchingNoteToPreviousVersion = noteList.find {
-            it.noteId == note.noteId
-        }
-
+        val matchingNoteToPreviousVersion = noteList.find { it.noteId == note.noteId }
         if (matchingNoteToPreviousVersion == null) {
             repo.saveNote(noteToSave)
             try {
                 val requestBody = Gson().toJson(noteToSave)
                 val url = "${MY_BACKEND_BASE_URL}api/notes"
-                Log.d(
-                    "TAG",
-                    "Request URL: $url, and request Body: $requestBody, Note posted successfully"
-                )
+                Log.d("TAG", "Request URL: $url, and request Body: $requestBody, Note posted successfully")
                 repo.insertNoteIntoBackEnd(noteToSave)
-            } catch (httpE: HttpException) {
-                Log.e(
-                    "TAG",
-                    "HTTP error: ${httpE.code()} - ${httpE.response()?.errorBody()?.string()}"
-                )
-            } catch (e: Exception) {
-                Log.e("TAG", "Unexpected error: ${e.localizedMessage}")
-            }
+            } catch (httpE: HttpException) { Log.e("TAG", "HTTP error: ${httpE.code()} - ${httpE.response()?.errorBody()?.string()}") } catch (e: Exception) { Log.e("TAG", "Unexpected error: ${e.localizedMessage}") }
         } else {
-            updateSelectedNoteContent(
-                userId = note.userId,
-                newChar = note.content,
-                isPinned = note.isPinned,
-                isStarred = note.isStarred,
-                fontSize = note.fontSize,
-                fontColor = note.fontColor,
-                fontWeight = note.fontWeight
-            )
+            updateSelectedNoteContent(userId = note.userId, newChar = note.content, isPinned = note.isPinned, isStarred = note.isStarred, fontSize = note.fontSize, fontColor = note.fontColor, fontWeight = note.fontWeight)
         }
         fetchNotesForUser(userId)
     }
+
+
 
     suspend fun fetchNotesForUser(userId: String) {
         if (userId.isNotEmpty()) {
@@ -224,7 +160,24 @@ fun fetchOnlineNotes(userId: String): Flow<MutableList<Note>> {
         fetchDeletedNotes()
     }
 
+    fun fontWeightToInt(fontWeight: FontWeight): Int {
+        return fontWeight.weight
+    }
 
+    fun intToFontWeight(fontWeightInt: Int): FontWeight {
+        return when (fontWeightInt) {
+            700 -> FontWeight.Bold
+            else -> FontWeight.Normal
+        }
+    }
+
+
+
+    fun updateUserIdForNewLogin() {
+        viewModelScope.launch {
+            fetchCurrentLoggedInUserId()
+        }
+    }
     suspend fun deleteNotePermanently(note: Note) {
         repo.deleteNote(note)
         fetchDeletedNotes()
@@ -293,6 +246,50 @@ fun fetchOnlineNotes(userId: String): Flow<MutableList<Note>> {
         privateDeletedNoteList.value = emptyList<Note>().toMutableList()
         privatePinnedNoteList.value = emptyList<Note>().toMutableList()
     }
+
+
+
+
+
+    fun refreshNotesForUser(userId: String) {
+        viewModelScope.launch {
+            // Clear existing notes to prevent stale data
+            clearAllNoteList()
+
+            // Fetch local notes
+            fetchNotesForUser(userId)
+
+            // Fetch online notes
+            fetchOnlineNotes(userId).collect { onlineNotes ->
+                // Merge local and online notes, if necessary, or just replace them
+                privateNoteList.value = mergeNotes(privateNoteList.value, onlineNotes)
+
+                // Update pinned and starred states after merging
+                updateNoteStates()
+            }
+        }
+    }
+
+    // Helper function to merge local and online notes
+    private fun mergeNotes(localNotes: MutableList<Note>, onlineNotes: MutableList<Note>): MutableList<Note> {
+        val notesMap = localNotes.associateBy { it.noteId }.toMutableMap()
+
+        // Update or add online notes to the local notes map
+        onlineNotes.forEach { onlineNote ->
+            notesMap[onlineNote.noteId] = onlineNote
+        }
+
+        return notesMap.values.toMutableList()
+    }
+
+    // Helper function to update pinned and starred states
+    private fun updateNoteStates() {
+        privatePinStateMap.value = privateNoteList.value.associate { it.noteId to it.isPinned }
+        privateStarStateMap.value = privateNoteList.value.associate { it.noteId to it.isStarred }
+    }
+
+
+
 
 }
 

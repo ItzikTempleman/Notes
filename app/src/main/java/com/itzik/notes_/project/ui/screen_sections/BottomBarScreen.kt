@@ -41,7 +41,7 @@ fun BottomBarScreen(
         modifier = Modifier
             .fillMaxWidth()
             .height(60.dp)
-            .background(colorResource(R.color.very_light_gray))
+            .background(Color.White)
     ) {
         Row(
             modifier = Modifier
@@ -77,7 +77,7 @@ fun BottomBarItem(
     Box(
         modifier = Modifier.size(50.dp)
             .clip(CircleShape)
-            .background(colorResource(R.color.very_light_gray))
+            .background(Color.White)
         .clickable {
                 navController.navigate(screen.route) {
                     popUpTo(navController.graph.findStartDestination().id)

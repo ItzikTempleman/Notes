@@ -53,11 +53,7 @@ fun LikedNotesScreen(
         ) {
         val (title, emptyStateMessage, likedNotesLazyColumn) = createRefs()
 
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(colorResource(R.color.very_light_gray))
-        ) {}
+
 
         Icon(
             modifier = Modifier
@@ -66,7 +62,7 @@ fun LikedNotesScreen(
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                 }
-                .padding(24.dp)
+                .padding(top=24.dp)
                 .size(32.dp),
             imageVector = Icons.Default.Star,
             contentDescription = null,
@@ -93,13 +89,10 @@ fun LikedNotesScreen(
             EmptyStateMessage(
                 screenDescription = "Liked",
                 modifier = Modifier
-                    .zIndex(3f)
                     .constrainAs(emptyStateMessage) {
                         start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                        bottom.linkTo(parent.bottom)
-                        top.linkTo(parent.top)
-                    }
+                        top.linkTo(title.bottom)
+                    }.padding(12.dp)
             )
         }
     }

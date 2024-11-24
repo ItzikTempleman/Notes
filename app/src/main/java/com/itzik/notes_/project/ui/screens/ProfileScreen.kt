@@ -36,6 +36,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
@@ -97,11 +99,7 @@ fun ProfileScreen(
 
         ) {
             val (imageContainer, cancelIconModifier, editButton, editProfileOptionsList, name, email, bottomColumn) = createRefs()
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(colorResource(R.color.very_light_gray))
-            ) {}
+
             ProfileImage(
                 isGuestAccount = user!!.userName == "Guest",
                 imageBoxModifier = Modifier.constrainAs(imageContainer) {
@@ -164,7 +162,8 @@ fun ProfileScreen(
             }
 
             user?.let { currentUser ->
-                Text(text = currentUser.userName,
+                Text(
+                    text = currentUser.userName,
                     modifier = Modifier
                         .constrainAs(name) {
                             top.linkTo(parent.top)
@@ -173,7 +172,10 @@ fun ProfileScreen(
                         .padding(start = 16.dp, top = 160.dp),
                     color = Color.Black,
                     fontSize = 28.sp,
-                    fontWeight = FontWeight.Bold)
+                    fontFamily = FontFamily.Monospace,
+                    fontStyle = FontStyle.Italic,
+                    fontWeight = FontWeight.Bold
+                )
                 Column(
                     modifier = Modifier.constrainAs(email) {
                         top.linkTo(name.bottom)

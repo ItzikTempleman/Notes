@@ -115,9 +115,10 @@ fun LoginScreen(
                 }
                 .padding(top = 150.dp),
             fontSize = 36.sp,
-            fontFamily = FontFamily.SansSerif,
+            fontFamily = FontFamily.Monospace,
             fontStyle = FontStyle.Italic,
-            color = colorResource(R.color.darker_blue),
+            fontWeight = FontWeight.Bold,
+            color = colorResource(R.color.deep_ocean_blue),
             text = stringResource(id = R.string.notes)
         )
 
@@ -128,7 +129,7 @@ fun LoginScreen(
                 }
                 .padding(horizontal = 125.dp),
             thickness = 1.dp,
-            color = colorResource(R.color.darker_blue)
+            color = colorResource(R.color.deep_ocean_blue)
         )
 
         Text(
@@ -139,7 +140,7 @@ fun LoginScreen(
                     end.linkTo(parent.end)
                 },
             fontSize = 20.sp,
-            color = colorResource(R.color.darker_blue),
+            color = colorResource(R.color.deep_ocean_blue),
             text = stringResource(id = R.string.manage)
         )
 
@@ -206,7 +207,7 @@ fun LoginScreen(
             enabled = isButtonEnabled,
             shape = RoundedCornerShape(12.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = colorResource(R.color.darker_blue)
+                containerColor = colorResource(R.color.deep_ocean_blue)
             ),
             modifier = Modifier
                 .constrainAs(loginBtn) {
@@ -315,6 +316,7 @@ fun LoginScreen(
                 }
         ) {
             Text(
+                color = colorResource(R.color.deep_ocean_blue),
                 fontSize = 22.sp,
                 text = stringResource(id = R.string.register),
             )

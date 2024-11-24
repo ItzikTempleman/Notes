@@ -136,14 +136,7 @@ fun HomeScreen(
     ) {
         val (backgroundImage, topRow, noteLazyColumn, newNoteBtn, emptyStateMessage) = createRefs()
 
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    colorResource(R.color.very_light_gray)
-                   // if (!isViewGrid) gradientBrush(false) else gradientBrush(true)
-                )
-        ) {}
+
 
         Image(
             painter = rememberAsyncImagePainter(
@@ -325,13 +318,10 @@ fun HomeScreen(
 
         if (combinedList.isEmpty()) {
             EmptyStateMessage(modifier = Modifier
-                .zIndex(4f)
                 .constrainAs(emptyStateMessage) {
                     start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    bottom.linkTo(parent.bottom)
                     top.linkTo(topRow.bottom)
-                }
+                }.padding(12.dp)
             )
         }
     }

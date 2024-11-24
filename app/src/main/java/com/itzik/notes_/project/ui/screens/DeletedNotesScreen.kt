@@ -74,11 +74,7 @@ fun DeletedNotesScreen(
 
             ) {
             val (returnIcon, trashBtn, deleteAllDialog, emptyStateMessage, lazyColumn) = createRefs()
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(colorResource(R.color.very_light_gray))
-            ) {}
+
 
             GenericIconButton(
                 modifier = Modifier
@@ -158,10 +154,8 @@ fun DeletedNotesScreen(
                     screenDescription = "Deleted",
                     modifier = Modifier.constrainAs(emptyStateMessage) {
                         start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                        bottom.linkTo(parent.bottom)
-                        top.linkTo(parent.top)
-                    }
+                        top.linkTo(returnIcon.bottom)
+                    }.padding(12.dp)
                 )
             }
         }

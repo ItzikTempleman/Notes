@@ -42,7 +42,7 @@ fun GridNoteCard(
     modifier: Modifier,
     cornerRadius: Dp = 10.dp,
     cutCornerSize: Dp = 30.dp,
-    noteColor: Int = Color.White.toArgb(),
+    noteColor: Int = Color.LightGray.toArgb(),
     noteViewModel: NoteViewModel,
     isSelected: Boolean,
 ) {

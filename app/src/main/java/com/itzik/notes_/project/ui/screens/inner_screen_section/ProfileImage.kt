@@ -14,6 +14,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Cancel
+import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.runtime.Composable
@@ -23,10 +24,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import coil.compose.rememberAsyncImagePainter
-
+import com.itzik.notes_.R
 @Composable
 fun ProfileImage(
     isGuestAccount: Boolean,
@@ -42,7 +44,7 @@ fun ProfileImage(
             .size(130.dp)
             .clip(CircleShape)
             .background(Color.White).border(
-                border = BorderStroke(1.dp, Color.Black),
+                border = BorderStroke(0.8.dp, colorResource(R.color.deep_ocean_blue)),
                 shape = CircleShape
             ),
         contentAlignment = Alignment.Center
@@ -56,26 +58,24 @@ fun ProfileImage(
             )
         } else {
             Icon(
+                tint = colorResource(R.color.deep_ocean_blue),
                 imageVector = Icons.Default.Person,
                 contentDescription = null,
-                modifier = Modifier.size(80.dp),
+                modifier = Modifier.size(60.dp),
             )
         }
         if (!isGuestAccount) {
             IconButton(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
-                    .offset(x = (-12).dp, y = (-10).dp)
-                    .size(40.dp).zIndex(2f)
-                    .clip(CircleShape)
-                    .background(Color.White)
-                    .shadow(2.dp, CircleShape),
+                    .offset(x = (-8).dp, y = (-6).dp)
+                    .zIndex(2f),
                 onClick = onImageSelected
             ) {
                 Icon(
-                    imageVector = Icons.Outlined.Image,
+                    imageVector = Icons.Default.Image,
                     contentDescription = null,
-                    tint = Color.Black,
+                    tint = colorResource(R.color.deep_ocean_blue),
                     modifier = Modifier.size(26.dp)
                 )
             }
@@ -89,7 +89,7 @@ fun ProfileImage(
             onClick = onRemoveImage
         ) {
             Icon(
-                tint = Color.Black,
+                tint = colorResource(R.color.deep_ocean_blue),
                 imageVector = Icons.Default.Cancel,
                 contentDescription = null,
                 modifier = Modifier.size(24.dp)

@@ -52,6 +52,7 @@ import com.itzik.notes_.project.viewmodels.NoteViewModel
 import com.itzik.notes_.project.viewmodels.UserViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 
 @SuppressLint("UnrememberedMutableState", "MutableCollectionMutableState")
@@ -109,7 +110,7 @@ fun HomeScreen(
             userViewModel.fetchUserById(userId)
             noteViewModel.updateUserIdForNewLogin()
             userViewModel.fetchViewType(userId)
-            noteViewModel.fetchOnlineNotes(userId)
+            //noteViewModel.fetchOnlineNotes(userId)
         }
 
         launch {
@@ -126,7 +127,6 @@ fun HomeScreen(
         }
     }
 
-    // val usernames = allBackendUsers.map { it.userName }.joinToString(", ")
 
     BackHandler {}
 
@@ -173,13 +173,6 @@ fun HomeScreen(
             user = user,
             onChecked = {
                 isChecked = it
-//                if (isChecked) {
-//                    coroutineScope.launch {
-//                        noteViewModel.fetchOnlineNotes(userId).collect {
-//                            onlineNotes = it as SnapshotStateList<Note>
-//                        }
-//                    }
-//                }
             }
         )
 
@@ -338,6 +331,7 @@ fun navigateToNoteScreenWithData(
             key = "noteId",
             value = note.noteId
         )
+
         noteViewModel.updateSelectedNoteContent(
             newChar = note.content,
             noteId = note.noteId,

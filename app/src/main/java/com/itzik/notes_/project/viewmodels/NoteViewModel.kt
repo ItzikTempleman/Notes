@@ -4,29 +4,25 @@ import android.util.Log
 import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
-import com.itzik.notes_.project.repositories.AppRepositoryInterface
-import com.itzik.notes_.project.utils.Constants.NAX_PINNED_NOTES
 import com.itzik.notes_.project.model.Note
 import com.itzik.notes_.project.model.Note.Companion.getCurrentTime
-import com.itzik.notes_.project.model.WallpaperResponse
-import com.itzik.notes_.project.utils.Constants.MY_BACKEND_BASE_URL
+import com.itzik.notes_.project.repositories.AppRepositoryInterface
+import com.itzik.notes_.project.utils.Constants.NAX_PINNED_NOTES
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
+import java.util.UUID
 import javax.inject.Inject
+import kotlin.collections.mutableListOf
+
 
 @HiltViewModel
 class NoteViewModel @Inject constructor(
     private val repo: AppRepositoryInterface,
 ) : ViewModel() {
-
 
     private val privateNote = MutableStateFlow(Note(content = "", userId = "", fontSize = 20))
     val publicNote: StateFlow<Note> get() = privateNote
@@ -64,19 +60,46 @@ class NoteViewModel @Inject constructor(
         userId = loggedInUser?.userId ?: ""
     }
 
+    suspend fun updateSelectedNoteContent(
+        newChar: String,
+        userId: String,
+        noteId: Int? = 0,
+        isPinned: Boolean,
+        isStarred: Boolean,
+        fontSize: Int,
+        fontColor: Int,
+        fontWeight: Int
+    ) {
 
+        privateNote.value = privateNote.value.copy(
+            fontSize = fontSize,
+            userId = userId,
+            fontColor = fontColor,
+            isPinned = isPinned,
+            isStarred = isStarred,
+            content = newChar,
+            time = getCurrentTime(),
+            fontWeight = fontWeight
+        )
 
-    suspend fun updateSelectedNoteContent(newChar: String, userId: String, noteId: Int? = 0, isPinned: Boolean, isStarred: Boolean, fontSize: Int, fontColor: Int, fontWeight: Int) {
-        privateNote.value = privateNote.value.copy(fontSize = fontSize, userId = userId, fontColor = fontColor, isPinned = isPinned, isStarred = isStarred, content = newChar, time = getCurrentTime(), fontWeight = fontWeight)
-        if (noteId != null) { privateNote.value.noteId = noteId }
+        if (noteId != null) {
+            privateNote.value.noteId = noteId
+        }
         repo.updateNote(privateNote.value)
     }
 
     suspend fun saveNote(note: Note) {
-        if (userId.isEmpty()) { fetchCurrentLoggedInUserId() }
+        if (userId.isEmpty()) {
+            fetchCurrentLoggedInUserId()
+        }
+
         val noteToSave = note.copy(userId = userId)
+
         val noteList = repo.fetchNotes(userId)
-        val matchingNoteToPreviousVersion = noteList.find { it.noteId == note.noteId }
+        val matchingNoteToPreviousVersion = noteList.find {
+            it.noteId == note.noteId
+        }
+
         if (matchingNoteToPreviousVersion == null) {
             repo.saveNote(noteToSave)
 //            try {
@@ -84,13 +107,21 @@ class NoteViewModel @Inject constructor(
 //                val url = "${MY_BACKEND_BASE_URL}api/notes"
 //                Log.d("TAG", "Request URL: $url, and request Body: $requestBody, Note posted successfully")
 //                repo.insertNoteIntoBackEnd(noteToSave)
-//            } catch (httpE: HttpException) { Log.e("TAG", "HTTP error: ${httpE.code()} - ${httpE.response()?.errorBody()?.string()}") } catch (e: Exception) { Log.e("TAG", "Unexpected error: ${e.localizedMessage}") }
+//            } catch (httpE: HttpException) { Log.e("TAG", "HTTP error: ${httpE.code()} - ${httpE.response()?.errorBody()?.string()}") }
+//                catch (e: Exception) { Log.e("TAG", "Unexpected error: ${e.localizedMessage}") }
         } else {
-            updateSelectedNoteContent(userId = note.userId, newChar = note.content, isPinned = note.isPinned, isStarred = note.isStarred, fontSize = note.fontSize, fontColor = note.fontColor, fontWeight = note.fontWeight)
+            updateSelectedNoteContent(
+                userId = note.userId,
+                newChar = note.content,
+                isPinned = note.isPinned,
+                isStarred = note.isStarred,
+                fontSize = note.fontSize,
+                fontColor = note.fontColor,
+                fontWeight = note.fontWeight
+            )
         }
         fetchNotesForUser(userId)
     }
-
 
 
     suspend fun fetchNotesForUser(userId: String) {
@@ -110,27 +141,27 @@ class NoteViewModel @Inject constructor(
         }
     }
 
-fun fetchOnlineNotes(userId: String): Flow<MutableList<Note>> {
-    val notes = flow {
-        val response = repo.getNotesFromBackEnd(userId)
+    fun fetchOnlineNotes(userId: String): Flow<MutableList<Note>> {
+        val notes = flow {
+            val response = repo.getNotesFromBackEnd(userId)
 
-        if (response.isSuccessful) {
-            val responseBody = response.body()
-            if (responseBody != null) {
-                emit(responseBody)
+            if (response.isSuccessful) {
+                val responseBody = response.body()
+                if (responseBody != null) {
+                    emit(responseBody)
+                } else {
+                    Log.d("TAG", response.message())
+                    emit(mutableListOf())
+                }
+                return@flow
             } else {
                 Log.d("TAG", response.message())
                 emit(mutableListOf())
             }
             return@flow
-        } else {
-            Log.d("TAG", response.message())
-            emit(mutableListOf())
         }
-        return@flow
+        return notes
     }
-    return notes
-}
 
     suspend fun setTrash(note: Note) {
         note.isInTrash = true
@@ -172,12 +203,12 @@ fun fetchOnlineNotes(userId: String): Flow<MutableList<Note>> {
     }
 
 
-
     fun updateUserIdForNewLogin() {
         viewModelScope.launch {
             fetchCurrentLoggedInUserId()
         }
     }
+
     suspend fun deleteNotePermanently(note: Note) {
         repo.deleteNote(note)
         fetchDeletedNotes()
@@ -246,50 +277,6 @@ fun fetchOnlineNotes(userId: String): Flow<MutableList<Note>> {
         privateDeletedNoteList.value = emptyList<Note>().toMutableList()
         privatePinnedNoteList.value = emptyList<Note>().toMutableList()
     }
-
-
-
-
-
-    fun refreshNotesForUser(userId: String) {
-        viewModelScope.launch {
-            // Clear existing notes to prevent stale data
-            clearAllNoteList()
-
-            // Fetch local notes
-            fetchNotesForUser(userId)
-
-            // Fetch online notes
-            fetchOnlineNotes(userId).collect { onlineNotes ->
-                // Merge local and online notes, if necessary, or just replace them
-                privateNoteList.value = mergeNotes(privateNoteList.value, onlineNotes)
-
-                // Update pinned and starred states after merging
-                updateNoteStates()
-            }
-        }
-    }
-
-    // Helper function to merge local and online notes
-    private fun mergeNotes(localNotes: MutableList<Note>, onlineNotes: MutableList<Note>): MutableList<Note> {
-        val notesMap = localNotes.associateBy { it.noteId }.toMutableMap()
-
-        // Update or add online notes to the local notes map
-        onlineNotes.forEach { onlineNote ->
-            notesMap[onlineNote.noteId] = onlineNote
-        }
-
-        return notesMap.values.toMutableList()
-    }
-
-    // Helper function to update pinned and starred states
-    private fun updateNoteStates() {
-        privatePinStateMap.value = privateNoteList.value.associate { it.noteId to it.isPinned }
-        privateStarStateMap.value = privateNoteList.value.associate { it.noteId to it.isStarred }
-    }
-
-
-
 
 }
 

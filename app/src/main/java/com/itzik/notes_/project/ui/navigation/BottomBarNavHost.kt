@@ -30,7 +30,7 @@ import kotlinx.coroutines.CoroutineScope
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
 @Composable
 fun BottomBarNavHost(
-    bottomBarNavController:NavHostController,
+    bottomBarNavController: NavHostController,
     userId: String,
     noteViewModel: NoteViewModel,
     rootNavController: NavHostController,
@@ -62,8 +62,8 @@ fun BottomBarNavHost(
                 composable(route = Screen.Home.route) {
                     isBottomBarVisible = true
                     HomeScreen(
-                        userViewModel=userViewModel,
-                        userId=userId,
+                        userViewModel = userViewModel,
+                        userId = userId,
                         noteViewModel = noteViewModel,
                         coroutineScope = coroutineScope,
                         bottomBarNavController = bottomBarNavController,
@@ -73,7 +73,7 @@ fun BottomBarNavHost(
                 composable(route = Screen.LikedNotes.route) {
                     isBottomBarVisible = true
                     LikedNotesScreen(
-                        noteViewModel=noteViewModel,
+                        noteViewModel = noteViewModel,
                         coroutineScope = coroutineScope,
                     )
                 }
@@ -89,9 +89,11 @@ fun BottomBarNavHost(
                     )
                 }
 
-                composable(route = Screen.NoteScreen.route){
+                composable(route = Screen.NoteScreen.route) {
                     isBottomBarVisible = false
-                    val noteId = bottomBarNavController.previousBackStackEntry?.savedStateHandle?.get<Int>("noteId")
+                    val noteId = bottomBarNavController.previousBackStackEntry?.savedStateHandle?.get<Int>(
+                            "noteId"
+                        )
                         NoteScreen(
                             noteId = noteId,
                             bottomBarNavController = bottomBarNavController,
@@ -100,15 +102,16 @@ fun BottomBarNavHost(
                         )
                     }
 
+
                 composable(route = Screen.DeletedNotesScreen.route) {
                     isBottomBarVisible = false
                     DeletedNotesScreen(
                         modifier = Modifier,
-                        userId=userId,
+                        userId = userId,
                         userViewModel = userViewModel,
                         noteViewModel = noteViewModel,
                         coroutineScope = coroutineScope,
-                        bottomBarNavController=bottomBarNavController
+                        bottomBarNavController = bottomBarNavController
                     )
                 }
             }

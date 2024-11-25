@@ -13,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -38,6 +39,7 @@ import com.itzik.notes_.project.ui.screens.inner_screen_section.NoteEditingTopBa
 import com.itzik.notes_.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlin.text.isNotEmpty
 
 
 @SuppressLint("SuspiciousIndentation")
@@ -48,7 +50,9 @@ fun NoteScreen(
     coroutineScope: CoroutineScope,
     bottomBarNavController: NavHostController,
 ) {
+
     val note by noteViewModel.publicNote.collectAsState()
+
 
     var textFieldValue by remember {
         mutableStateOf(
@@ -68,7 +72,6 @@ fun NoteScreen(
             coroutineScope.launch {
                 note.content = textFieldValue.annotatedString.text
                 noteViewModel.saveNote(note)
-                Log.d("TAG","userId: ${note.userId}")
             }
         }
         bottomBarNavController.popBackStack()

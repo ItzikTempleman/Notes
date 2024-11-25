@@ -4,9 +4,11 @@ import android.util.Log
 import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import com.itzik.notes_.project.model.Note
 import com.itzik.notes_.project.model.Note.Companion.getCurrentTime
 import com.itzik.notes_.project.repositories.AppRepositoryInterface
+import com.itzik.notes_.project.utils.Constants.MY_BACKEND_BASE_URL
 import com.itzik.notes_.project.utils.Constants.NAX_PINNED_NOTES
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -14,6 +16,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 import java.util.UUID
 import javax.inject.Inject
 import kotlin.collections.mutableListOf
@@ -93,7 +96,7 @@ class NoteViewModel @Inject constructor(
             fetchCurrentLoggedInUserId()
         }
 
-        val noteToSave = note.copy(userId = userId)
+        val noteToSave = note.copy(userId = userId, noteId = privateNote.value.noteId)
 
         val noteList = repo.fetchNotes(userId)
         val matchingNoteToPreviousVersion = noteList.find {
@@ -102,13 +105,14 @@ class NoteViewModel @Inject constructor(
 
         if (matchingNoteToPreviousVersion == null) {
             repo.saveNote(noteToSave)
-//            try {
-//                val requestBody = Gson().toJson(noteToSave)
-//                val url = "${MY_BACKEND_BASE_URL}api/notes"
-//                Log.d("TAG", "Request URL: $url, and request Body: $requestBody, Note posted successfully")
-//                repo.insertNoteIntoBackEnd(noteToSave)
-//            } catch (httpE: HttpException) { Log.e("TAG", "HTTP error: ${httpE.code()} - ${httpE.response()?.errorBody()?.string()}") }
-//                catch (e: Exception) { Log.e("TAG", "Unexpected error: ${e.localizedMessage}") }
+            try {
+                val requestBody = Gson().toJson(noteToSave)
+                val url = "${MY_BACKEND_BASE_URL}api/notes"
+               // Log.d("TAG", "Request URL: $url, and request Body: $requestBody, Note posted successfully")
+                Log.d("TAG", "noteToSave id: ${noteToSave.noteId}")
+                repo.insertNoteIntoBackEnd(noteToSave)
+            } catch (httpE: HttpException) { Log.e("TAG", "HTTP error: ${httpE.code()} - ${httpE.response()?.errorBody()?.string()}") }
+                catch (e: Exception) { Log.e("TAG", "Unexpected error: ${e.localizedMessage}") }
         } else {
             updateSelectedNoteContent(
                 userId = note.userId,

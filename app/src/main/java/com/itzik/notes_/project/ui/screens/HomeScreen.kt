@@ -253,6 +253,7 @@ fun HomeScreen(
         }
 
 
+
         GenericFloatingActionButton(
             modifier = Modifier
                 .constrainAs(newNoteBtn) {
@@ -331,7 +332,6 @@ fun navigateToNoteScreenWithData(
             key = "noteId",
             value = note.noteId
         )
-
         noteViewModel.updateSelectedNoteContent(
             newChar = note.content,
             noteId = note.noteId,

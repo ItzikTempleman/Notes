@@ -91,67 +91,45 @@ class NoteViewModel @Inject constructor(
         repo.updateNote(privateNote.value)
     }
 
+
     suspend fun saveNote(note: Note) {
         if (userId.isEmpty()) {
             fetchCurrentLoggedInUserId()
         }
 
-        val noteId = if (note.noteId == 0) {
-            repo.saveNote(note.copy(userId = userId))
-            val generatedNote = repo.fetchNotes(userId).last()
-            generatedNote.noteId
-        } else {
-            note.noteId
+        val noteToSave = note.copy(userId = userId)
+
+        val noteList = repo.fetchNotes(userId)
+        val matchingNoteToPreviousVersion = noteList.find {
+            it.noteId == note.noteId
         }
-        val noteToSave = note.copy(userId = userId, noteId = noteId)
 
-        try {
-            val existingNoteInBackend = repo.fetchNotes(userId).find { it.noteId == noteToSave.noteId }
-
-            if (existingNoteInBackend == null) {
-                repo.insertNoteIntoBackEnd(noteToSave)
-                Log.d("NOTE ID TAG", "New note posted successfully with ID: ${noteToSave.noteId}")
-            } else {
-                //repo.updateNoteInBackEnd(noteToSave)
-                Log.d("TAG", "Existing note updated with ID: ${noteToSave.noteId}")
-            }
-        } catch (httpE: HttpException) {
-            Log.e("TAG", "HTTP error: ${httpE.code()} - ${httpE.response()?.errorBody()?.string()}")
-        } catch (e: Exception) {
-            Log.e("TAG", "Unexpected error: ${e.localizedMessage}")
+        if (matchingNoteToPreviousVersion == null) {
+            repo.saveNote(noteToSave)
+//            try {
+//                val requestBody = Gson().toJson(noteToSave)
+//                val url = "${MY_BACKEND_BASE_URL}api/notes"
+//                Log.d("TAG", "Request URL: $url, and request Body: $requestBody, Note posted successfully")
+//                repo.insertNoteIntoBackEnd(noteToSave)
+//            } catch (httpE: HttpException) {
+//                Log.e("TAG", "HTTP error: ${httpE.code()} - ${httpE.response()?.errorBody()?.string()}")
+//            } catch (e: Exception) {
+//                Log.e("TAG", "Unexpected error: ${e.localizedMessage}")
+//            }
+        } else {
+            updateSelectedNoteContent(
+                userId = note.userId,
+                newChar = note.content,
+                isPinned = note.isPinned,
+                isStarred = note.isStarred,
+                fontSize = note.fontSize,
+                fontColor = note.fontColor,
+                fontWeight = note.fontWeight
+            )
         }
         fetchNotesForUser(userId)
     }
-
-//    suspend fun saveNote(note: Note) {
-//        if (userId.isEmpty()) {
-//            fetchCurrentLoggedInUserId()
-//        }
-//
-//        // Save the note locally and fetch the generated ID
-//        val noteId = if (note.noteId == 0) {
-//            val generatedId = repo.saveNote(note) // Local save for Room DB
-//            generatedId
-//        } else {
-//            note.noteId
-//        }
-//
-//        val noteToSave = note.copy(userId = userId, noteId = noteId as Int)
-//
-//        try {
-//            // Send the note to the backend
-//            repo.insertNoteIntoBackEnd(noteToSave)
-//            Log.d("TAG", "Note posted successfully with ID: $noteId")
-//        } catch (httpE: HttpException) {
-//            Log.e("TAG", "HTTP error: ${httpE.code()} - ${httpE.response()?.errorBody()?.string()}")
-//        } catch (e: Exception) {
-//            Log.e("TAG", "Unexpected error: ${e.localizedMessage}")
-//        }
-//
-//        fetchNotesForUser(userId)
-//    }
-
-
+    
     suspend fun fetchNotesForUser(userId: String) {
         if (userId.isNotEmpty()) {
             val notes = repo.fetchNotes(userId)
@@ -307,4 +285,3 @@ class NoteViewModel @Inject constructor(
     }
 
 }
-

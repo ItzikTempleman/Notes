@@ -96,30 +96,22 @@ class NoteViewModel @Inject constructor(
             fetchCurrentLoggedInUserId()
         }
 
-        // Save the note locally and retrieve the generated noteId
         val noteId = if (note.noteId == 0) {
-            // Save the note locally (Room DB) and get the generated noteId
-            repo.saveNote(note.copy(userId = userId)) // Save locally (Room DB)
-            val generatedNote = repo.fetchNotes(userId).last()  // Fetch the last note added (as it's newly added)
-            generatedNote.noteId // Return the generated noteId
+            repo.saveNote(note.copy(userId = userId))
+            val generatedNote = repo.fetchNotes(userId).last()
+            generatedNote.noteId
         } else {
-            // If the note already exists, use the existing noteId
             note.noteId
         }
-
-        // Create the noteToSave object with the correct noteId
         val noteToSave = note.copy(userId = userId, noteId = noteId)
 
         try {
-            // Send the note to the backend
             val existingNoteInBackend = repo.fetchNotes(userId).find { it.noteId == noteToSave.noteId }
 
             if (existingNoteInBackend == null) {
-                // Insert the note into the backend if it doesn't exist
                 repo.insertNoteIntoBackEnd(noteToSave)
-                Log.d("TAG", "New note posted successfully with ID: ${noteToSave.noteId}")
+                Log.d("NOTE ID TAG", "New note posted successfully with ID: ${noteToSave.noteId}")
             } else {
-                // Update the existing note in the backend
                 //repo.updateNoteInBackEnd(noteToSave)
                 Log.d("TAG", "Existing note updated with ID: ${noteToSave.noteId}")
             }
@@ -128,10 +120,9 @@ class NoteViewModel @Inject constructor(
         } catch (e: Exception) {
             Log.e("TAG", "Unexpected error: ${e.localizedMessage}")
         }
-
-        // Fetch the latest notes after saving the note to the backend
         fetchNotesForUser(userId)
     }
+
 //    suspend fun saveNote(note: Note) {
 //        if (userId.isEmpty()) {
 //            fetchCurrentLoggedInUserId()

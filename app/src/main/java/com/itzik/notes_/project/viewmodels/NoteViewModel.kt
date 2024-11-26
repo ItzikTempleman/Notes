@@ -56,16 +56,17 @@ class NoteViewModel @Inject constructor(
     }
 
 
-
     private suspend fun fetchCurrentLoggedInUserId() {
         val users = repo.fetchLoggedInUsers()
         val loggedInUser = users.firstOrNull { it.isLoggedIn }
         userId = loggedInUser?.userId ?: ""
     }
+
     fun initializeNewNote() {
         privateNote.value = Note(
             noteId = 0,
             content = "",
+            time = getCurrentTime(),
             userId = userId,
             fontSize = 20,
             fontColor = Color.Black.toArgb(),
@@ -79,13 +80,14 @@ class NoteViewModel @Inject constructor(
     suspend fun updateSelectedNoteContent(
         newChar: String,
         userId: String,
-        noteId: Int,
+        noteId: Int? = 0,
         isPinned: Boolean,
         isStarred: Boolean,
         fontSize: Int,
         fontColor: Int,
         fontWeight: Int
     ) {
+
         privateNote.value = privateNote.value.copy(
             fontSize = fontSize,
             userId = userId,
@@ -94,11 +96,13 @@ class NoteViewModel @Inject constructor(
             isStarred = isStarred,
             content = newChar,
             time = getCurrentTime(),
-            fontWeight = fontWeight,
-            noteId = noteId
+            fontWeight = fontWeight
         )
+
+        if (noteId != null) {
+            privateNote.value.noteId = noteId
+        }
         repo.updateNote(privateNote.value)
-        Log.d("TAG", "Updated note with ID: ${privateNote.value.noteId}")
     }
 
 
@@ -107,37 +111,36 @@ class NoteViewModel @Inject constructor(
             fetchCurrentLoggedInUserId()
         }
 
-        // Always tie the note to the current user
         val noteToSave = note.copy(userId = userId)
 
-        if (note.noteId == 0) {
-            // It's a new note, let Room generate an ID
-            repo.saveNote(noteToSave)
-            Log.d("TAG", "New note saved with Room-assigned ID.")
-        } else {
-            // Check if the note already exists
-            val noteList = repo.fetchNotes(userId)
-            val matchingNote = noteList.find { it.noteId == note.noteId }
+        val noteList = repo.fetchNotes(userId)
 
-            if (matchingNote == null) {
-                // If not found, treat as new
-                repo.saveNote(noteToSave)
-                Log.d("TAG", "Saved as new note because no matching ID was found.")
-            } else {
-                // Update the existing note
-                repo.updateNote(noteToSave)
-                Log.d("TAG", "Updated existing note with ID: ${note.noteId}")
-            }
+
+        val matchingNoteToPreviousVersion = noteList.find {
+            it.noteId == note.noteId
         }
 
-        // Refresh the list of notes for the user
+        if (matchingNoteToPreviousVersion == null) {
+            repo.saveNote(noteToSave)
+        } else {
+            updateSelectedNoteContent(
+                userId = note.userId,
+                newChar = note.content,
+                isPinned = note.isPinned,
+                isStarred = note.isStarred,
+                fontSize = note.fontSize,
+                fontColor = note.fontColor,
+                fontWeight = note.fontWeight
+            )
+        }
         fetchNotesForUser(userId)
     }
+
 
     suspend fun fetchNotesForUser(userId: String) {
         if (userId.isNotEmpty()) {
             val notes = repo.fetchNotes(userId)
-
+            Log.d("TAG", "Fetched notes for userId $userId: $notes")
             val sortedNotes = notes.sortedWith(compareByDescending { it.isPinned })
 
             privateNoteList.value = sortedNotes.toMutableList()

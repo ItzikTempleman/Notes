@@ -71,7 +71,7 @@ fun NoteScreen(
         if (textFieldValue.text.isNotEmpty()) {
             coroutineScope.launch {
                 note.content = textFieldValue.annotatedString.text
-                noteViewModel.saveNote(note)
+                noteViewModel.saveNote(note) // Save or update the note
             }
         }
         bottomBarNavController.popBackStack()

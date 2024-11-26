@@ -1,14 +1,14 @@
 package com.itzik.notes_.project.viewmodels
 
 import android.util.Log
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
 import com.itzik.notes_.project.model.Note
 import com.itzik.notes_.project.model.Note.Companion.getCurrentTime
 import com.itzik.notes_.project.repositories.AppRepositoryInterface
-import com.itzik.notes_.project.utils.Constants.MY_BACKEND_BASE_URL
 import com.itzik.notes_.project.utils.Constants.NAX_PINNED_NOTES
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -16,8 +16,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
-import java.util.UUID
 import javax.inject.Inject
 import kotlin.collections.mutableListOf
 
@@ -62,6 +60,7 @@ class NoteViewModel @Inject constructor(
         val loggedInUser = users.firstOrNull { it.isLoggedIn }
         userId = loggedInUser?.userId ?: ""
     }
+
 
     suspend fun updateSelectedNoteContent(
         newChar: String,
@@ -129,7 +128,11 @@ class NoteViewModel @Inject constructor(
         }
         fetchNotesForUser(userId)
     }
-    
+
+
+
+
+
     suspend fun fetchNotesForUser(userId: String) {
         if (userId.isNotEmpty()) {
             val notes = repo.fetchNotes(userId)

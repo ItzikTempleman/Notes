@@ -40,6 +40,7 @@ data class Note(
 ) : Parcelable {
 
     companion object {
+
         fun getCurrentTime(): String {
             val currentDateTime = LocalDateTime.now()
             val formatter = DateTimeFormatter.ofPattern("HH:mm")

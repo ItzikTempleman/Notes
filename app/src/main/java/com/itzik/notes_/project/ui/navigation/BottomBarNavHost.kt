@@ -94,6 +94,7 @@ fun BottomBarNavHost(
                     val noteId = bottomBarNavController.previousBackStackEntry?.savedStateHandle?.get<Int>(
                             "noteId"
                         )
+
                         NoteScreen(
                             noteId = noteId,
                             bottomBarNavController = bottomBarNavController,
@@ -101,6 +102,7 @@ fun BottomBarNavHost(
                             coroutineScope = coroutineScope,
                         )
                     }
+
 
 
                 composable(route = Screen.DeletedNotesScreen.route) {

@@ -14,6 +14,7 @@ import androidx.compose.material.icons.filled.PushPin
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -32,6 +33,7 @@ import androidx.constraintlayout.compose.Dimension
 import com.itzik.notes_.R
 import com.itzik.notes_.project.model.Note
 import com.itzik.notes_.project.viewmodels.NoteViewModel
+import java.nio.file.WatchEvent
 
 @SuppressLint("SuspiciousIndentation")
 @Composable
@@ -57,7 +59,7 @@ fun NoteListItem(
             modifier = modifier.fillMaxWidth()
                 .height(50.dp)
         ) {
-            val (timeStamp, content, pinnedNoteIcon, likedNoteIcon) = createRefs()
+            val (timeStamp, noteId,div,content, pinnedNoteIcon, likedNoteIcon) = createRefs()
 
             Box(
                 modifier = Modifier  .background(Color.White, shape = RoundedCornerShape(4.dp))
@@ -77,9 +79,26 @@ fun NoteListItem(
             }
 
             Text(
+                modifier = Modifier.constrainAs(noteId) {
+                    start.linkTo(timeStamp.end)
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                }.padding(start = 8.dp),
+                text="ID #${note.noteId}",
+                color = Color.Red
+            )
+            VerticalDivider(
+                modifier= Modifier.constrainAs(div){
+                    start.linkTo(noteId.end)
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                }.padding(8.dp)
+            )
+
+            Text(
                 maxLines = 1,
                 modifier = Modifier.constrainAs(content) {
-                    start.linkTo(timeStamp.end)
+                    start.linkTo(div.end)
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)
                     width = Dimension.percent(2f/3f)

@@ -71,7 +71,7 @@ fun NoteScreen(
         if (textFieldValue.text.isNotEmpty()) {
             coroutineScope.launch {
                 note.content = textFieldValue.annotatedString.text
-                noteViewModel.saveNote(note) // Save or update the note
+                noteViewModel.saveNote(note)
             }
         }
         bottomBarNavController.popBackStack()
@@ -98,7 +98,7 @@ fun NoteScreen(
                     }
                     noteViewModel.updateSelectedNoteContent(
                         textFieldValue.text,
-                        noteId = noteId,
+                        noteId = noteId?:0 ,
                         isPinned = note.isPinned,
                         isStarred = note.isStarred,
                         fontSize = fontSize,
@@ -138,7 +138,7 @@ fun NoteScreen(
                 coroutineScope.launch {
                     noteViewModel.updateSelectedNoteContent(
                         newChar = newValue.annotatedString.text,
-                        noteId = noteId,
+                        noteId = noteId?:0,
                         isPinned = note.isPinned,
                         isStarred = note.isStarred,
                         fontSize = fontSize,
@@ -194,7 +194,7 @@ fun NoteScreen(
                         selectedColor = color.toArgb()
                         noteViewModel.updateSelectedNoteContent(
                             textFieldValue.text,
-                            noteId = noteId,
+                            noteId = noteId?:0,
                             isStarred = note.isPinned,
                             isPinned = note.isStarred,
                             fontSize = fontSize,

@@ -64,7 +64,7 @@ class NoteViewModel @Inject constructor(
     }
 
     fun initializeNewNote() {
-        shouldUpdateNote=false
+        shouldUpdateNote = false
         Log.d("wow", "$shouldUpdateNote")
         privateNote.value = Note(
             noteId = 0,
@@ -80,22 +80,23 @@ class NoteViewModel @Inject constructor(
         Log.d("TAG", "Initialized new note: ${privateNote.value}")
     }
 
-    suspend fun updateSelectedNoteContent(
+    suspend fun updateNote(
         newChar: String,
         userId: String,
-        noteId: Int? = 0,
+        noteId: Int,
         isPinned: Boolean,
         isStarred: Boolean,
         fontSize: Int,
         fontColor: Int,
         fontWeight: Int,
-        isUpdate: Boolean=true,
+        isUpdate: Boolean = true,
     ) {
-        shouldUpdateNote=isUpdate
-Log.d("wow", "$shouldUpdateNote")
-        privateNote.value = privateNote.value.copy(
+        shouldUpdateNote = isUpdate
+        Log.d("wow", "$shouldUpdateNote")
+        val updatedNote = privateNote.value.copy(
             fontSize = fontSize,
             userId = userId,
+            noteId = noteId,
             fontColor = fontColor,
             isPinned = isPinned,
             isStarred = isStarred,
@@ -104,10 +105,8 @@ Log.d("wow", "$shouldUpdateNote")
             fontWeight = fontWeight
         )
 
-        if (noteId != null) {
-            privateNote.value.noteId = noteId
-        }
         repo.updateNote(privateNote.value)
+        privateNote.value = updatedNote
     }
 
 
@@ -116,29 +115,21 @@ Log.d("wow", "$shouldUpdateNote")
             fetchCurrentLoggedInUserId()
         }
 
-        val noteToSave = note.copy(userId = userId)
-        // privateNote.value =noteToSave
-        val noteList = repo.fetchNotes(userId)
-
-
-        val matchingNoteToPreviousVersion = noteList.find {
-            it.equals(noteToSave)
-        }
-
         if (!shouldUpdateNote) {
-            repo.saveNote(noteToSave)
+            repo.saveNote(note)
         } else {
-            updateSelectedNoteContent(
+            updateNote(
                 userId = note.userId,
                 newChar = note.content,
                 isPinned = note.isPinned,
                 isStarred = note.isStarred,
                 fontSize = note.fontSize,
                 fontColor = note.fontColor,
-                fontWeight = note.fontWeight
+                fontWeight = note.fontWeight,
+                noteId = note.noteId
             )
         }
-        shouldUpdateNote=false
+        shouldUpdateNote = false
         fetchNotesForUser(userId)
     }
 
@@ -146,7 +137,6 @@ Log.d("wow", "$shouldUpdateNote")
     suspend fun fetchNotesForUser(userId: String) {
         if (userId.isNotEmpty()) {
             val notes = repo.fetchNotes(userId)
-            Log.d("TAG", "Fetched notes for userId $userId: $notes")
             val sortedNotes = notes.sortedWith(compareByDescending { it.isPinned })
 
             privateNoteList.value = sortedNotes.toMutableList()

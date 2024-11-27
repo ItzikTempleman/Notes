@@ -55,7 +55,7 @@ fun BoldedTextSelectionButtons(
                 onValueChange(newTextFieldValue)
                 coroutineScope.launch {
 
-                    noteViewModel.updateSelectedNoteContent(
+                    noteViewModel.updateNote(
                         newChar = newTextFieldValue.text,
                         noteId = note.noteId,
                         isPinned = note.isPinned,

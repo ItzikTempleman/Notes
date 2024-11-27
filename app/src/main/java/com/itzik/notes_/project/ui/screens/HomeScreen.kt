@@ -318,7 +318,7 @@ fun navigateToNoteScreenWithData(
             key = "noteId",
             value = note.noteId
         )
-        noteViewModel.updateSelectedNoteContent(
+        noteViewModel.updateNote(
             newChar = note.content,
             noteId = note.noteId,
             userId = note.userId,

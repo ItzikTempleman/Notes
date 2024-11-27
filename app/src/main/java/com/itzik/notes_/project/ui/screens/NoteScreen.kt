@@ -68,13 +68,21 @@ fun NoteScreen(
     val focusManager = LocalFocusManager.current
 
     BackHandler {
-        if (textFieldValue.text.isNotEmpty()) {
-            coroutineScope.launch {
-                note.content = textFieldValue.annotatedString.text
-                noteViewModel.saveNote(note)
+        coroutineScope.launch {
+            if (textFieldValue.text.isNotEmpty()) {
+                noteViewModel.updateNote(
+                    newChar = textFieldValue.text,
+                    noteId = note.noteId,
+                    userId = note.userId,
+                    isPinned = note.isPinned,
+                    isStarred = note.isStarred,
+                    fontSize = note.fontSize,
+                    fontColor = note.fontColor,
+                    fontWeight = note.fontWeight
+                )
             }
+            bottomBarNavController.popBackStack()
         }
-        bottomBarNavController.popBackStack()
     }
 
     ConstraintLayout(
@@ -96,7 +104,7 @@ fun NoteScreen(
                     } else if (!it && fontSize > 10) {
                         fontSize -= 2
                     }
-                    noteViewModel.updateSelectedNoteContent(
+                    noteViewModel.updateNote(
                         textFieldValue.text,
                         noteId = noteId?:0 ,
                         isPinned = note.isPinned,
@@ -137,17 +145,7 @@ fun NoteScreen(
             onValueChange = { newValue ->
                 textFieldValue = newValue
                 coroutineScope.launch {
-                    noteViewModel.publicNote.value.content= newValue.annotatedString.text
-//                    noteViewModel.updateSelectedNoteContent(
-//                        newChar = newValue.annotatedString.text,
-//                        noteId = noteId?:0,
-//                        isPinned = note.isPinned,
-//                        isStarred = note.isStarred,
-//                        fontSize = fontSize,
-//                        fontColor = note.fontColor,
-//                        userId = note.userId,
-//                        fontWeight = note.fontWeight
-//                    )
+                    note.copy(content= textFieldValue.annotatedString.text)
                 }
             },
             colors = TextFieldDefaults.colors(
@@ -195,7 +193,7 @@ fun NoteScreen(
                 onColorSelected = { color ->
                     coroutineScope.launch {
                         selectedColor = color.toArgb()
-                        noteViewModel.updateSelectedNoteContent(
+                        noteViewModel.updateNote(
                             textFieldValue.text,
                             noteId = noteId?:0,
                             isStarred = note.isPinned,

@@ -68,7 +68,6 @@ class NoteViewModel @Inject constructor(
 
     fun initializeNewNote() {
         shouldUpdateNote = false
-        Log.d("wow", "$shouldUpdateNote")
         privateNote.value = Note(
             noteId = 0,
             content = "",
@@ -80,7 +79,6 @@ class NoteViewModel @Inject constructor(
             isStarred = false,
             fontWeight = 400
         )
-        Log.d("TAG", "Initialized new note: ${privateNote.value}")
     }
 
     suspend fun updateNote(
@@ -95,7 +93,6 @@ class NoteViewModel @Inject constructor(
         isUpdate: Boolean = true,
     ) {
         shouldUpdateNote = isUpdate
-        Log.d("wow", "$shouldUpdateNote")
         val updatedNote = privateNote.value.copy(
             fontSize = fontSize,
             userId = userId,
@@ -120,16 +117,36 @@ class NoteViewModel @Inject constructor(
 
         if (!shouldUpdateNote) {
             repo.saveNote(note)
-            try {
-                val requestBody = Gson().toJson(note)
-                val url = "${MY_BACKEND_BASE_URL}api/notes"
-                Log.d("TAG", "Request URL: $url, and request Body: $requestBody, Note posted successfully")
-                repo.insertNoteIntoBackEnd(note)
-            } catch (httpE: HttpException) {
-                Log.e("TAG", "HTTP error: ${httpE.code()} - ${httpE.response()?.errorBody()?.string()}")
-            } catch (e: Exception) {
-                Log.e("TAG", "Unexpected error: ${e.localizedMessage}")
+            val insertedNote = repo.fetchLatestNoteForUser(userId)
+            note.noteId = insertedNote.noteId
+
+
+            viewModelScope.launch {
+                postNoteForUser(note, note.userId).collect { postedNote ->
+                    if (postedNote != null) {
+                        Log.d("TAG", "Note posted successfully: ${postedNote.noteId}")
+                    } else {
+                        Log.e("TAG", "Failed to post note.")
+                    }
+                }
             }
+          
+//            try {
+//                val requestBody = Gson().toJson(note)
+//                val url = "${MY_BACKEND_BASE_URL}api/notes"
+//                Log.d("TAG", "Request URL: $url, and request Body: $requestBody")
+//                val response = repo.postNoteForUser(note, note.userId)
+//
+//                if (response.isSuccessful) {
+//                    Log.d("TAG", "note that posted: $note")
+//                } else {
+//                    Log.e("TAG", "Backend error: ${response.code()} - ${response.message()}")
+//                }
+//            } catch (httpE: HttpException) {
+//                Log.e("TAG", "HTTP error: ${httpE.code()} - ${httpE.response()?.errorBody()?.string()}")
+//            } catch (e: Exception) {
+//                Log.e("TAG", "Unexpected error: ${e.localizedMessage}")
+//            }
         } else {
             updateNote(
                 userId = note.userId,
@@ -161,6 +178,34 @@ class NoteViewModel @Inject constructor(
         } else {
             privateNoteList.value = mutableListOf()
         }
+    }
+
+
+    fun postNoteForUser(note: Note, userId: String): Flow<Note?> {
+        val noteToPost = flow {
+            try {
+                val response = repo.postNoteForUser(note, userId)
+                if (response.isSuccessful) {
+                    val responseBody = response.body()
+                    if (responseBody != null) {
+                        emit(responseBody)
+                    } else {
+                        Log.d("TAG", "Response body is null")
+                        emit(null)
+                    }
+                    return@flow
+                } else {
+                    Log.d("TAG", "Error posting note: ${response.code()} - ${response.message()}")
+                    emit(null)
+
+                }
+                return@flow
+            } catch (e: Exception) {
+                Log.e("TAG", "Unexpected error: ${e.localizedMessage}")
+                emit(null)
+            }
+        }
+        return noteToPost
     }
 
 

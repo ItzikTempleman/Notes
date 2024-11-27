@@ -31,7 +31,7 @@ class AppRepository @Inject constructor(
     override suspend fun getUsersFromBackEnd(): Response<List<User>> = usersAndNotesService.getUsersFromBackEnd()
     override suspend fun getUserFromUserNameAndPasswordFromOnline(email: String, password: String): Response<User> =usersAndNotesService.getUserFromUserNameAndPasswordFromOnline(email, password)
 
-    override suspend fun insertNoteIntoBackEnd(note: Note) = usersAndNotesService.postANoteForUser(note)
+    override suspend fun postNoteForUser(note: Note, userId:String) = usersAndNotesService.postNoteForUser( userId, note)
     override suspend fun getNotesFromBackEnd(userId: String): Response<MutableList<Note>> = usersAndNotesService.getAllNotesForUser(userId)
 
 
@@ -90,6 +90,9 @@ class AppRepository @Inject constructor(
             else -> noteDao.fetchNotes(userId)
         }
     }
+
+    override suspend fun fetchLatestNoteForUser(userId: String) = noteDao.fetchLatestNoteForUser(userId)
+
 
     override suspend fun deleteNote(note: Note) = noteDao.deleteNote(note)
     override suspend fun updateFontWeight(

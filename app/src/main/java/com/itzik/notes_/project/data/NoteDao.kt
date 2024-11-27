@@ -49,5 +49,8 @@ interface NoteDao {
 
     @Query("UPDATE $NOTE_TABLE SET fontWeight = :fontWeight WHERE noteId = :noteId")
     suspend fun updateFontWeight(noteId: Int, fontWeight: Int)
+
+    @Query("SELECT * FROM $NOTE_TABLE WHERE userId = :userId ORDER BY noteId DESC LIMIT 1")
+    suspend fun fetchLatestNoteForUser(userId: String): Note
 }
 

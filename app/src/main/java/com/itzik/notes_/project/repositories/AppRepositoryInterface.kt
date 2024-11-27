@@ -14,7 +14,7 @@ interface AppRepositoryInterface {
     suspend fun getUserFromUserNameAndPasswordFromOnline(email: String, password: String): Response<User>
 
 
-    suspend fun insertNoteIntoBackEnd(note: Note)
+    suspend fun postNoteForUser(note: Note, userId:String):Response<Note>
     suspend fun getNotesFromBackEnd(userId: String): Response<MutableList<Note>>
 
 
@@ -44,6 +44,7 @@ interface AppRepositoryInterface {
     suspend fun insertSingleNoteIntoRecycleBin(note: Note)
     suspend fun setTrash(note: Note)
     suspend fun updateNote(note: Note)
+    suspend fun fetchLatestNoteForUser(userId: String):Note
     suspend fun insertNoteListIntoRecycleBin(notes: MutableList<Note>)
     suspend fun fetchTrashedNotes(userId: String): MutableList<Note>
     suspend fun emptyTrashBin()

@@ -24,8 +24,11 @@ interface UsersAndNotesService {
     ): Response<User>
 
 
-    @POST("/api/notes")
-    suspend fun postANoteForUser(@Body note: Note)
+    @POST("api/notes/user/{userId}")
+    suspend fun postNoteForUser(
+        @Path("userId") userId: String,
+        @Body note: Note
+    ): Response<Note>
 
 
     @GET("/api/notes/user/{userId}")

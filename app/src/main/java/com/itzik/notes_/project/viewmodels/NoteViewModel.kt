@@ -130,7 +130,7 @@ class NoteViewModel @Inject constructor(
                     }
                 }
             }
-          
+
 //            try {
 //                val requestBody = Gson().toJson(note)
 //                val url = "${MY_BACKEND_BASE_URL}api/notes"

@@ -31,7 +31,7 @@ interface UsersAndNotesService {
     ): Response<Note>
 
 
-    @GET("/api/notes/user/{userId}")
+    @GET("api/notes/user/{userId}")
     suspend fun getAllNotesForUser(
         @Path("userId") userId: String
     ): Response<MutableList<Note>>

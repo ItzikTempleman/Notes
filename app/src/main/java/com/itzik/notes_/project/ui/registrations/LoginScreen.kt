@@ -241,22 +241,22 @@ fun LoginScreen(
                             password
                         )
                     ) {
-//
-//                            coroutineScope.launch {
-//                                userViewModel.getUserFromUserNameAndPasswordFromOnline(
-//                                    email,
-//                                    password
-//                                ).collect { user ->
-//                                    user.isLoggedIn = true
-//                                    userViewModel.updateIsLoggedIn(user)
-//                                    userViewModel.postAUser(user)
-//                                    userViewModel.registerUser(user)
-//                                    rootNavController.popBackStack()
-//                                    rootNavController.navigate(Screen.Home.route)
-//                                }
-//
-//
-//                        }
+
+                            coroutineScope.launch {
+                                userViewModel.getUserFromUserNameAndPasswordFromOnline(
+                                    email,
+                                    password
+                                ).collect { user ->
+                                    user.isLoggedIn = true
+                                    userViewModel.updateIsLoggedIn(user)
+                                    userViewModel.postAUser(user)
+                                    userViewModel.registerUser(user)
+                                    rootNavController.popBackStack()
+                                    rootNavController.navigate(Screen.Home.route)
+                                }
+
+
+                        }
                         if (user != null) {
                             coroutineScope.launch {
                                 userViewModel.getUserFromUserNameAndPassword(

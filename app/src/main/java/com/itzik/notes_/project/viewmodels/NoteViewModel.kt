@@ -120,7 +120,6 @@ class NoteViewModel @Inject constructor(
             val insertedNote = repo.fetchLatestNoteForUser(userId)
             note.noteId = insertedNote.noteId
 
-
             viewModelScope.launch {
                 postNoteForUser(note, note.userId).collect { postedNote ->
                     if (postedNote != null) {
@@ -130,7 +129,6 @@ class NoteViewModel @Inject constructor(
                     }
                 }
             }
-
         } else {
             updateNote(
                 userId = note.userId,
@@ -192,7 +190,6 @@ class NoteViewModel @Inject constructor(
         return noteToPost
     }
 
-
     fun fetchOnlineNotes(userId: String): Flow<MutableList<Note>> {
         val notes = flow {
             val response = repo.getNotesFromBackEnd(userId)
@@ -201,7 +198,7 @@ class NoteViewModel @Inject constructor(
                 val responseBody = response.body()
                 if (responseBody != null) {
                     responseBody.forEach{
-                        it.fontColor= Color.Gray.toArgb()
+                        it.fontColor= Color.DarkGray.toArgb()
                     }
                     emit(responseBody)
                     Log.d("TAG", response.message())

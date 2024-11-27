@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -49,7 +50,7 @@ fun HomeScreenTopBar(
             .fillMaxWidth()
             .height(50.dp)
     ) {
-        val (searchWallpaperIcon, guestAccountText, dataSourceSwitch, sortNotesIcon, noteViewTypeIcon) = createRefs()
+        val (searchWallpaperIcon, guestAccountText, offlineName, dataSourceSwitch,onlineName, sortNotesIcon, noteViewTypeIcon) = createRefs()
 
         GenericIconButton(
             modifier = Modifier
@@ -78,17 +79,35 @@ fun HomeScreenTopBar(
         )
 
         if (user?.userName != "Guest") {
+            offlineName
+
+            Text(
+                modifier= Modifier.constrainAs(offlineName){
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                    end.linkTo(dataSourceSwitch.start)
+                }.padding(8.dp),
+                text = stringResource(R.string.local_notes)
+            )
             Switch(
                 modifier = Modifier.constrainAs(dataSourceSwitch) {
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)
-                    end.linkTo(sortNotesIcon.start)
+                    end.linkTo(onlineName.start)
                 },
                 checked = isChecked,
                 onCheckedChange = {
                     isChecked=it
                     onChecked(it)
                 }
+            )
+            Text(
+                modifier= Modifier.constrainAs(onlineName){
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                    end.linkTo(sortNotesIcon.start)
+                }.padding(8.dp),
+                text = stringResource(R.string.online_notes)
             )
         }
 

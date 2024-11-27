@@ -51,4 +51,6 @@
     <string name="delete_all_notes">Delete all notes</string>
     <string name="reset_wallpaper">Reset wallpaper\n</string>
     <string name="login_as_guest">Log in as guest</string>
+    <string name="local_notes">Local</string>
+    <string name="online_notes">Online</string>
 </resources>

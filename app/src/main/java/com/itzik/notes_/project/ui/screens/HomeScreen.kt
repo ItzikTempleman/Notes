@@ -45,6 +45,7 @@ import com.itzik.notes_.project.ui.screens.inner_screen_section.HomeScreenTopBar
 import com.itzik.notes_.project.viewmodels.NoteViewModel
 import com.itzik.notes_.project.viewmodels.UserViewModel
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.util.UUID
 
@@ -63,6 +64,7 @@ fun HomeScreen(
     var isExpanded by remember { mutableStateOf(false) }
     val noteList by noteViewModel.publicNoteList.collectAsState()
     val pinnedNoteList by noteViewModel.publicPinnedNoteList.collectAsState()
+
     val selectedNote by remember { mutableStateOf<Note?>(null) }
     var isViewGrid by remember { mutableStateOf(false) }
     val user by userViewModel.publicUser.collectAsState()
@@ -104,7 +106,6 @@ fun HomeScreen(
             userViewModel.fetchUserById(userId)
             noteViewModel.updateUserIdForNewLogin()
             userViewModel.fetchViewType(userId)
-            //noteViewModel.fetchOnlineNotes(userId)
         }
 
         launch {
@@ -120,7 +121,6 @@ fun HomeScreen(
             }
         }
     }
-
 
     BackHandler {}
 
@@ -167,9 +167,14 @@ fun HomeScreen(
             user = user,
             onChecked = {
                 isChecked = it
+                coroutineScope.launch {
+                    noteViewModel.fetchOnlineNotes(userId).collect {
+                        onlineNotes.clear()
+                        onlineNotes.addAll(it)
+                    }
+                }
             }
         )
-
         SortDropDownMenu(
             isExpanded = isExpanded,
             modifier = Modifier.wrapContentSize(),
@@ -297,11 +302,13 @@ fun HomeScreen(
         }
 
         if (combinedList.isEmpty()) {
-            EmptyStateMessage(modifier = Modifier
-                .constrainAs(emptyStateMessage) {
-                    start.linkTo(parent.start)
-                    top.linkTo(topRow.bottom)
-                }.padding(12.dp)
+            EmptyStateMessage(
+                modifier = Modifier
+                    .constrainAs(emptyStateMessage) {
+                        start.linkTo(parent.start)
+                        top.linkTo(topRow.bottom)
+                    }
+                    .padding(12.dp)
             )
         }
     }

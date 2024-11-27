@@ -59,7 +59,7 @@ fun NoteListItem(
             modifier = modifier.fillMaxWidth()
                 .height(50.dp)
         ) {
-            val (timeStamp, noteId,div,content, pinnedNoteIcon, likedNoteIcon) = createRefs()
+            val (timeStamp, content, pinnedNoteIcon, likedNoteIcon) = createRefs()
 
             Box(
                 modifier = Modifier  .background(Color.White, shape = RoundedCornerShape(4.dp))
@@ -78,27 +78,11 @@ fun NoteListItem(
                 )
             }
 
-            Text(
-                modifier = Modifier.constrainAs(noteId) {
-                    start.linkTo(timeStamp.end)
-                    top.linkTo(parent.top)
-                    bottom.linkTo(parent.bottom)
-                }.padding(start = 8.dp),
-                text="ID #${note.noteId}",
-                color = Color.Red
-            )
-            VerticalDivider(
-                modifier= Modifier.constrainAs(div){
-                    start.linkTo(noteId.end)
-                    top.linkTo(parent.top)
-                    bottom.linkTo(parent.bottom)
-                }.padding(8.dp)
-            )
 
             Text(
                 maxLines = 1,
                 modifier = Modifier.constrainAs(content) {
-                    start.linkTo(div.end)
+                    start.linkTo(timeStamp.end)
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)
                     width = Dimension.percent(2f/3f)

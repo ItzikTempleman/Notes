@@ -131,22 +131,6 @@ class NoteViewModel @Inject constructor(
                 }
             }
 
-//            try {
-//                val requestBody = Gson().toJson(note)
-//                val url = "${MY_BACKEND_BASE_URL}api/notes"
-//                Log.d("TAG", "Request URL: $url, and request Body: $requestBody")
-//                val response = repo.postNoteForUser(note, note.userId)
-//
-//                if (response.isSuccessful) {
-//                    Log.d("TAG", "note that posted: $note")
-//                } else {
-//                    Log.e("TAG", "Backend error: ${response.code()} - ${response.message()}")
-//                }
-//            } catch (httpE: HttpException) {
-//                Log.e("TAG", "HTTP error: ${httpE.code()} - ${httpE.response()?.errorBody()?.string()}")
-//            } catch (e: Exception) {
-//                Log.e("TAG", "Unexpected error: ${e.localizedMessage}")
-//            }
         } else {
             updateNote(
                 userId = note.userId,
@@ -216,7 +200,11 @@ class NoteViewModel @Inject constructor(
             if (response.isSuccessful) {
                 val responseBody = response.body()
                 if (responseBody != null) {
+                    responseBody.forEach{
+                        it.fontColor= Color.Gray.toArgb()
+                    }
                     emit(responseBody)
+                    Log.d("TAG", response.message())
                 } else {
                     Log.d("TAG", response.message())
                     emit(mutableListOf())

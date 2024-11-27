@@ -104,7 +104,8 @@ fun NoteScreen(
                         fontSize = fontSize,
                         fontColor = note.fontColor,
                         userId = note.userId,
-                        fontWeight = note.fontWeight
+                        fontWeight = note.fontWeight,
+
                     )
                 }
             },
@@ -136,15 +137,17 @@ fun NoteScreen(
             onValueChange = { newValue ->
                 textFieldValue = newValue
                 coroutineScope.launch {
-                    noteViewModel.updateSelectedNoteContent(
-                        newChar = newValue.annotatedString.text,
-                        noteId = noteId?:0,
-                        isPinned = note.isPinned,
-                        isStarred = note.isStarred,
-                        fontSize = fontSize,
-                        fontColor = note.fontColor,
-                        userId = note.userId, fontWeight = note.fontWeight
-                    )
+                    noteViewModel.publicNote.value.content= newValue.annotatedString.text
+//                    noteViewModel.updateSelectedNoteContent(
+//                        newChar = newValue.annotatedString.text,
+//                        noteId = noteId?:0,
+//                        isPinned = note.isPinned,
+//                        isStarred = note.isStarred,
+//                        fontSize = fontSize,
+//                        fontColor = note.fontColor,
+//                        userId = note.userId,
+//                        fontWeight = note.fontWeight
+//                    )
                 }
             },
             colors = TextFieldDefaults.colors(
@@ -199,7 +202,8 @@ fun NoteScreen(
                             isPinned = note.isStarred,
                             fontSize = fontSize,
                             fontColor = selectedColor,
-                            userId = note.userId, fontWeight = note.fontWeight
+                            userId = note.userId,
+                            fontWeight = note.fontWeight
                         )
                     }
                     isColorPickerOpen = false

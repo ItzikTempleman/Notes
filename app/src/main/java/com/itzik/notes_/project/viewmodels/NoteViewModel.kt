@@ -24,6 +24,7 @@ import kotlin.collections.mutableListOf
 class NoteViewModel @Inject constructor(
     private val repo: AppRepositoryInterface,
 ) : ViewModel() {
+    private var shouldUpdateNote = true
 
     private val privateNote = MutableStateFlow(Note(content = "", userId = "", fontSize = 20))
     val publicNote: StateFlow<Note> get() = privateNote
@@ -63,6 +64,8 @@ class NoteViewModel @Inject constructor(
     }
 
     fun initializeNewNote() {
+        shouldUpdateNote=false
+        Log.d("wow", "$shouldUpdateNote")
         privateNote.value = Note(
             noteId = 0,
             content = "",
@@ -85,9 +88,11 @@ class NoteViewModel @Inject constructor(
         isStarred: Boolean,
         fontSize: Int,
         fontColor: Int,
-        fontWeight: Int
+        fontWeight: Int,
+        isUpdate: Boolean=true,
     ) {
-
+        shouldUpdateNote=isUpdate
+Log.d("wow", "$shouldUpdateNote")
         privateNote.value = privateNote.value.copy(
             fontSize = fontSize,
             userId = userId,
@@ -112,15 +117,15 @@ class NoteViewModel @Inject constructor(
         }
 
         val noteToSave = note.copy(userId = userId)
-
+        // privateNote.value =noteToSave
         val noteList = repo.fetchNotes(userId)
 
 
         val matchingNoteToPreviousVersion = noteList.find {
-            it.noteId == note.noteId
+            it.equals(noteToSave)
         }
 
-        if (matchingNoteToPreviousVersion == null) {
+        if (!shouldUpdateNote) {
             repo.saveNote(noteToSave)
         } else {
             updateSelectedNoteContent(
@@ -133,6 +138,7 @@ class NoteViewModel @Inject constructor(
                 fontWeight = note.fontWeight
             )
         }
+        shouldUpdateNote=false
         fetchNotesForUser(userId)
     }
 

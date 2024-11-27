@@ -326,7 +326,8 @@ fun navigateToNoteScreenWithData(
             isStarred = note.isStarred,
             fontSize = note.fontSize,
             fontColor = note.fontColor,
-            fontWeight = note.fontWeight
+            fontWeight = note.fontWeight,
+            isUpdate = true
         )
         bottomBarNavController.navigate(Screen.NoteScreen.route)
     }

@@ -113,7 +113,6 @@ fun NoteScreen(
                         fontColor = note.fontColor,
                         userId = note.userId,
                         fontWeight = note.fontWeight,
-
                     )
                 }
             },

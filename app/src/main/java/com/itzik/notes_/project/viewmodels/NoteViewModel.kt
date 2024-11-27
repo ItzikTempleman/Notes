@@ -6,9 +6,11 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import com.itzik.notes_.project.model.Note
 import com.itzik.notes_.project.model.Note.Companion.getCurrentTime
 import com.itzik.notes_.project.repositories.AppRepositoryInterface
+import com.itzik.notes_.project.utils.Constants.MY_BACKEND_BASE_URL
 import com.itzik.notes_.project.utils.Constants.NAX_PINNED_NOTES
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -16,6 +18,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 import javax.inject.Inject
 import kotlin.collections.mutableListOf
 
@@ -117,6 +120,16 @@ class NoteViewModel @Inject constructor(
 
         if (!shouldUpdateNote) {
             repo.saveNote(note)
+            try {
+                val requestBody = Gson().toJson(note)
+                val url = "${MY_BACKEND_BASE_URL}api/notes"
+                Log.d("TAG", "Request URL: $url, and request Body: $requestBody, Note posted successfully")
+                repo.insertNoteIntoBackEnd(note)
+            } catch (httpE: HttpException) {
+                Log.e("TAG", "HTTP error: ${httpE.code()} - ${httpE.response()?.errorBody()?.string()}")
+            } catch (e: Exception) {
+                Log.e("TAG", "Unexpected error: ${e.localizedMessage}")
+            }
         } else {
             updateNote(
                 userId = note.userId,
@@ -289,13 +302,3 @@ class NoteViewModel @Inject constructor(
     }
 
 }
-//            try {
-//                val requestBody = Gson().toJson(noteToSave)
-//                val url = "${MY_BACKEND_BASE_URL}api/notes"
-//                Log.d("TAG", "Request URL: $url, and request Body: $requestBody, Note posted successfully")
-//                repo.insertNoteIntoBackEnd(noteToSave)
-//            } catch (httpE: HttpException) {
-//                Log.e("TAG", "HTTP error: ${httpE.code()} - ${httpE.response()?.errorBody()?.string()}")
-//            } catch (e: Exception) {
-//                Log.e("TAG", "Unexpected error: ${e.localizedMessage}")
-//            }

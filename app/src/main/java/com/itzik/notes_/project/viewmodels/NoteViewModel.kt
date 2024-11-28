@@ -51,7 +51,6 @@ class NoteViewModel @Inject constructor(
     private val privateDeletedNoteList = MutableStateFlow<MutableList<Note>>(mutableListOf())
     val publicDeletedNoteList: StateFlow<MutableList<Note>> get() = privateDeletedNoteList
 
-
     var userId = ""
 
     init {
@@ -142,18 +141,12 @@ class NoteViewModel @Inject constructor(
     fun postNoteForUser(note: Note, userId: String) {
         viewModelScope.launch {
             try {
-                val response = repo.postNoteForUser(note, userId)
-                if (response.isSuccessful) {
-                    Log.d("POST", "Note posted successfully: ${response.body()}")
-                } else {
-                    Log.e("POST", "Failed to post note: ${response.errorBody()?.string()}")
-                }
+                repo.postNoteForUser(note, userId)
             } catch (e: Exception) {
                 Log.e("POST", "Exception occurred: ${e.message}")
             }
         }
     }
-
 
     suspend fun fetchNotesForUser(userId: String) {
         if (userId.isNotEmpty()) {

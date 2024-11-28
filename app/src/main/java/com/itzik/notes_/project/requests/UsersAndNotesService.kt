@@ -28,7 +28,7 @@ interface UsersAndNotesService {
     suspend fun postNoteForUser(
         @Path("userId") userId: String,
         @Body note: Note
-    ): Response<Note>
+    )
 
 
     @GET("api/notes/user/{userId}")

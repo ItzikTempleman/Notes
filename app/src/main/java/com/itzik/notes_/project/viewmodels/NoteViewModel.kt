@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.itzik.notes_.project.model.Note
 import com.itzik.notes_.project.model.Note.Companion.getCurrentTime
+import com.itzik.notes_.project.model.User
 import com.itzik.notes_.project.repositories.AppRepositoryInterface
 import com.itzik.notes_.project.utils.Constants.MY_BACKEND_BASE_URL
 import com.itzik.notes_.project.utils.Constants.NAX_PINNED_NOTES
@@ -119,16 +120,8 @@ class NoteViewModel @Inject constructor(
             repo.saveNote(note)
             val insertedNote = repo.fetchLatestNoteForUser(userId)
             note.noteId = insertedNote.noteId
+            postNoteForUser(note, note.userId)
 
-            viewModelScope.launch {
-                postNoteForUser(note, note.userId).collect { postedNote ->
-                    if (postedNote != null) {
-                        Log.d("TAG", "Note posted successfully: ${postedNote.noteId}")
-                    } else {
-                        Log.e("TAG", "Failed to post note.")
-                    }
-                }
-            }
         } else {
             updateNote(
                 userId = note.userId,
@@ -143,6 +136,22 @@ class NoteViewModel @Inject constructor(
         }
         shouldUpdateNote = false
         fetchNotesForUser(userId)
+    }
+
+
+    fun postNoteForUser(note: Note, userId: String) {
+        viewModelScope.launch {
+            try {
+                val response = repo.postNoteForUser(note, userId)
+                if (response.isSuccessful) {
+                    Log.d("POST", "Note posted successfully: ${response.body()}")
+                } else {
+                    Log.e("POST", "Failed to post note: ${response.errorBody()?.string()}")
+                }
+            } catch (e: Exception) {
+                Log.e("POST", "Exception occurred: ${e.message}")
+            }
+        }
     }
 
 
@@ -163,32 +172,6 @@ class NoteViewModel @Inject constructor(
     }
 
 
-    fun postNoteForUser(note: Note, userId: String): Flow<Note?> {
-        val noteToPost = flow {
-            try {
-                val response = repo.postNoteForUser(note, userId)
-                if (response.isSuccessful) {
-                    val responseBody = response.body()
-                    if (responseBody != null) {
-                        emit(responseBody)
-                    } else {
-                        Log.d("TAG", "Response body is null")
-                        emit(null)
-                    }
-                    return@flow
-                } else {
-                    Log.d("TAG", "Error posting note: ${response.code()} - ${response.message()}")
-                    emit(null)
-
-                }
-                return@flow
-            } catch (e: Exception) {
-                Log.e("TAG", "Unexpected error: ${e.localizedMessage}")
-                emit(null)
-            }
-        }
-        return noteToPost
-    }
 
     fun fetchOnlineNotes(userId: String): Flow<MutableList<Note>> {
         val notes = flow {
@@ -197,8 +180,8 @@ class NoteViewModel @Inject constructor(
             if (response.isSuccessful) {
                 val responseBody = response.body()
                 if (responseBody != null) {
-                    responseBody.forEach{
-                        it.fontColor= Color.DarkGray.toArgb()
+                    responseBody.forEach {
+                        it.fontColor = Color.DarkGray.toArgb()
                     }
                     emit(responseBody)
                     Log.d("TAG", response.message())

@@ -14,7 +14,7 @@ interface AppRepositoryInterface {
     suspend fun getUserFromUserNameAndPasswordFromOnline(email: String, password: String): Response<User>
 
 
-    suspend fun postNoteForUser(note: Note, userId:String)
+    suspend fun postNoteForUser(note: Note, userId:String): Response<Note>
     suspend fun getNotesFromBackEnd(userId: String): Response<MutableList<Note>>
 
 

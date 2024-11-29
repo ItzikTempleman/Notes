@@ -51,6 +51,7 @@ class NoteViewModel @Inject constructor(
     private val privateDeletedNoteList = MutableStateFlow<MutableList<Note>>(mutableListOf())
     val publicDeletedNoteList: StateFlow<MutableList<Note>> get() = privateDeletedNoteList
 
+
     var userId = ""
 
     init {
@@ -119,7 +120,7 @@ class NoteViewModel @Inject constructor(
             repo.saveNote(note)
             val insertedNote = repo.fetchLatestNoteForUser(userId)
             note.noteId = insertedNote.noteId
-            postNoteForUser(note, note.userId)
+            postNoteForUser(note.copy(noteId = note.noteId), userId)
 
         } else {
             updateNote(
@@ -137,13 +138,13 @@ class NoteViewModel @Inject constructor(
         fetchNotesForUser(userId)
     }
 
-
     fun postNoteForUser(note: Note, userId: String) {
+
         viewModelScope.launch {
             try {
                 repo.postNoteForUser(note, userId)
             } catch (e: Exception) {
-                Log.e("POST", "Exception occurred: ${e.message}")
+                Log.d("POST", "${e.message}")
             }
         }
     }
@@ -163,7 +164,6 @@ class NoteViewModel @Inject constructor(
             privateNoteList.value = mutableListOf()
         }
     }
-
 
 
     fun fetchOnlineNotes(userId: String): Flow<MutableList<Note>> {
@@ -191,6 +191,7 @@ class NoteViewModel @Inject constructor(
         }
         return notes
     }
+
 
     suspend fun setTrash(note: Note) {
         note.isInTrash = true

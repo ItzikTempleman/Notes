@@ -2,6 +2,7 @@ package com.itzik.notes_.project.di
 
 
 import android.content.Context
+import android.util.Log
 import androidx.room.Room
 import com.itzik.notes_.project.data.AppDatabase
 import com.itzik.notes_.project.data.NoteDao
@@ -17,7 +18,10 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.Response
+import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -72,7 +76,6 @@ object AppModule {
     @Provides
     @Named("my_backend_service")
     fun provideBackEndRetrofit(): UsersAndNotesService {
-
         val retrofit =
             Retrofit.Builder().baseUrl(MY_BACKEND_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())

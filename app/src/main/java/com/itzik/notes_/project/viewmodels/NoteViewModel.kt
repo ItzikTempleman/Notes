@@ -120,7 +120,7 @@ class NoteViewModel @Inject constructor(
             repo.saveNote(note)
             val insertedNote = repo.fetchLatestNoteForUser(userId)
             note.noteId = insertedNote.noteId
-            postNoteForUser(note.copy(noteId = note.noteId), userId)
+            postNoteForUser(note, userId)
 
         } else {
             updateNote(
@@ -138,16 +138,14 @@ class NoteViewModel @Inject constructor(
         fetchNotesForUser(userId)
     }
 
-    fun postNoteForUser(note: Note, userId: String) {
-
-        viewModelScope.launch {
-            try {
-                repo.postNoteForUser(note, userId)
-            } catch (e: Exception) {
-                Log.d("POST", "${e.message}")
-            }
+    suspend fun postNoteForUser(note: Note, userId: String) {
+        try {
+            repo.postNoteForUser(note, userId)
+        } catch (e: Exception) {
+            Log.d("POST", "Error posting note: ${e.message}")
         }
     }
+
 
     suspend fun fetchNotesForUser(userId: String) {
         if (userId.isNotEmpty()) {

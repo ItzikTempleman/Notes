@@ -141,7 +141,7 @@ class NoteViewModel @Inject constructor(
     suspend fun postNoteForUser(note: Note, userId: String) {
         try {
             val response = repo.postNoteForUser(note, userId)
-            Log.d("POST", "Response: ${response.body()}")
+            Log.d("POST", "note: $note}")
             if (response.isSuccessful) {
                 Log.d("POST", "Note posted successfully: ${response.body()}")
             } else {

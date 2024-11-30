@@ -9,6 +9,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.itzik.notes_.project.utils.Constants.NOTE_TABLE
 import kotlinx.parcelize.Parcelize
+import java.time.Instant
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -29,7 +30,7 @@ data class Note(
     @PrimaryKey(autoGenerate = true)
     var noteId: Int = 0,
     var content: String,
-    var time: String = getCurrentTime(),
+    var time: String = Instant.now().toString(),
     var isInTrash: Boolean = false,
     var isStarred: Boolean = false,
     var isPinned: Boolean = false,

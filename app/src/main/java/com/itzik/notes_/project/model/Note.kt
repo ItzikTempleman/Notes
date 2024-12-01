@@ -10,9 +10,7 @@ import androidx.room.PrimaryKey
 import com.itzik.notes_.project.utils.Constants.NOTE_TABLE
 import kotlinx.parcelize.Parcelize
 import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneOffset
-import java.time.format.DateTimeFormatter
+
 
 
 @Parcelize
@@ -43,9 +41,7 @@ data class Note(
 
     companion object {
         fun getCurrentTime(): String {
-            val currentDateTime = LocalDateTime.now()
-            val formatter = DateTimeFormatter.ofPattern("HH:mm")
-            return currentDateTime.format(formatter)
+            return Instant.now().toString()
         }
     }
 }

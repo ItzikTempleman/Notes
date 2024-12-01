@@ -121,6 +121,7 @@ fun NoteScreen(
                 if (textFieldValue.text.isNotEmpty()) {
                     coroutineScope.launch {
                         note.content = textFieldValue.text
+                        Log.d("TAG", "note id in note screen: ${note.noteId}")
                         noteViewModel.saveNote(note)
                     }
                 }

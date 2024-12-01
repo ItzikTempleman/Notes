@@ -114,10 +114,17 @@ class NoteViewModel @Inject constructor(
         if (userId.isEmpty()) {
             fetchCurrentLoggedInUserId()
         }
+
         if (!shouldUpdateNote) {
-            repo.saveNote(note)
-            val insertedNote = repo.fetchLatestNoteForUser(userId)
-            note.noteId = insertedNote.noteId
+            if (note.noteId == 0) {
+                Log.d("POST", "Saving new note...")
+                repo.saveNote(note)
+                val insertedNote = repo.fetchLatestNoteForUser(userId)
+                note.noteId = insertedNote.noteId
+                Log.d("POST", "New note ID obtained: ${note.noteId}")
+            }
+
+            Log.d("POST", "Note id before posting: ${note.noteId}")
             postNoteForUser(note, userId)
         } else {
             updateNote(
@@ -131,18 +138,22 @@ class NoteViewModel @Inject constructor(
                 noteId = note.noteId
             )
         }
+
         shouldUpdateNote = false
         fetchNotesForUser(userId)
     }
 
+
     suspend fun postNoteForUser(note: Note, userId: String) {
+        Log.d("POST", "Attempting to post note with ID: ${note.noteId}")
         val response = repo.postNoteForUser(note, userId)
-        response.body()?.let {
-
+        response.body()?.let { savedNote ->
+            Log.d("POST", "Note posted successfully with ID: ${savedNote.noteId}")
         } ?: run {
-
+            Log.e("POST", "Failed to post note: ${response.errorBody()?.string()}")
         }
     }
+
 
     suspend fun fetchNotesForUser(userId: String) {
         if (userId.isNotEmpty()) {

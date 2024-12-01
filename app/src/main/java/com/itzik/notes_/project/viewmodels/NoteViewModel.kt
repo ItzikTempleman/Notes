@@ -112,16 +112,19 @@ class NoteViewModel @Inject constructor(
 
 
     suspend fun saveNote(note: Note) {
+        if (note.noteId == 0) {
+            Log.d("POST", "Invalid note ID detected")
+            return // or handle more appropriately
+        }
+
         if (userId.isEmpty()) {
             fetchCurrentLoggedInUserId()
         }
 
         if (!shouldUpdateNote) {
+            Log.d("POST", "Note id before posting: ${note.noteId}")
             repo.saveNote(note)
-            val insertedNote = repo.fetchLatestNoteForUser(userId)
-            note.noteId = insertedNote.noteId
             postNoteForUser(note, userId)
-
         } else {
             updateNote(
                 userId = note.userId,
@@ -141,19 +144,12 @@ class NoteViewModel @Inject constructor(
 
     suspend fun postNoteForUser(note: Note, userId: String) {
         try {
+            Log.d("POST", "Attempting to post note with ID: ${note.noteId}")
             val response = repo.postNoteForUser(note, userId)
-
-            if (response.isSuccessful) {
-                val savedNote = response.body()
-                if (savedNote != null) {
-                    repo.postNoteForUser(note, userId)
-                    Log.d("POST", "Note posted successfully: $savedNote")
-                } else {
-                    Log.e("POST", "Response body is null")
-                }
-            } else {
-                val errorBody = response.errorBody()?.string()
-                Log.e("POST", "Failed to post note: $errorBody")
+            response.body()?.let { savedNote ->
+                Log.d("POST", "Note posted successfully with ID: ${savedNote.noteId}")
+            } ?: run {
+                Log.e("POST", "Failed to post note: ${response.errorBody()?.string()}")
             }
         } catch (e: Exception) {
             Log.e("POST", "Error posting note: ${e.message}", e)

@@ -110,22 +110,18 @@ class NoteViewModel @Inject constructor(
         privateNote.value = updatedNote
     }
 
+
     suspend fun saveNote(note: Note) {
         if (userId.isEmpty()) {
             fetchCurrentLoggedInUserId()
         }
 
         if (!shouldUpdateNote) {
-            if (note.noteId == 0) {
-                Log.d("POST", "Saving new note...")
-                repo.saveNote(note)
-                val insertedNote = repo.fetchLatestNoteForUser(userId)
-                note.noteId = insertedNote.noteId
-                Log.d("POST", "New note ID obtained: ${note.noteId}")
-            }
-
-            Log.d("POST", "Note id before posting: ${note.noteId}")
+            repo.saveNote(note)
+            val insertedNote = repo.fetchLatestNoteForUser(userId)
+            note.noteId = insertedNote.noteId
             postNoteForUser(note, userId)
+
         } else {
             updateNote(
                 userId = note.userId,
@@ -138,22 +134,31 @@ class NoteViewModel @Inject constructor(
                 noteId = note.noteId
             )
         }
-
         shouldUpdateNote = false
         fetchNotesForUser(userId)
     }
 
 
     suspend fun postNoteForUser(note: Note, userId: String) {
-        Log.d("POST", "Attempting to post note with ID: ${note.noteId}")
-        val response = repo.postNoteForUser(note, userId)
-        response.body()?.let { savedNote ->
-            Log.d("POST", "Note posted successfully with ID: ${savedNote.noteId}")
-        } ?: run {
-            Log.e("POST", "Failed to post note: ${response.errorBody()?.string()}")
+        try {
+            val response = repo.postNoteForUser(note, userId)
+
+            if (response.isSuccessful) {
+                val savedNote = response.body()
+                if (savedNote != null) {
+                    repo.postNoteForUser(note, userId)
+                    Log.d("POST", "Note posted successfully: $savedNote")
+                } else {
+                    Log.e("POST", "Response body is null")
+                }
+            } else {
+                val errorBody = response.errorBody()?.string()
+                Log.e("POST", "Failed to post note: $errorBody")
+            }
+        } catch (e: Exception) {
+            Log.e("POST", "Error posting note: ${e.message}", e)
         }
     }
-
 
     suspend fun fetchNotesForUser(userId: String) {
         if (userId.isNotEmpty()) {

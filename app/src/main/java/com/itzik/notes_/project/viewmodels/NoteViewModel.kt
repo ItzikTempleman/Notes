@@ -110,20 +110,23 @@ class NoteViewModel @Inject constructor(
         privateNote.value = updatedNote
     }
 
-
     suspend fun saveNote(note: Note) {
         if (userId.isEmpty()) {
             fetchCurrentLoggedInUserId()
         }
-
         if (!shouldUpdateNote) {
             if (note.noteId == 0) {
-                // Only save if the note ID is zero (meaning new note)
+                Log.d("POST", "Saving new note...")
                 repo.saveNote(note)
                 val insertedNote = repo.fetchLatestNoteForUser(userId)
-                note.noteId = insertedNote.noteId  // Ensure the ID is updated after save
+                note.noteId = insertedNote.noteId
+                Log.d("POST", "New note ID obtained: ${note.noteId}")
+            } else {
+                Log.d("POST", "Updating existing note with ID: ${note.noteId}")
+                repo.updateNote(note)
             }
-            postNoteForUser(note, userId)  // Post using the updated note ID
+            Log.d("POST", "Note id before posting: ${note.noteId}")
+            postNoteForUser(note, userId)
         } else {
             updateNote(
                 userId = note.userId,
@@ -135,6 +138,7 @@ class NoteViewModel @Inject constructor(
                 fontWeight = note.fontWeight,
                 noteId = note.noteId
             )
+            Log.d("POST", "Note updated locally and ready to sync or already synced.")
         }
         shouldUpdateNote = false
         fetchNotesForUser(userId)

@@ -115,10 +115,9 @@ class NoteViewModel @Inject constructor(
             fetchCurrentLoggedInUserId()
         }
         if (!shouldUpdateNote) {
+            repo.saveNote(note)
             val insertedNote = repo.fetchLatestNoteForUser(userId)
             note.noteId = insertedNote.noteId
-            repo.saveNote(note)
-            Log.d("POST", "note id: ${note.noteId}")
             postNoteForUser(note, userId)
         } else {
             updateNote(
@@ -141,7 +140,7 @@ class NoteViewModel @Inject constructor(
         response.body()?.let {
 
         } ?: run {
-          
+
         }
     }
 

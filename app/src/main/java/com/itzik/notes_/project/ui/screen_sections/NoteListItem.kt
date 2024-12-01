@@ -32,6 +32,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.itzik.notes_.R
 import com.itzik.notes_.project.model.Note
+import com.itzik.notes_.project.utils.getFormattedTime
 import com.itzik.notes_.project.viewmodels.NoteViewModel
 import java.nio.file.WatchEvent
 
@@ -73,7 +74,7 @@ fun NoteListItem(
 
             ) {
                 Text(
-                    text = note.time,
+                    text = getFormattedTime(),
                     fontSize = 10.sp
                 )
             }

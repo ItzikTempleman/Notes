@@ -1,6 +1,9 @@
 package com.itzik.notes_.project.utils
 
+import com.itzik.notes_.project.model.Note
+import java.time.Instant
 import java.time.LocalDate
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 object Constants {
@@ -17,5 +20,11 @@ fun reverseDateFormat(date: String): String {
     val localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
     val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
     return localDate.format(formatter)
+}
+
+fun getFormattedTime(): String {
+    val instant = Instant.parse(Note.getCurrentTime())
+    val formatter = DateTimeFormatter.ofPattern("HH:mm").withZone(ZoneId.systemDefault())
+    return formatter.format(instant)
 }
 

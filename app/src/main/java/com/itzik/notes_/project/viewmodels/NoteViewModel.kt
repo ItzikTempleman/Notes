@@ -112,19 +112,18 @@ class NoteViewModel @Inject constructor(
 
 
     suspend fun saveNote(note: Note) {
-        if (note.noteId == 0) {
-            Log.d("POST", "Invalid note ID detected")
-            return // or handle more appropriately
-        }
-
         if (userId.isEmpty()) {
             fetchCurrentLoggedInUserId()
         }
 
         if (!shouldUpdateNote) {
-            Log.d("POST", "Note id before posting: ${note.noteId}")
-            repo.saveNote(note)
-            postNoteForUser(note, userId)
+            if (note.noteId == 0) {
+                // Only save if the note ID is zero (meaning new note)
+                repo.saveNote(note)
+                val insertedNote = repo.fetchLatestNoteForUser(userId)
+                note.noteId = insertedNote.noteId  // Ensure the ID is updated after save
+            }
+            postNoteForUser(note, userId)  // Post using the updated note ID
         } else {
             updateNote(
                 userId = note.userId,
@@ -140,7 +139,6 @@ class NoteViewModel @Inject constructor(
         shouldUpdateNote = false
         fetchNotesForUser(userId)
     }
-
 
     suspend fun postNoteForUser(note: Note, userId: String) {
         try {

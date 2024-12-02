@@ -1,16 +1,16 @@
 <resources>
     <string name="app_name">MyNotes</string>
 
-    <string name="log_in">LOG IN</string>
+    <string name="log_in">Login</string>
     <string name="email">Username</string>
     <string name="password">Password</string>
-    <string name="register">REGISTER</string>
+    <string name="register">Register</string>
     <string name="registration">Registration</string>
     <string name="create_name">Name</string>
     <string name="create_email">Email</string>
     <string name="create_password">Password</string>
     <string name="enter_phone_number">Phone Number</string>
-    <string name="create_user">CREATE USER</string>
+    <string name="create_user">Create account</string>
     <string name="full_name">Name</string>
     <string name="user_email">Email</string>
     <string name="log_out">Log out</string>
@@ -53,4 +53,7 @@
     <string name="login_as_guest">Log in as guest</string>
     <string name="local_notes">Local</string>
     <string name="online_notes">Online</string>
+    <string name="other">Other</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
 </resources>

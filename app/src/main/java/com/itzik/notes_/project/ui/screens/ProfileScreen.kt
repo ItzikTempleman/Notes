@@ -95,7 +95,7 @@ fun ProfileScreen(
                 }
             }
         ConstraintLayout(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize().background(Color.White)
 
         ) {
             val (imageContainer, cancelIconModifier, editButton, editProfileOptionsList, name, email, bottomColumn) = createRefs()

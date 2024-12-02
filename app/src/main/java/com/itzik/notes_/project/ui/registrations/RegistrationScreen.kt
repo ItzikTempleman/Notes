@@ -12,12 +12,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.Man
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Transgender
@@ -25,6 +28,8 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,6 +40,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
@@ -117,154 +123,157 @@ fun RegistrationScreen(
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
     ) {
-        val ( title, nameTF, emailTF, passwordTF, phoneNumberTF, dropDownIcon, genderSelector, selectGenderTitle, birthDateTitle, birthDateSelector,signUpBtn) = createRefs()
-        Box(
+        val (title, nameTF, emailTF, passwordTF, phoneNumberTF, genderRow, birthDate, signUpBtn) = createRefs()
+
+
+
+        CustomOutlinedTextField(
+            fieldNumber = 0,
+            doesInstructionsHintExist = true,
+            value = name,
+            onValueChange = {
+                name = it
+                updateButtonState(name, createEmail, createPassword, createPhoneNumber)
+            },
+            label = nameLabelMessage,
             modifier = Modifier
-                .fillMaxSize()
-                .background(colorResource(R.color.very_light_gray))
-        ) {}
-        Text(
-            modifier = Modifier
-                .constrainAs(title) {
+                .constrainAs(nameTF) {
                     top.linkTo(parent.top)
-                    start.linkTo(parent.start)
                 }
-                .padding(16.dp),
-            fontSize = 24.sp,
-            fontFamily = FontFamily.Monospace,
-            fontStyle = FontStyle.Italic,
-            fontWeight = FontWeight.Bold,
-            color = colorResource(R.color.deep_ocean_blue),
-            text = stringResource(id = R.string.registration)
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
+            leftImageVector = Icons.Default.Person,
+            isError = nameError,
+            visualTransformation = VisualTransformation.None
         )
 
-                CustomOutlinedTextField(
-                    fieldNumber =0,
-                    doesInstructionsHintExist=true,
-                    value = name,
-                    onValueChange = {
-                        name = it
-                        updateButtonState(name, createEmail, createPassword, createPhoneNumber)
-                    },
-                    label = nameLabelMessage,
-                    modifier = Modifier
-                        .constrainAs(nameTF) {
-                            top.linkTo(title.bottom)
-                        }
-                        .fillMaxWidth()
-                        .padding(20.dp),
-                    leftImageVector = Icons.Default.Person,
-                    isError = nameError,
-                    visualTransformation = VisualTransformation.None
-                    )
-
-                CustomOutlinedTextField(
-                    fieldNumber=1,
-                    doesInstructionsHintExist=true,
-                    value = createEmail,
-                    onValueChange = {
-                        createEmail = it
-                        updateButtonState(name, createEmail, createPassword, createPhoneNumber)
-                    },
-                    label = createEmailLabelMessage,
-                    modifier = Modifier
-                        .constrainAs(emailTF) {
-                            top.linkTo(nameTF.bottom)
-                        }
-                        .fillMaxWidth()
-                        .padding(20.dp),
-                    leftImageVector = Icons.Default.Email,
-                    isError = isNewEmailError,
-                    visualTransformation = VisualTransformation.None,
+        CustomOutlinedTextField(
+            fieldNumber = 1,
+            doesInstructionsHintExist = true,
+            value = createEmail,
+            onValueChange = {
+                createEmail = it
+                updateButtonState(name, createEmail, createPassword, createPhoneNumber)
+            },
+            label = createEmailLabelMessage,
+            modifier = Modifier
+                .constrainAs(emailTF) {
+                    top.linkTo(nameTF.bottom)
+                }
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
+            leftImageVector = Icons.Default.Email,
+            isError = isNewEmailError,
+            visualTransformation = VisualTransformation.None,
 
 
-                    )
+            )
 
-                CustomOutlinedTextField(
-                    fieldNumber=2,
-                    doesInstructionsHintExist=true,
-                    value = createPassword,
-                    onValueChange = {
-                        createPassword = it
-                        updateButtonState(name, createEmail, createPassword, createPhoneNumber)
-                    },
-                    label = createPasswordLabelMessage,
-                    modifier = Modifier
-                        .constrainAs(passwordTF) {
-                            top.linkTo(emailTF.bottom)
-                        }
-                        .fillMaxWidth()
-                        .padding(20.dp),
-                    leftImageVector = if (isCreatedPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-                    isError = isCreatePasswordError,
-                    keyboardType = KeyboardType.Password,
-                    isPasswordToggleClicked = isCreatedPasswordVisible,
-                    isPasswordIconShowing = {
-                        isCreatedPasswordVisible = !isCreatedPasswordVisible
-                    },
-                    visualTransformation = if (isCreatedPasswordVisible) VisualTransformation.None
-                    else PasswordVisualTransformation(),
-                    )
+        CustomOutlinedTextField(
+            fieldNumber = 2,
+            doesInstructionsHintExist = true,
+            value = createPassword,
+            onValueChange = {
+                createPassword = it
+                updateButtonState(name, createEmail, createPassword, createPhoneNumber)
+            },
+            label = createPasswordLabelMessage,
+            modifier = Modifier
+                .constrainAs(passwordTF) {
+                    top.linkTo(emailTF.bottom)
+                }
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
+            leftImageVector = if (isCreatedPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+            isError = isCreatePasswordError,
+            keyboardType = KeyboardType.Password,
+            isPasswordToggleClicked = isCreatedPasswordVisible,
+            isPasswordIconShowing = {
+                isCreatedPasswordVisible = !isCreatedPasswordVisible
+            },
+            visualTransformation = if (isCreatedPasswordVisible) VisualTransformation.None
+            else PasswordVisualTransformation(),
+        )
 
-                CustomOutlinedTextField(
-                    fieldNumber=3,
-                    doesInstructionsHintExist=true,
-                    value = createPhoneNumber,
-                    onValueChange = {
-                        createPhoneNumber = it
-                        updateButtonState(name, createEmail, createPassword, createPhoneNumber)
-                    },
-                    label = createPhoneNumberLabelMessage,
-                    modifier = Modifier
-                        .constrainAs(phoneNumberTF) {
-                            top.linkTo(passwordTF.bottom)
-                        }
-                        .fillMaxWidth()
-                        .padding(20.dp),
-                    leftImageVector = Icons.Filled.Phone,
-                    isError = phoneNumberError,
-                    visualTransformation = VisualTransformation.None,
-                    keyboardType = KeyboardType.Phone,
-                )
+        CustomOutlinedTextField(
+            fieldNumber = 3,
+            doesInstructionsHintExist = true,
+            value = createPhoneNumber,
+            onValueChange = {
+                createPhoneNumber = it
+                updateButtonState(name, createEmail, createPassword, createPhoneNumber)
+            },
+            label = createPhoneNumberLabelMessage,
+            modifier = Modifier
+                .constrainAs(phoneNumberTF) {
+                    top.linkTo(passwordTF.bottom)
+                }
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
+            leftImageVector = Icons.Filled.Phone,
+            isError = phoneNumberError,
+            visualTransformation = VisualTransformation.None,
+            keyboardType = KeyboardType.Phone,
+        )
+
+
+        Card(
+            modifier = Modifier
+                .constrainAs(genderRow) {
+                    top.linkTo(phoneNumberTF.bottom)
+                }
+                .fillMaxWidth()
+                .height(95.dp)
+                .padding(20.dp),
+            colors = CardDefaults.cardColors(colorResource(R.color.light_green)),
+            shape = RoundedCornerShape(8.dp)
+        ) {
+            ConstraintLayout(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                val (dropDownIcon, genderSelector, selectGenderTitle) = createRefs()
 
                 Icon(
                     modifier = Modifier
                         .constrainAs(dropDownIcon) {
-                            top.linkTo(phoneNumberTF.bottom)
+                            top.linkTo(parent.top)
+                            bottom.linkTo(parent.bottom)
                             start.linkTo(parent.start)
                         }
-                        .padding(start = 22.dp, top = 24.dp),
-                    imageVector = Icons.Default.Transgender,
+                        .padding(6.dp)
+                        .size(32.dp),
+                    imageVector = Icons.Default.Man,
                     contentDescription = null
                 )
 
                 Text(
                     modifier = Modifier
                         .constrainAs(selectGenderTitle) {
-                            top.linkTo(phoneNumberTF.bottom)
+                            top.linkTo(parent.top)
+                            bottom.linkTo(parent.bottom)
                             start.linkTo(dropDownIcon.end)
                         }
-                        .padding(top = 26.dp, start = 14.dp),
+                        .padding(8.dp),
                     text = dropDownMenuPlaceHolder,
                     fontSize = 16.sp,
                     color = Color.Black
                 )
 
-
                 Box(
                     modifier = Modifier
                         .constrainAs(genderSelector) {
-                            top.linkTo(phoneNumberTF.bottom)
-                            start.linkTo(selectGenderTitle.end)
+                            top.linkTo(parent.top)
+                            bottom.linkTo(parent.bottom)
+                            end.linkTo(parent.end)
                         }
-                        .padding(top = 12.dp)
+                        .padding(6.dp)
                 ) {
-
                     GenderDropDownMenu(
                         modifier = Modifier
                             .wrapContentSize()
-                            .padding(top = 8.dp),
+                            .padding(top = 10.dp),
                         coroutineScope = coroutineScope,
                         onDismissRequest = {
                             isGenderExpanded = false
@@ -290,51 +299,75 @@ fun RegistrationScreen(
                         imageVector = if (isGenderExpanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown
                     )
                 }
+            }
+        }
+
+        Card(
+            modifier = Modifier
+                .constrainAs(birthDate) {
+                    top.linkTo(genderRow.bottom)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }
+                .padding(20.dp).height(55.dp),
+            colors = CardDefaults.cardColors(colorResource(R.color.light_orange)),
+            shape = RoundedCornerShape(8.dp)
+        ) {
+            ConstraintLayout(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                var (icon, birthDateTitle, datePicker) = createRefs()
+
+
+                Icon(
+                    modifier = Modifier
+                        .size(48.dp)
+                        .constrainAs(icon) {
+                            top.linkTo(parent.top)
+                            start.linkTo(parent.start)
+                            bottom.linkTo(parent.bottom)
+                        }.padding(12.dp),
+                    imageVector = Icons.Default.CalendarMonth,
+                    contentDescription = null
+                )
 
                 Text(
                     modifier = Modifier
                         .constrainAs(birthDateTitle) {
-                            top.linkTo(genderSelector.bottom)
-                            start.linkTo(parent.start)
-                        }
-                        .padding(start = 60.dp, top = 60.dp),
+                            top.linkTo(parent.top)
+                            start.linkTo(icon.end)
+                            bottom.linkTo(parent.bottom)
+                        },
                     text = stringResource(R.string.enter_birthdate)
                 )
-                Row(
-                    modifier = Modifier
-                        .constrainAs(birthDateSelector) {
-                            top.linkTo(birthDateTitle.bottom)
-                            start.linkTo(parent.start)
-                        }
-                        .padding(22.dp),
-                    horizontalArrangement = Arrangement.Start,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Icon(
-                        modifier = Modifier.size(24.dp),
-                        imageVector = Icons.Default.CalendarMonth,
-                        contentDescription = null
-                    )
 
-                    DateTextField(
-                        modifier = Modifier.padding(start = 12.dp),
-                        onValueChanged = { localDate ->
-                            localDate?.let {
-                                dateSelected = reverseDateFormat(it.toString())
-                                isDateSelected = true
-                            } ?: run {
-                                dateSelected = ""
-                            }
+                DateTextField(
+                    modifier = Modifier.constrainAs(datePicker) {
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                        bottom.linkTo(parent.bottom)
+                    },
+                    onValueChanged = { localDate ->
+                        localDate?.let {
+                            dateSelected = reverseDateFormat(it.toString())
+                            isDateSelected = true
+                        } ?: run {
+                            dateSelected = ""
                         }
-                    )
-                }
+                    }
+                )
+            }
+        }
+
 
         Button(
             modifier = Modifier
                 .constrainAs(signUpBtn) {
-                    top.linkTo(birthDateSelector.bottom)
+                    bottom.linkTo(parent.bottom)
                 }
-                .fillMaxWidth().height(90.dp)
+                .fillMaxWidth()
+                .height(90.dp)
                 .padding(20.dp),
             onClick = {
                 if (userViewModel != null) {
@@ -370,7 +403,7 @@ fun RegistrationScreen(
                             profileImage = "",
                             gender = selectedGender,
                             dateOfBirth = dateSelected,
-                            selectedWallpaper=""
+                            selectedWallpaper = ""
                         )
                         coroutineScope.launch {
                             try {
@@ -388,9 +421,9 @@ fun RegistrationScreen(
                 }
             },
             enabled = isButtonEnabled,
-            shape = RoundedCornerShape(12.dp),
+            shape = RoundedCornerShape(8.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = colorResource(R.color.deep_ocean_blue)
+                containerColor = colorResource(R.color.light_green)
             ),
         ) {
             Text(
@@ -399,14 +432,4 @@ fun RegistrationScreen(
             )
         }
     }
-}
-
-
-@Preview(showBackground = true, device = "spec:width=412dp,height=932dp")
-@Composable
-fun RegistrationScreenPreview() {
-    RegistrationScreen(
-        coroutineScope = rememberCoroutineScope(),
-        rootNavController = rememberNavController()
-    )
 }

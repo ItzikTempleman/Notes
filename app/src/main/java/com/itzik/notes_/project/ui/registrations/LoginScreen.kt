@@ -3,13 +3,16 @@ package com.itzik.notes_.project.ui.registrations
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Visibility
@@ -95,15 +98,10 @@ fun LoginScreen(
 
     ConstraintLayout(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxSize()
 
     ) {
-        val (loginTextTop, loginTextLine, loginTextBottom, loginText, emailTF, passwordTF, loginBtn, orText, doNotHaveText, signUpBtn, loginAsGuest) = createRefs()
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(colorResource(R.color.very_light_gray))
-        ) {}
+        val (loginTextTop, loginText, emailTF, passwordTF, loginBtn, orText, doNotHaveText, signUpBtn, loginAsGuest) = createRefs()
 
         Text(
             modifier = Modifier
@@ -111,50 +109,21 @@ fun LoginScreen(
                     top.linkTo(parent.top)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
-                    bottom.linkTo(loginTextLine.top)
-                }
-                .padding(top = 150.dp),
-            fontSize = 36.sp,
-            fontFamily = FontFamily.Monospace,
-            fontStyle = FontStyle.Italic,
-            fontWeight = FontWeight.Bold,
-            color = colorResource(R.color.deep_ocean_blue),
+                }.padding(top = 16.dp),
+            fontSize = 28.sp,
+            color = Color.Black,
             text = stringResource(id = R.string.notes)
         )
-
-        HorizontalDivider(
-            modifier = Modifier
-                .constrainAs(loginTextLine) {
-                    top.linkTo(loginTextTop.bottom, margin = (-20).dp)
-                }
-                .padding(horizontal = 125.dp),
-            thickness = 1.dp,
-            color = colorResource(R.color.deep_ocean_blue)
-        )
-
-        Text(
-            modifier = Modifier
-                .constrainAs(loginTextBottom) {
-                    top.linkTo(loginTextLine.bottom)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                },
-            fontSize = 20.sp,
-            color = colorResource(R.color.deep_ocean_blue),
-            text = stringResource(id = R.string.manage)
-        )
-
 
         Text(
             modifier = Modifier
                 .constrainAs(loginText) {
-                    top.linkTo(loginTextLine.bottom)
+                    top.linkTo(loginTextTop.bottom)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                 }
-                .padding(40.dp),
+                .padding(16.dp),
             fontSize = 22.sp,
-            fontWeight = FontWeight.Bold,
             color = Color.Black,
             text = stringResource(id = R.string.login_account)
         )
@@ -171,7 +140,7 @@ fun LoginScreen(
                     top.linkTo(loginText.bottom)
                 }
                 .fillMaxWidth()
-                .padding(20.dp),
+                .padding(horizontal = 20.dp),
             leftImageVector = Icons.Default.Email,
             isError = isEmailError,
             visualTransformation = VisualTransformation.None,
@@ -189,7 +158,7 @@ fun LoginScreen(
                     top.linkTo(emailTF.bottom)
                 }
                 .fillMaxWidth()
-                .padding(20.dp),
+                .padding(horizontal = 20.dp),
             leftImageVector = if (isPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
             isError = isPasswordError,
             keyboardType = KeyboardType.Password,
@@ -201,13 +170,11 @@ fun LoginScreen(
             else PasswordVisualTransformation(),
         )
 
-
-
         Button(
             enabled = isButtonEnabled,
-            shape = RoundedCornerShape(12.dp),
+            shape = RoundedCornerShape(8.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = colorResource(R.color.deep_ocean_blue)
+                containerColor = colorResource(R.color.light_green)
             ),
             modifier = Modifier
                 .constrainAs(loginBtn) {
@@ -237,26 +204,24 @@ fun LoginScreen(
                     }
                 }
                 if (userViewModel != null) {
-                    if (userViewModel.validateEmail(email) && userViewModel.validatePassword(
-                            password
+                    if (userViewModel.validateEmail(email) && userViewModel.validatePassword(password
                         )
                     ) {
-
-                            coroutineScope.launch {
-                                userViewModel.getUserFromUserNameAndPasswordFromOnline(
-                                    email,
-                                    password
-                                ).collect { user ->
-                                    user.isLoggedIn = true
-                                    userViewModel.updateIsLoggedIn(user)
-                                    userViewModel.postAUser(user)
-                                    userViewModel.registerUser(user)
-                                    rootNavController.popBackStack()
-                                    rootNavController.navigate(Screen.Home.route)
-                                }
-
-
+                        coroutineScope.launch {
+                            userViewModel.getUserFromUserNameAndPasswordFromOnline(
+                                email,
+                                password
+                            ).collect { user ->
+                                user.isLoggedIn = true
+                                userViewModel.updateIsLoggedIn(user)
+                                userViewModel.postAUser(user)
+                                userViewModel.registerUser(user)
+                                rootNavController.popBackStack()
+                                rootNavController.navigate(Screen.Home.route)
+                            }
                         }
+
+
                         if (user != null) {
                             coroutineScope.launch {
                                 userViewModel.getUserFromUserNameAndPassword(
@@ -291,10 +256,11 @@ fun LoginScreen(
 
 
 
+
         Text(
             modifier = Modifier
                 .constrainAs(doNotHaveText) {
-                    top.linkTo(loginBtn.bottom)
+                    bottom.linkTo(signUpBtn.top)
                     end.linkTo(parent.end)
                     start.linkTo(parent.start)
                 },
@@ -310,15 +276,15 @@ fun LoginScreen(
             },
             modifier = Modifier
                 .constrainAs(signUpBtn) {
-                    top.linkTo(doNotHaveText.bottom)
+                    bottom.linkTo(orText.top)
                     end.linkTo(parent.end)
                     start.linkTo(parent.start)
                 }
         ) {
             Text(
-                color = colorResource(R.color.deep_ocean_blue),
                 fontSize = 22.sp,
                 text = stringResource(id = R.string.register),
+                color = Color.Black
             )
         }
 
@@ -326,20 +292,19 @@ fun LoginScreen(
             modifier = Modifier.constrainAs(orText) {
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
-                top.linkTo(signUpBtn.bottom)
+                bottom.linkTo(loginAsGuest.top)
             },
-            text = "OR",
-            fontSize = 14.sp
+            text = "Or",
+            fontSize = 20.sp
         )
 
         TextButton(
             modifier = Modifier
                 .constrainAs(loginAsGuest) {
-                    top.linkTo(orText.bottom)
+                    bottom.linkTo(parent.bottom)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
-                }
-                .padding(8.dp),
+                }.padding(16.dp),
             onClick = {
                 coroutineScope.launch {
                     val existingAdminUser = userViewModel?.getAdminUserIfExists(tempUser.email)
@@ -358,18 +323,8 @@ fun LoginScreen(
             Text(
                 fontSize = 24.sp,
                 text = stringResource(R.string.login_as_guest),
-                color = colorResource(R.color.deep_ocean_blue)
+                color = Color.Black
             )
         }
     }
-}
-
-
-@Preview(showBackground = true, device = "spec:width=412dp,height=932dp")
-@Composable
-fun LoginScreenPreview() {
-    LoginScreen(
-        coroutineScope = rememberCoroutineScope(),
-        rootNavController = rememberNavController()
-    )
 }

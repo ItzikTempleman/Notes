@@ -1,14 +1,17 @@
 package com.itzik.notes_.project.ui.composable_elements
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.Column
 //noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material3.DropdownMenu
-
+import androidx.compose.material3.HorizontalDivider
+import com.itzik.notes_.R
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import com.itzik.notes_.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -57,7 +60,7 @@ fun GenderDropDownMenu(
     onDismissRequest: () -> Unit
 ) {
 
-    val genderList: List<String> = listOf("Male", "Female", "Other")
+    val genderList: List<String> = listOf(stringResource(R.string.male), stringResource(R.string.female), stringResource(R.string.other))
 
     DropdownMenu(
         modifier = modifier,
@@ -73,10 +76,15 @@ fun GenderDropDownMenu(
                     onDismissRequest()
                 }
             ) {
-                Text(
-                    text = it,
-                    color = Color.Black
+                Column {
+                    Text(
+                        text = it,
+                        color = Color.Black
                     )
+                    if (it.toString()!= stringResource(R.string.other)) {
+                        HorizontalDivider()
+                    }
+                }
             }
         }
     }

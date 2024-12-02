@@ -64,7 +64,7 @@ fun DeletedNotesScreen(
         modifier = Modifier.fillMaxSize()
     ) {
         ConstraintLayout(
-            modifier = modifier
+            modifier = modifier.background(Color.White)
                 .clickable {
                     isDeleteAllDialogOpen = false
                     isDialogOpen = false

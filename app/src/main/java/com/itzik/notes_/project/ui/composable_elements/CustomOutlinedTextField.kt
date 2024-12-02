@@ -20,6 +20,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Block
 import androidx.compose.material.icons.filled.EventNote
 import androidx.compose.material.icons.filled.HourglassEmpty
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.QuestionMark
 import androidx.compose.material.icons.filled.SpeakerNotesOff
 import androidx.compose.material.icons.filled.VisibilityOff
@@ -70,90 +71,65 @@ fun CustomOutlinedTextField(
         mutableStateOf(false)
     }
 
+
     ConstraintLayout(
         modifier = modifier
             .fillMaxWidth()
-            .height(90.dp),
+            .height(90.dp)
     ) {
         val (topCard, hintRow) = createRefs()
-        Card(
+        OutlinedTextField(
+            shape = MaterialTheme.shapes.small,
+            value = value,
+            onValueChange = { onValueChange?.invoke(it) },
             modifier = Modifier
                 .constrainAs(topCard) {
                     top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
                 }
-                .fillMaxWidth()
-                .height(60.dp),
-            colors = CardDefaults.cardColors(Color.White),
-            elevation = CardDefaults.cardElevation(0.dp),
-            shape = RoundedCornerShape(12.dp)
-        ) {
-            ConstraintLayout(
-                modifier = Modifier.fillMaxSize()
-            ) {
-                val (textFiled) = createRefs()
-                OutlinedTextField(
-                    shape = MaterialTheme.shapes.small,
-                    value = value,
-                    onValueChange = { onValueChange?.invoke(it) },
-                    modifier = Modifier
-                        .constrainAs(textFiled) {
-                            top.linkTo(parent.top)
-                            bottom.linkTo(parent.bottom)
-                        }
-                        .fillMaxWidth(),
-                    label = {
-                        Text(
-                            text = label,
-                            fontSize = 14.sp,
-                            color = Color.DarkGray,
-                        )
-                    },
-                    leadingIcon = {
-                        IconButton(onClick = {
-                            if (isPasswordIconShowing != null) {
-                                isPasswordToggleClicked?.let {
-                                    isPasswordIconShowing(it)
-                                }
-                            } else return@IconButton
-                        }) {
-                            Icon(
-                                imageVector = leftImageVector,
-                                contentDescription = null,
-                                tint = Color.Black,
-                            )
-                        }
-                    },
-                    trailingIcon = {
-                        if (rightImageVector != null) {
-                            IconButton(
-                                onClick = {
-                                    invokedFunction?.invoke()
-                                },
-                                modifier = Modifier
-                            ) {
-                                Icon(
-                                    imageVector = rightImageVector,
-                                    contentDescription = null,
-                                    tint = Color.Black,
-                                )
-                            }
-                        }
-                    },
-                    singleLine = isSingleLine,
-                    visualTransformation = visualTransformation,
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        unfocusedBorderColor = Color.Transparent,
-                        focusedBorderColor = Color.Transparent,
-                        errorBorderColor = Color.Transparent,
-                        focusedLabelColor = MaterialTheme.colorScheme.primary,
-                        cursorColor = MaterialTheme.colorScheme.primary,
-                        errorLabelColor = MaterialTheme.colorScheme.error
-                    ),
-                    isError = isError,
-                    keyboardOptions = KeyboardOptions(keyboardType = keyboardType)
+                .fillMaxWidth(),
+            label = {
+                Text(
+                    text = label,
+                    fontSize = 14.sp,
+                    color = Color.DarkGray,
                 )
-            }
-        }
+            },
+            leadingIcon = {
+                IconButton(onClick = {
+                    if (isPasswordIconShowing != null) {
+                        isPasswordToggleClicked?.let {
+                            isPasswordIconShowing(it)
+                        }
+                    } else return@IconButton
+                }) {
+                    Icon(
+                        imageVector = leftImageVector,
+                        contentDescription = null,
+                    )
+                }
+            },
+            trailingIcon = {
+                if (rightImageVector != null) {
+                    IconButton(
+                        onClick = {
+                            invokedFunction?.invoke()
+                        },
+                        modifier = Modifier
+                    ) {
+                        Icon(
+                            imageVector = rightImageVector,
+                            contentDescription = null,
+                        )
+                    }
+                }
+            },
+            singleLine = isSingleLine,
+            visualTransformation = visualTransformation,
+            isError = isError,
+            keyboardOptions = KeyboardOptions(keyboardType = keyboardType)
+        )
+
 
         if (doesInstructionsHintExist == true) {
             Row(
@@ -167,25 +143,24 @@ fun CustomOutlinedTextField(
             ) {
                 GenericIconButton(
                     modifier = Modifier
-                        .size(30.dp)
+                        .size(20.dp)
                         .padding(start = 8.dp),
                     onClick = {
                         isFieldOpenState = !isFieldOpenState
                     },
-                    imageVector = Icons.Default.QuestionMark,
-                    colorNumber = 1
+                    imageVector = Icons.Default.Info,
+                    colorNumber = 5
                 )
                 if (isFieldOpenState) {
                     Text(
                         text = when (fieldNumber) {
                             0 -> "Full name, each containing at least two letters"
                             1 -> "Valid format: \"x@x.x\""
-                            2 -> "\"Xx3*\" Upper case, lower case, number and special symbol"
+                            2 -> "\"Xx3#\" Uppercase,lowercase,number,symbol"
                             3 -> "10-12 digits number: optional '+' for country code"
                             else -> ""
                         },
                         fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
                     )
                 }
             }

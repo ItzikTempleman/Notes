@@ -48,7 +48,7 @@ fun LikedNotesScreen(
 
     ConstraintLayout(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxSize().background(Color.White)
 
         ) {
         val (title, emptyStateMessage, likedNotesLazyColumn) = createRefs()

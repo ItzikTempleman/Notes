@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import com.itzik.notes_.project.model.Note
 import com.itzik.notes_.project.utils.Constants.NOTE_TABLE
@@ -13,6 +14,14 @@ import com.itzik.notes_.project.utils.Constants.NOTE_TABLE
 interface NoteDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun saveNote(note: Note)
+//    @Transaction
+//    suspend fun saveWithGeneratedId(note: Note) {
+//        if (note.noteId == 0) {
+//            note.noteId = Note.generateNoteId(note.userId)
+//        }
+//        saveNote(note)
+//    }
+
 
     @Query("SELECT * FROM $NOTE_TABLE WHERE isInTrash = 0 AND userId = :userId")
     suspend fun fetchNotes(userId: String): MutableList<Note>

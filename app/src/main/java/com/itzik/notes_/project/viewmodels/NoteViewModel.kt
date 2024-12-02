@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.itzik.notes_.project.model.Note
+
 import com.itzik.notes_.project.model.Note.Companion.getCurrentTime
 import com.itzik.notes_.project.model.User
 import com.itzik.notes_.project.repositories.AppRepositoryInterface

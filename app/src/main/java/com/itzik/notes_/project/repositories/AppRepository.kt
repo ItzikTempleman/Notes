@@ -70,7 +70,10 @@ class AppRepository @Inject constructor(
 
     override suspend fun fetchViewType(userId: String): Boolean = userDao.fetchViewType(userId)
 
-    override suspend fun saveNote(note: Note) = noteDao.saveNote(note)
+    override suspend fun saveNote(note: Note) {
+        noteDao.saveNote(note)
+    }
+
     override suspend fun fetchNotes(userId: String) = noteDao.fetchNotes(userId)
     override suspend fun setTrash(note: Note) = noteDao.setTrash(note)
     override suspend fun updateNote(note: Note) = noteDao.updateNote(note)

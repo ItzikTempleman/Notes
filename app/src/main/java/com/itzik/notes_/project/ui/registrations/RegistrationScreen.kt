@@ -2,6 +2,7 @@ package com.itzik.notes_.project.ui.registrations
 
 
 import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -42,7 +43,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
@@ -120,12 +123,20 @@ fun RegistrationScreen(
 
     }
 
+    Image(
+        modifier = Modifier
+            .fillMaxSize(),
+        painter = painterResource(R.drawable.android_material),
+        contentDescription = null,
+        contentScale = ContentScale.FillBounds
+    )
+
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {
-        val (title, nameTF, emailTF, passwordTF, phoneNumberTF, genderRow, birthDate, signUpBtn) = createRefs()
+        val (nameTF, emailTF, passwordTF, phoneNumberTF, genderRow, birthDate, signUpBtn) = createRefs()
 
 
 

@@ -2,6 +2,7 @@ package com.itzik.notes_.project.ui.registrations
 
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,7 +16,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavHostController
 import com.itzik.notes_.R
 
@@ -44,33 +47,7 @@ fun SplashScreen(
         }
     }
 
-//    LaunchedEffect(loggedInUsers) {
-//        delay(1500)
-//
-//        if (loggedInUsers.isEmpty()) {
-//            userViewModel.getUsersFromBackend().collect { backendUsers ->
-//                if (backendUsers.isNotEmpty()) {
-//                    backendUsers.forEach { userViewModel.registerUser(it) }
-//                }
-//            }
-//        }
-//
-//        val refreshedUsers = userViewModel.publicLoggedInUsersList.value
-//
-//        if (refreshedUsers.isNotEmpty() && refreshedUsers.firstOrNull { it.isLoggedIn } != null) {
-//            rootNavController.popBackStack()
-//            rootNavController.navigate(HOME)
-//        } else {
-//            rootNavController.popBackStack()
-//            rootNavController.navigate(AUTHENTICATION)
-//        }
-//    }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(colorResource(R.color.very_light_gray))
-    ) {}
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -78,6 +55,13 @@ fun SplashScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+        Image(
+            modifier = Modifier
+                .fillMaxSize(),
+            painter = painterResource(R.drawable.android_material),
+            contentDescription = null,
+            contentScale = ContentScale.FillBounds
+        )
         CircularProgressIndicator(
             color = Color.Gray
         )

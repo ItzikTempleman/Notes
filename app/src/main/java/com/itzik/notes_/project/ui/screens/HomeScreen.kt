@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
@@ -87,7 +88,9 @@ fun HomeScreen(
     var allBackendUsers by remember {
         mutableStateOf(emptyList<User>())
     }
-
+    var isImageDefault by remember {
+        mutableStateOf(true)
+    }
 
     val combinedList by remember(isChecked, pinnedNoteList, noteList) {
         mutableStateOf(
@@ -125,13 +128,25 @@ fun HomeScreen(
 
     BackHandler {}
 
+
+
     ConstraintLayout(
         modifier = Modifier
-            .fillMaxSize().background(Color.White)
+            .fillMaxSize()
+            .background(Color.White)
     ) {
         val (backgroundImage, topRow, noteLazyColumn, newNoteBtn, emptyStateMessage) = createRefs()
 
 
+        if (isImageDefault) {
+            Image(
+                modifier = Modifier
+                    .fillMaxSize(),
+                painter = painterResource(R.drawable.android_material),
+                contentDescription = null,
+                contentScale = ContentScale.FillBounds
+            )
+        }
 
         Image(
             painter = rememberAsyncImagePainter(
@@ -156,6 +171,7 @@ fun HomeScreen(
                 .fillMaxWidth(),
             onOpenWallpaperSearch = {
                 isImagePickerOpen = !isImagePickerOpen
+                isImageDefault=false
             },
             onSortButtonClick = {
                 isExpanded = !isExpanded
@@ -176,6 +192,7 @@ fun HomeScreen(
                 }
             }
         )
+
         SortDropDownMenu(
             isExpanded = isExpanded,
             modifier = Modifier.wrapContentSize(),

@@ -17,7 +17,8 @@ object Constants {
     const val MY_BACKEND_BASE_URL = "https://my-notes-app-itzik-0c1e8b06170b.herokuapp.com/"
 }
 fun reverseDateFormat(date: String): String {
-    val localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+//    val localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+    val localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd-MM-yyyy"))
     val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
     return localDate.format(formatter)
 }

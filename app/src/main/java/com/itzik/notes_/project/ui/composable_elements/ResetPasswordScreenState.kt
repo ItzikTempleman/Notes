@@ -41,7 +41,8 @@ fun EmailInputField(
         isError = isError,
         leftImageVector = Icons.Default.Email,
         invokedFunction = onSendClick,
-        keyboardType = KeyboardType.Email
+        keyboardType = KeyboardType.Email,
+        readOnly = false
     )
 }
 
@@ -62,7 +63,8 @@ fun SmsInputField(
         rightImageVector = Icons.Rounded.NavigateNext,
         leftImageVector = Icons.Default.Sms,
         invokedFunction = onSubmitCodeClick,
-        keyboardType = KeyboardType.Text
+        keyboardType = KeyboardType.Text,
+        readOnly = false
     )
 }
 
@@ -89,7 +91,8 @@ fun NewPasswordInputField(
         invokedFunction = onConfirmPasswordClick,
         leftImageVector = if (isPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
         keyboardType = KeyboardType.Password,
-        visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation()
+        visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+        readOnly = false
     )
 }
 

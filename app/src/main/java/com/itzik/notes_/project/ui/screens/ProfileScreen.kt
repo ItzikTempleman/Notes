@@ -194,7 +194,8 @@ fun ProfileScreen(
                                     editedEmail = newEmail
                                 },
                                 value = editedEmail,
-                                visualTransformation = VisualTransformation.None
+                                visualTransformation = VisualTransformation.None,
+                                readOnly = false
                             )
 
                             IconButton(onClick = {
@@ -226,7 +227,8 @@ fun ProfileScreen(
                                     editedPhoneNumber = newPhone
                                 },
                                 value = editedPhoneNumber,
-                                visualTransformation = VisualTransformation.None
+                                visualTransformation = VisualTransformation.None,
+                                readOnly = false
                             )
 
                             IconButton(onClick = {

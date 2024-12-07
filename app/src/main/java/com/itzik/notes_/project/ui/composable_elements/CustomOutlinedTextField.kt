@@ -65,15 +65,18 @@ fun CustomOutlinedTextField(
     leftImageVector: ImageVector,
     rightImageVector: ImageVector? = null,
     isError: Boolean = false,
+    isClickableIcon: Boolean?=false,
     keyboardType: KeyboardType = KeyboardType.Text,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     isPasswordIconShowing: ((Boolean) -> Unit)? = null,
     isPasswordToggleClicked: Boolean? = null,
     isSingleLine: Boolean = true,
+    readOnly: Boolean,
 ) {
     var isFieldOpenState by remember {
         mutableStateOf(false)
     }
+
 
     val instructionText = when (fieldNumber) {
         0 -> stringResource(R.string.name_instruction)
@@ -106,13 +109,17 @@ fun CustomOutlinedTextField(
                     color = Color.DarkGray,
                 )
             },
+            readOnly=readOnly,
             leadingIcon = {
                 IconButton(onClick = {
                     if (isPasswordIconShowing != null) {
                         isPasswordToggleClicked?.let {
                             isPasswordIconShowing(it)
                         }
-                    } else return@IconButton
+                    } else if(isClickableIcon==true){
+                        invokedFunction?.invoke()
+                    }
+                    else return@IconButton
                 }) {
                     Icon(
                         imageVector = leftImageVector,

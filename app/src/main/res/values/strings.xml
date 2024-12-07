@@ -68,4 +68,6 @@
     <string name="empty_state_message">No %1$s notes</string>
     <string name="deleted">Deleted</string>
     <string name="default_description">general</string>
+    <string name="date_of_birth">Date of birth</string>
+    <string name="select">Select</string>
 </resources>

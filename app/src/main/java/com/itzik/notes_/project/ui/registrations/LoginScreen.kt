@@ -160,6 +160,7 @@ fun LoginScreen(
             leftImageVector = Icons.Default.Email,
             isError = isEmailError,
             visualTransformation = VisualTransformation.None,
+            readOnly = false
         )
 
         CustomOutlinedTextField(
@@ -184,6 +185,7 @@ fun LoginScreen(
             },
             visualTransformation = if (isPasswordVisible) VisualTransformation.None
             else PasswordVisualTransformation(),
+            readOnly = false
         )
 
         Button(

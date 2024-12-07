@@ -44,7 +44,7 @@ fun ProfileImage(
             .size(130.dp)
             .clip(CircleShape)
             .background(Color.White).border(
-                border = BorderStroke(0.8.dp, colorResource(R.color.deep_ocean_blue)),
+                border = BorderStroke(0.8.dp, Color.Black),
                 shape = CircleShape
             ),
         contentAlignment = Alignment.Center
@@ -58,7 +58,7 @@ fun ProfileImage(
             )
         } else {
             Icon(
-                tint = colorResource(R.color.deep_ocean_blue),
+                tint = Color.Black,
                 imageVector = Icons.Default.Person,
                 contentDescription = null,
                 modifier = Modifier.size(60.dp),
@@ -75,7 +75,7 @@ fun ProfileImage(
                 Icon(
                     imageVector = Icons.Default.Image,
                     contentDescription = null,
-                    tint = colorResource(R.color.deep_ocean_blue),
+                    tint = Color.Black,
                     modifier = Modifier.size(26.dp)
                 )
             }
@@ -89,7 +89,7 @@ fun ProfileImage(
             onClick = onRemoveImage
         ) {
             Icon(
-                tint = colorResource(R.color.deep_ocean_blue),
+                tint = Color.Black,
                 imageVector = Icons.Default.Cancel,
                 contentDescription = null,
                 modifier = Modifier.size(24.dp)

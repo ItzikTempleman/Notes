@@ -14,6 +14,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import com.itzik.notes_.R
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.foundation.layout.size
+import androidx.compose.ui.graphics.graphicsLayer
 
 @Composable
 fun GenericIconButton(
@@ -23,8 +27,14 @@ fun GenericIconButton(
     iconSize: Modifier = Modifier.size(32.dp),
     colorNumber: Int,
 ) {
+
+    val layoutDirection = LocalLayoutDirection.current
+
     IconButton(
-        modifier = modifier,
+        modifier = modifier
+            .graphicsLayer {
+                scaleX = if (layoutDirection == LayoutDirection.Rtl) -1f else 1f
+            },
         onClick = {
             onClick()
         }
@@ -37,7 +47,7 @@ fun GenericIconButton(
                 0 -> colorResource(id = R.color.olive_green)
                 1 -> colorResource(id = R.color.deep_ocean_blue)
                 2 -> colorResource(id = R.color.sunset_orange)
-                3 -> colorResource(id = R.color.desaturated_dark_red)
+                3 -> Color.Red
                 else -> {
                     Color.DarkGray
                 }

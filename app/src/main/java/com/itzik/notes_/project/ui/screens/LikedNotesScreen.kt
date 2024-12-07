@@ -19,6 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
@@ -87,7 +88,7 @@ fun LikedNotesScreen(
 
         if (likedNotes.isEmpty()) {
             EmptyStateMessage(
-                screenDescription = "Liked",
+                screenDescription = stringResource(R.string.that_i_liked),
                 modifier = Modifier
                     .constrainAs(emptyStateMessage) {
                         start.linkTo(parent.start)

@@ -138,7 +138,7 @@ fun ProfileScreen(
             } else {
                 Text(
                     color = colorResource(R.color.deep_ocean_blue),
-                    text = "Cannot edit guest details",
+                    text = stringResource(R.string.cannot_edit_guest_details),
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier
                         .padding(8.dp)

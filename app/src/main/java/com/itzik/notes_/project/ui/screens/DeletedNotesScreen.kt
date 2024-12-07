@@ -151,7 +151,7 @@ fun DeletedNotesScreen(
             }
             if (deletedNotes.isEmpty()) {
                 EmptyStateMessage(
-                    screenDescription = "Deleted",
+                    screenDescription = stringResource(id = R.string.deleted),
                     modifier = Modifier.constrainAs(emptyStateMessage) {
                         start.linkTo(parent.start)
                         top.linkTo(returnIcon.bottom)

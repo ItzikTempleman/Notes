@@ -98,6 +98,11 @@ fun LoginScreen(
         isButtonEnabled = email.isNotBlank() && password.isNotBlank()
     }
 
+    val invalidEmail = stringResource(R.string.invalid_username_email_format)
+
+   val invalidPassword = stringResource(R.string.enter_symbols_of_type_format)
+
+
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
@@ -198,7 +203,7 @@ fun LoginScreen(
                 if (userViewModel != null) {
                     if (!userViewModel.validateEmail(email)) {
                         isEmailError = true
-                        emailLabelMessage = "Invalid username / email format"
+                        emailLabelMessage = invalidEmail
                     } else {
                         isEmailError = false
                         emailLabelMessage = emailText
@@ -208,7 +213,7 @@ fun LoginScreen(
                     if (!userViewModel.validatePassword(password)) {
                         isPasswordError = true
                         passwordLabelMessage =
-                            "Enter symbols of type format X, x, $ , 1"
+                            invalidPassword
                     } else {
                         isPasswordError = false
                         passwordLabelMessage = passwordText
@@ -305,7 +310,7 @@ fun LoginScreen(
                 end.linkTo(parent.end)
                 bottom.linkTo(loginAsGuest.top)
             },
-            text = "Or",
+            text = stringResource(R.string.or),
             fontSize = 20.sp
         )
 

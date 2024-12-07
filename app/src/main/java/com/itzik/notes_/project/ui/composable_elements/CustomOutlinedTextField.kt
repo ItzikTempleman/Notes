@@ -1,11 +1,13 @@
 package com.itzik.notes_.project.ui.composable_elements
 
 
+import com.itzik.notes_.R
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -24,6 +26,7 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.QuestionMark
 import androidx.compose.material.icons.filled.SpeakerNotesOff
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -40,6 +43,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -71,6 +75,13 @@ fun CustomOutlinedTextField(
         mutableStateOf(false)
     }
 
+    val instructionText = when (fieldNumber) {
+        0 -> stringResource(R.string.name_instruction)
+        1 -> stringResource(R.string.email_instruction)
+        2 -> stringResource(R.string.password_instruction)
+        3 -> stringResource(R.string.phone_instruction)
+        else -> ""
+    }
 
     ConstraintLayout(
         modifier = modifier
@@ -143,23 +154,17 @@ fun CustomOutlinedTextField(
             ) {
                 GenericIconButton(
                     modifier = Modifier
-                        .size(20.dp)
+                        .size(26.dp)
                         .padding(start = 8.dp),
                     onClick = {
                         isFieldOpenState = !isFieldOpenState
                     },
-                    imageVector = Icons.Default.Info,
-                    colorNumber = 5
+                    imageVector = Icons.Outlined.Info,
+                    colorNumber = 3
                 )
                 if (isFieldOpenState) {
                     Text(
-                        text = when (fieldNumber) {
-                            0 -> "Full name, each containing at least two letters"
-                            1 -> "Valid format: \"x@x.x\""
-                            2 -> "\"Xx3#\" Uppercase,lowercase,number,symbol"
-                            3 -> "10-12 digits number: optional '+' for country code"
-                            else -> ""
-                        },
+                        text = instructionText,
                         fontSize = 16.sp,
                     )
                 }
@@ -171,7 +176,8 @@ fun CustomOutlinedTextField(
 
 @Composable
 fun EmptyStateMessage(
-    modifier: Modifier, screenDescription: String? = ""
+    modifier: Modifier,
+    screenDescription: String? = ""
 ) {
     Row(
         modifier = modifier,
@@ -183,12 +189,12 @@ fun EmptyStateMessage(
             contentDescription = null,
             tint = Color.Black
         )
-
+        val safeScreenDescription = screenDescription ?: stringResource(id = R.string.default_description)
         Text(
             modifier = Modifier.padding(start = 8.dp),
             fontSize = 20.sp,
             color = Color.Black,
-            text = "No $screenDescription notes"
+            text = stringResource(id = R.string.empty_state_message, safeScreenDescription)
         )
     }
 }

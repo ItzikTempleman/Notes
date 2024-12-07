@@ -177,10 +177,7 @@ fun RegistrationScreen(
                 .padding(horizontal = 20.dp),
             leftImageVector = Icons.Default.Email,
             isError = isNewEmailError,
-            visualTransformation = VisualTransformation.None,
-
-
-            )
+            visualTransformation = VisualTransformation.None)
 
         CustomOutlinedTextField(
             fieldNumber = 2,

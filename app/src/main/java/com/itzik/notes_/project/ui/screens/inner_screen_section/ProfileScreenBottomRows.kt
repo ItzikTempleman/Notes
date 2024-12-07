@@ -19,23 +19,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
+import com.itzik.notes_.R
 
 sealed class ProfileScreenBottomRows(
     val itemName: String,
     val itemIcon: ImageVector,
     val tint: Color,
 ) {
-    data object DeletedNotes : ProfileScreenBottomRows(
-        itemName = "Trash",
+    class DeletedNotes(itemName: String) : ProfileScreenBottomRows(
+        itemName = itemName,
         itemIcon = Icons.Default.DeleteForever,
         tint = Color.Black
     )
 
-    data object LogOut : ProfileScreenBottomRows(
-        itemName = "Log Out",
+   class LogOut(itemName: String) : ProfileScreenBottomRows(
+        itemName = itemName,
         itemIcon = Icons.Default.PowerSettingsNew,
         tint = Color.Red
     )
@@ -81,8 +82,8 @@ fun BottomOptionsProfileScreen(
     onItemSelected: (BottomScreenOption) -> Unit,
 ) {
     val bottomOptionsRow = listOf(
-        ProfileScreenBottomRows.DeletedNotes,
-        ProfileScreenBottomRows.LogOut,
+        ProfileScreenBottomRows.DeletedNotes(stringResource(R.string.trash)),
+        ProfileScreenBottomRows.LogOut(stringResource(R.string.log_out)),
     )
 
     Column(

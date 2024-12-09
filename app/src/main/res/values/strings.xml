@@ -17,7 +17,7 @@
     <string name="user_id">id</string>
     <string name="user_info">Profile</string>
     <string name="home">Home</string>
-    <string name="that_i_liked">that i liked</string>
+    <string name="that_i_liked">liked</string>
     <string name="settings">Settings</string>
     <string name="deleted_notes">Recently Deleted</string>
     <string name="pinned_notes">Pinned notes\n</string>

@@ -174,24 +174,31 @@ class UserViewModel @Inject constructor(
     }
 
 
-    fun validateName(name: String) = name.length > 4
+    fun validateName(name: String): Boolean {
+        val isValid = name.length > 4
+        Log.d("Validation", "Name valid: $isValid")
+        return isValid
+    }
 
     fun validateEmail(email: String): Boolean {
-        val emailRegex = Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\$")
-        return email.matches(emailRegex)
+        val isValid = email.matches(Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\$"))
+        Log.d("Validation", "Email valid: $isValid")
+        return isValid
     }
 
     fun validatePassword(password: String): Boolean {
-        val passwordRegex =
+        val isValid = password.matches(
             Regex("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{4,}$")
-        return password.matches(passwordRegex)
+        )
+        Log.d("Validation", "Password valid: $isValid")
+        return isValid
     }
 
     fun validatePhoneNumber(phoneNumber: String): Boolean {
-        val regex = Regex("^(\\+\\d{1,3})?(0\\d{9}|\\d{9,11})$")
-        return regex.matches(phoneNumber)
+        val isValid = phoneNumber.matches(Regex("^(\\+\\d{1,3})?(0\\d{9}|\\d{9,11})$"))
+        Log.d("Validation", "Phone number valid: $isValid")
+        return isValid
     }
-
 
     fun getAgeFromSDateString(date: String): String {
         val dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")

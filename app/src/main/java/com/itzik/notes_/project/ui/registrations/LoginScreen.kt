@@ -118,10 +118,13 @@ fun LoginScreen(
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                 }
-                .padding(60.dp),
-            fontSize = 32.sp,
+                .padding(80.dp),
+            fontSize = 54.sp,
+            fontWeight = FontWeight.ExtraBold,
+            fontFamily = FontFamily.Serif,
+            fontStyle = FontStyle.Italic,
             text = stringResource(id = R.string.hello),
-            color=Color.Black
+            color=Color.DarkGray
         )
 
         CustomOutlinedTextField(
@@ -246,7 +249,7 @@ fun LoginScreen(
             }
         ) {
             Text(
-                color = Color.Black,
+                color = Color.DarkGray,
                 fontSize = 26.sp,
                 text = stringResource(id = R.string.log_in)
             )
@@ -281,7 +284,7 @@ fun LoginScreen(
             Text(
                 fontSize = 26.sp,
                 text = stringResource(id = R.string.register),
-                color = Color.Black
+                color = Color.DarkGray
             )
         }
 
@@ -319,9 +322,9 @@ fun LoginScreen(
             }
         ) {
             Text(
-                fontSize = 26.sp,
+                fontSize = 22.sp,
                 text = stringResource(R.string.login_as_guest),
-                color = Color.Black
+                color = Color.DarkGray
             )
         }
     }

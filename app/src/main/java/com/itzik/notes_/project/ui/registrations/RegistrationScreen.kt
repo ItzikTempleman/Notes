@@ -100,17 +100,20 @@ fun RegistrationScreen(
     }
     var isDateSelected by remember { mutableStateOf(false) }
     var isGenderSelected by remember { mutableStateOf(false) }
+
+
+
+
     fun updateButtonState(name: String, email: String, password: String, phoneNumber: String) {
         if (userViewModel != null) {
-            isButtonEnabled =
-                userViewModel.validateName(name) &&
-                        userViewModel.validateEmail(email) &&
-                        userViewModel.validatePassword(password) &&
-                        userViewModel.validatePhoneNumber(phoneNumber)
+            isButtonEnabled = userViewModel.validateName(name) &&
+                    userViewModel.validateEmail(email) &&
+                    userViewModel.validatePassword(password) &&
+                    userViewModel.validatePhoneNumber(phoneNumber)
+
+            Log.d("TAG", "isButtonEnabled: $isButtonEnabled")
         }
-
     }
-
 
 
     ConstraintLayout(
@@ -311,8 +314,11 @@ fun RegistrationScreen(
                 }
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp),
+            onDateSelected = {
+                dateSelected = it
+                isDateSelected = true
+            }
         )
-
 
 
         Button(
@@ -325,6 +331,9 @@ fun RegistrationScreen(
                 .padding(20.dp),
             onClick = {
                 if (userViewModel != null) {
+                    Log.d("TAG", "Gender selected: $isGenderSelected")
+                    Log.d("TAG", "Date selected: $isDateSelected")
+
                     if (!userViewModel.validateEmail(createEmail)) {
                         isNewEmailError = true
                         createEmailLabelMessage = "Invalid username / email format"
@@ -335,19 +344,15 @@ fun RegistrationScreen(
 
                     if (!userViewModel.validatePassword(createPassword)) {
                         isCreatePasswordError = true
-                        createPasswordLabelMessage =
-                            "Enter symbols of type format X, x, $ , 1"
+                        createPasswordLabelMessage = "Enter symbols of type format X, x, $, 1"
                     } else {
                         isCreatePasswordError = false
                         createPasswordLabelMessage = createdPasswordText
                     }
 
-                    if (userViewModel.validateEmail(createEmail) && userViewModel.validatePassword(
-                            createPassword
-                        ) && isGenderSelected && isDateSelected
-                        && userViewModel.validateName(name) && userViewModel.validatePhoneNumber(
-                            createPhoneNumber
-                        )
+                    if (userViewModel.validateEmail(createEmail) && userViewModel.validatePassword(createPassword)
+                        && isGenderSelected && isDateSelected
+                        && userViewModel.validateName(name) && userViewModel.validatePhoneNumber(createPhoneNumber)
                     ) {
                         val user = userViewModel.createUser(
                             name = name,
@@ -359,13 +364,15 @@ fun RegistrationScreen(
                             dateOfBirth = dateSelected,
                             selectedWallpaper = ""
                         )
+
                         coroutineScope.launch {
                             try {
+                                Log.d("TAG", "Inside 'registerUser': $user")
                                 userViewModel.registerUser(user)
                                 userViewModel.postAUser(user)
                                 rootNavController.navigate(Screen.Home.route)
                             } catch (e: Exception) {
-                                Log.d("TAG", "registering user error: ${e.message}")
+                                Log.e("TAG", "Error during registration: ${e.message}", e)
                             }
                         }
                     }
@@ -377,8 +384,8 @@ fun RegistrationScreen(
             ),
         ) {
             Text(
-                color = Color.Black,
-                fontSize = 26.sp,
+                color = Color.DarkGray,
+                fontSize = 22.sp,
                 text = stringResource(R.string.create_user)
             )
         }

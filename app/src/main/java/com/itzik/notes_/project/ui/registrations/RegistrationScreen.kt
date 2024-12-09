@@ -2,6 +2,7 @@ package com.itzik.notes_.project.ui.registrations
 
 import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -38,6 +39,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -109,13 +111,7 @@ fun RegistrationScreen(
 
     }
 
-    Image(
-        modifier = Modifier
-            .fillMaxSize(),
-        painter = painterResource(R.drawable.android_material),
-        contentDescription = null,
-        contentScale = ContentScale.FillBounds
-    )
+
 
     ConstraintLayout(
         modifier = Modifier
@@ -225,8 +221,13 @@ fun RegistrationScreen(
                 }
                 .fillMaxWidth()
                 .height(95.dp)
-                .padding(20.dp),
-            colors = CardDefaults.cardColors(colorResource(R.color.light_green)),
+                .padding(20.dp)
+                .border(
+                    width = 0.2.dp,
+                    color = Color.Black,
+                    shape = RoundedCornerShape(8.dp)
+                ),
+            colors = CardDefaults.cardColors(containerColor = Color.Transparent),
             shape = RoundedCornerShape(8.dp)
         ) {
             ConstraintLayout(
@@ -309,11 +310,7 @@ fun RegistrationScreen(
                     top.linkTo(genderRow.bottom)
                 }
                 .fillMaxWidth()
-                .padding(20.dp),
-            onDateSelected = {
-                dateSelected = reverseDateFormat(it.toString())
-                isDateSelected = true
-            }
+                .padding(horizontal = 20.dp),
         )
 
 
@@ -368,23 +365,20 @@ fun RegistrationScreen(
                                 userViewModel.postAUser(user)
                                 rootNavController.navigate(Screen.Home.route)
                             } catch (e: Exception) {
-                                Log.e(
-                                    "RegistrationScreen",
-                                    "Error registering user: ${e.message}"
-                                )
+                                Log.d("TAG", "registering user error: ${e.message}")
                             }
                         }
                     }
                 }
             },
-            enabled = isButtonEnabled,
             shape = RoundedCornerShape(8.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = colorResource(R.color.light_green)
+                containerColor = colorResource(R.color.intermediate_blue_10)
             ),
         ) {
             Text(
-                fontSize = 20.sp,
+                color = Color.Black,
+                fontSize = 26.sp,
                 text = stringResource(R.string.create_user)
             )
         }

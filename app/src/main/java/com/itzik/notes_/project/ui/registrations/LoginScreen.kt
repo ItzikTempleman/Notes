@@ -108,40 +108,20 @@ fun LoginScreen(
             .fillMaxSize()
 
     ) {
-        val (loginTextTop, loginText, emailTF, passwordTF, loginBtn, orText, doNotHaveText, signUpBtn, loginAsGuest) = createRefs()
+        val (loginText, emailTF, passwordTF, loginBtn, orText, doNotHaveText, signUpBtn, loginAsGuest) = createRefs()
 
-        Image(
-            modifier = Modifier
-                .fillMaxSize(),
-            painter = painterResource(R.drawable.android_material),
-            contentDescription = null,
-            contentScale = ContentScale.FillBounds
-        )
-
-
-        Text(
-            modifier = Modifier
-                .constrainAs(loginTextTop) {
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                }.padding(top = 16.dp),
-            fontSize = 28.sp,
-            color = Color.Black,
-            text = stringResource(id = R.string.notes)
-        )
 
         Text(
             modifier = Modifier
                 .constrainAs(loginText) {
-                    top.linkTo(loginTextTop.bottom)
+                    top.linkTo(parent.top)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                 }
-                .padding(16.dp),
-            fontSize = 22.sp,
-            color = Color.Black,
-            text = stringResource(id = R.string.login_account)
+                .padding(60.dp),
+            fontSize = 32.sp,
+            text = stringResource(id = R.string.hello),
+            color=Color.Black
         )
 
         CustomOutlinedTextField(
@@ -189,10 +169,9 @@ fun LoginScreen(
         )
 
         Button(
-            enabled = isButtonEnabled,
             shape = RoundedCornerShape(8.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = colorResource(R.color.light_green)
+                containerColor = colorResource(R.color.intermediate_blue_10)
             ),
             modifier = Modifier
                 .constrainAs(loginBtn) {
@@ -267,7 +246,8 @@ fun LoginScreen(
             }
         ) {
             Text(
-                fontSize = 20.sp,
+                color = Color.Black,
+                fontSize = 26.sp,
                 text = stringResource(id = R.string.log_in)
             )
         }
@@ -282,9 +262,8 @@ fun LoginScreen(
                     end.linkTo(parent.end)
                     start.linkTo(parent.start)
                 },
-            fontWeight = FontWeight.Bold,
-            color = Color.Black,
-            fontSize = 18.sp,
+            fontSize = 22.sp,
+            color = Color.DarkGray,
             text = stringResource(id = R.string.dont_have),
         )
 
@@ -300,7 +279,7 @@ fun LoginScreen(
                 }
         ) {
             Text(
-                fontSize = 22.sp,
+                fontSize = 26.sp,
                 text = stringResource(id = R.string.register),
                 color = Color.Black
             )
@@ -313,7 +292,8 @@ fun LoginScreen(
                 bottom.linkTo(loginAsGuest.top)
             },
             text = stringResource(R.string.or),
-            fontSize = 20.sp
+            fontSize = 22.sp,
+            color = Color.DarkGray
         )
 
         TextButton(
@@ -339,7 +319,7 @@ fun LoginScreen(
             }
         ) {
             Text(
-                fontSize = 24.sp,
+                fontSize = 26.sp,
                 text = stringResource(R.string.login_as_guest),
                 color = Color.Black
             )

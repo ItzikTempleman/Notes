@@ -1,6 +1,7 @@
 package com.itzik.notes_.project.ui.composable_elements
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 //noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.DropdownMenuItem
@@ -28,7 +29,7 @@ fun SortDropDownMenu(
     onDismissRequest: () -> Unit
 ) {
 
-    val sortOptions: List<String> = listOf("Sort by date modified", "Sort alphabetically")
+    val sortOptions: List<String> = listOf(stringResource(R.string.sort_date), stringResource(R.string.sort_alphabetically))
 
     DropdownMenu(
         modifier = modifier,
@@ -79,9 +80,9 @@ fun GenderDropDownMenu(
                 Column {
                     Text(
                         text = it,
-                        color = Color.Black
+                        color = if (isSystemInDarkTheme()) Color.White else Color.Black
                     )
-                    if (it.toString()!= stringResource(R.string.other)) {
+                    if (it.toString() != stringResource(R.string.other)) {
                         HorizontalDivider()
                     }
                 }

@@ -35,13 +35,21 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.itzik.notes_.R
 import com.itzik.notes_.project.model.Note
+
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
+
+@Composable
+fun isRTL(): Boolean {
+    return LocalLayoutDirection.current == LayoutDirection.Rtl
+}
 
 @Composable
 fun SwipeToOptions(
@@ -57,6 +65,7 @@ fun SwipeToOptions(
     val swipeState = remember { Animatable(0f) }
     val coroutineScope = rememberCoroutineScope()
     val interactionSource = remember { MutableInteractionSource() }
+    val rtl = isRTL()
 
     Box(
         modifier = Modifier

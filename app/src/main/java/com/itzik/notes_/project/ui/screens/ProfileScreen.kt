@@ -130,7 +130,7 @@ fun ProfileScreen(
                     isEditable = !isEditable
                 }) {
                     Text(
-                        text = if (isEditable) stringResource(R.string.done)
+                        if (isEditable) stringResource(R.string.done)
                         else stringResource(R.string.edit),
                         color = Color.Black,
                     )
@@ -188,7 +188,7 @@ fun ProfileScreen(
                         if (selectedOption == SelectedEditOption.EMAIL) {
                             CustomOutlinedTextField(
                                 leftImageVector = Icons.Outlined.Email,
-                                label = "Edit user name email",
+                                label = stringResource(R.string.email),
                                 modifier = Modifier.width(300.dp),
                                 onValueChange = { newEmail ->
                                     editedEmail = newEmail
@@ -221,7 +221,7 @@ fun ProfileScreen(
                         if (selectedOption == SelectedEditOption.PHONE_NUMBER) {
                             CustomOutlinedTextField(
                                 leftImageVector = Icons.Outlined.Phone,
-                                label = "Edit phone number",
+                                label = stringResource(R.string.enter_phone_number),
                                 modifier = Modifier.width(300.dp),
                                 onValueChange = { newPhone ->
                                     editedPhoneNumber = newPhone

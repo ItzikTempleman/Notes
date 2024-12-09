@@ -16,7 +16,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.itzik.notes_.R
@@ -25,11 +27,11 @@ import com.itzik.notes_.R
 sealed class EditProfileOptions(
     val itemName: String,
 ) {
-    data object EditEmail : EditProfileOptions(
-        itemName = "Email"
+    class EditEmail(itemName:String) : EditProfileOptions(
+        itemName = itemName
     )
-    data object EditPhoneNumber : EditProfileOptions(
-        itemName = "Phone number"
+   class EditPhoneNumber(itemName:String) : EditProfileOptions(
+        itemName = itemName
     )
 }
 
@@ -54,7 +56,7 @@ fun EditProfileItem(
             horizontalArrangement = Arrangement.Start,
         ) {
             Text(
-                text = editProfileOptions.itemName, fontSize = 12.sp
+                text = editProfileOptions.itemName, fontSize = 12.sp, color = Color.Black
             )
         }
         HorizontalDivider(modifier = Modifier.fillMaxWidth())
@@ -69,8 +71,8 @@ fun EditProfileOptionsScreen(
     onOptionSelected: (SelectedEditOption) -> Unit
 ) {
     val editOptionsRow = listOf(
-        EditProfileOptions.EditEmail,
-        EditProfileOptions.EditPhoneNumber,
+        EditProfileOptions.EditEmail(stringResource(R.string.email)),
+        EditProfileOptions.EditPhoneNumber(stringResource(R.string.enter_phone_number)),
     )
 
     Column(

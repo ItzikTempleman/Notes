@@ -226,7 +226,7 @@ fun RegistrationScreen(
                 .height(95.dp)
                 .padding(20.dp)
                 .border(
-                    width = 0.2.dp,
+                    width = 0.4.dp,
                     color = Color.Black,
                     shape = RoundedCornerShape(8.dp)
                 ),

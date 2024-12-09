@@ -1,6 +1,7 @@
 package com.itzik.notes_.project.ui.screens.inner_screen_section
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -56,7 +57,8 @@ fun NoteEditingTopBar(
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)
                     start.linkTo(parent.start)
-                }.padding(horizontal = 12.dp)
+                }
+                .padding(horizontal = 12.dp)
                 .size(50.dp),
             onClick = onSave,
             imageVector = Icons.Default.ArrowBackIosNew,
@@ -76,20 +78,24 @@ fun NoteEditingTopBar(
                     onFontSizeChange(false)
                 },
             text = "A",
-            fontSize = 20.sp
+            fontSize = 20.sp,
+            color = Color.Black
         )
 
         Text(
-            modifier = Modifier.constrainAs(increaseFont) {
-                top.linkTo(parent.top)
-                bottom.linkTo(parent.bottom)
-                start.linkTo(decreaseFont.end)
-            }.padding(8.dp)
+            modifier = Modifier
+                .constrainAs(increaseFont) {
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                    start.linkTo(decreaseFont.end)
+                }
+                .padding(8.dp)
                 .clickable {
                     onFontSizeChange(true)
                 },
             text = "A",
-            fontSize = 28.sp
+            fontSize = 28.sp,
+            color = Color.Black
         )
 
         VerticalDivider(
@@ -97,7 +103,8 @@ fun NoteEditingTopBar(
                 .constrainAs(leftDivider) {
                     start.linkTo(increaseFont.end)
                 }
-                .padding(vertical = 12.dp)
+                .padding(vertical = 12.dp),
+            color = Color.Black
         )
 
 
@@ -135,7 +142,7 @@ fun NoteEditingTopBar(
                 .constrainAs(midDivider) {
                     start.linkTo(bold.end)
                 }
-                .padding(vertical = 12.dp)
+                .padding(vertical = 12.dp), color = Color.Black
         )
 
 
@@ -157,11 +164,13 @@ fun NoteEditingTopBar(
 
         if (isPinned) {
             Icon(
-                modifier = Modifier.constrainAs(pin) {
-                    top.linkTo(parent.top)
-                    bottom.linkTo(parent.bottom)
-                    end.linkTo(parent.end)
-                }.padding(horizontal = 8.dp)
+                modifier = Modifier
+                    .constrainAs(pin) {
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                        end.linkTo(parent.end)
+                    }
+                    .padding(horizontal = 8.dp)
                     .rotate(45f),
                 imageVector = Icons.Outlined.PushPin,
                 contentDescription = null,
@@ -171,11 +180,13 @@ fun NoteEditingTopBar(
 
         if (isStarred) {
             Icon(
-                modifier = Modifier.constrainAs(star) {
-                    top.linkTo(parent.top)
-                    bottom.linkTo(parent.bottom)
-                    end.linkTo(parent.end)
-                }.padding(horizontal = 60.dp),
+                modifier = Modifier
+                    .constrainAs(star) {
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                        end.linkTo(parent.end)
+                    }
+                    .padding(horizontal = 60.dp),
                 imageVector = Icons.Outlined.StarOutline,
                 contentDescription = null,
                 tint = Color.Gray

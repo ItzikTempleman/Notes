@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 
@@ -40,6 +41,6 @@ fun ProfileFieldRow(profileField: ProfileField, value: String, customIcon: Image
         val icon = customIcon ?: profileField.icon
         Icon(imageVector = icon, contentDescription = null)
         Spacer(modifier = Modifier.width(8.dp))
-        Text(text = value)
+        Text(text = value, color = Color.Black)
     }
 }

@@ -11,11 +11,11 @@ import java.util.Locale
 fun getMockUser()=
     User(
         userName = "Guest",
-        email = "guest@itzik_notes.com",
+        email = "guest@notes.com",
         password = "Yy4$",
         phoneNumber = "0000000000",
         gender = Gender.OTHER,
-        dateOfBirth = "01/01/2000",
+        dateOfBirth = "01/01/2024",
         isViewGrid = false,
         profileImage = "",
         selectedWallpaper=""

@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.itzik.notes_.R
 import com.itzik.notes_.project.model.Note
+import com.itzik.notes_.project.ui.composable_elements.swipe_to_action.isRTL
 import com.itzik.notes_.project.viewmodels.NoteViewModel
 
 @Composable
@@ -59,6 +60,9 @@ fun GridNoteCard(
 
     val isPinned = pinStateMap[note.noteId] ?: false
     val isStarred = starStateMap[note.noteId] ?: false
+
+    val rtl = isRTL()
+
     Box(
         modifier = modifier
             .height(130.dp)
@@ -94,12 +98,15 @@ fun GridNoteCard(
                 val (content, pinnedNoteIcon, likedNoteIcon) = createRefs()
 
                 Text(
-                    modifier = Modifier
+                    modifier = if(!rtl) Modifier
                         .constrainAs(content) {
                             start.linkTo(parent.start)
                             top.linkTo(parent.top)
-                        }
-                        .padding(start = 4.dp, top = 4.dp, end = 30.dp),
+                        }.padding(start = 4.dp, top = 4.dp, end = 30.dp) else Modifier
+                            .constrainAs(content) {
+                        end.linkTo(parent.end)
+                        top.linkTo(parent.top)
+                    }.padding(end = 4.dp, top = 4.dp, start = 30.dp) ,
                     text = note.content,
                     fontSize = note.fontSize.sp,
                     color = Color(note.fontColor),

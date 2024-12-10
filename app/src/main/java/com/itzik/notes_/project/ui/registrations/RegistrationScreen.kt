@@ -305,8 +305,6 @@ fun RegistrationScreen(
             }
         }
 
-
-
         DatePickerDialog(
             modifier = Modifier
                 .constrainAs(birthDate) {
@@ -319,7 +317,6 @@ fun RegistrationScreen(
                 isDateSelected = true
             }
         )
-
 
         Button(
             modifier = Modifier

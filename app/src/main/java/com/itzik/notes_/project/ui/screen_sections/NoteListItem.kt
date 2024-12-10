@@ -74,8 +74,7 @@ fun NoteListItem(
 
             ) {
                 Text(
-                    text = getFormattedTime(),
-                    fontSize = 10.sp,
+                    getFormattedTime(), fontSize = 10.sp,
                     color=Color.Black
                 )
             }

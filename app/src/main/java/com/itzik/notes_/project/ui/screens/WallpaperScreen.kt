@@ -2,6 +2,7 @@ package com.itzik.notes_.project.ui.screens
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -18,6 +19,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Cancel
+import androidx.compose.material.icons.filled.ClearAll
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -59,7 +61,7 @@ fun WallpaperScreen(
     modifier: Modifier,
     userViewModel: UserViewModel,
     onImageSelected: (image: String) -> Unit,
-    resetDefault: ()->Unit,
+    resetDefault: () -> Unit,
     coroutineScope: CoroutineScope,
     onScreenExit: (isScreenClosed: Boolean) -> Unit,
 ) {
@@ -71,14 +73,9 @@ fun WallpaperScreen(
     ConstraintLayout(
         modifier = modifier
             .fillMaxSize()
-
+            .background(Color.White)
     ) {
-        val (searchBar, resetDefaultBtn, imageGallery) = createRefs()
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(colorResource(R.color.very_light_gray))
-        ) {}
+        val (searchBar, imageGallery) = createRefs()
 
         Card(
             modifier = Modifier
@@ -87,15 +84,27 @@ fun WallpaperScreen(
                 }
                 .fillMaxWidth()
                 .height(70.dp)
-                .padding(8.dp),
-            elevation = CardDefaults.cardElevation(12.dp),
+                .padding(8.dp)
+                .border(
+                    width = 0.4.dp,
+                    color = Color.Black,
+                    shape = RoundedCornerShape(8.dp)
+                ),
+            shape = RoundedCornerShape(8.dp),
             colors = CardDefaults.cardColors(Color.White)
         ) {
-            Row(
+            ConstraintLayout(
                 modifier = Modifier.fillMaxSize(),
-                verticalAlignment = Alignment.CenterVertically
             ) {
+                val (searchField,searchBtn, divider, cancelBtn, clearAllBtn) = createRefs()
+
                 TextField(
+                    modifier= Modifier.constrainAs(searchField){
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                        start.linkTo(parent.start)
+                        end.linkTo(searchBtn.start)
+                    },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Done
@@ -112,16 +121,25 @@ fun WallpaperScreen(
                         focusedContainerColor = Color.White,
                         unfocusedContainerColor = Color.White,
                         focusedIndicatorColor = Color.White,
-                        unfocusedIndicatorColor = Color.White
+                        unfocusedIndicatorColor = Color.White,
+                        focusedTextColor = Color.Black,
+                        unfocusedTextColor = Color.Black
                     ),
                     value = searchParam,
                     onValueChange = {
                         searchParam = it
                     }, placeholder = {
-                        Text(text = stringResource(R.string.search_images))
+                        Text(text = stringResource(R.string.search_images), color = Color.Black)
                     }
                 )
+
                 IconButton(
+                    modifier= Modifier.constrainAs(searchBtn){
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                        start.linkTo(searchField.end)
+                        end.linkTo(divider.start)
+                    },
                     onClick = {
                         coroutineScope.launch {
                             userViewModel.getWallpaperList(searchParam).collect {
@@ -130,37 +148,47 @@ fun WallpaperScreen(
                         }
                     }
                 ) {
-                    Icon(imageVector = Icons.Default.Search, contentDescription = null)
+                    Icon(imageVector = Icons.Default.Search, contentDescription = null, tint = Color.Black)
                 }
-                VerticalDivider(modifier = Modifier.padding(12.dp))
+
+                VerticalDivider(modifier = Modifier.padding(12.dp).constrainAs(divider){
+                    start.linkTo(searchBtn.end)
+                    end.linkTo(cancelBtn.start)
+                })
+
                 IconButton(
+                    modifier= Modifier.constrainAs(cancelBtn){
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                        start.linkTo(divider.end)
+                        end.linkTo(clearAllBtn.start)
+                    },
                     onClick = {
                         onScreenExit(false)
                     }
 
                 ) {
-                    Icon(imageVector = Icons.Default.Cancel, contentDescription = null)
+                    Icon(imageVector = Icons.Default.Cancel, contentDescription = null, tint = Color.Black)
+                }
+
+
+                IconButton(
+                    modifier= Modifier.constrainAs(clearAllBtn){
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                        end.linkTo(parent.end)
+                    },
+                    onClick = {
+                        resetDefault()
+                    }
+                ) {
+                    Icon(imageVector = Icons.Default.ClearAll, contentDescription = null, tint = colorResource(R.color.darker_blue))
                 }
             }
         }
 
-        TextButton(
-            modifier = Modifier
-                .constrainAs(resetDefaultBtn) {
-                    top.linkTo(searchBar.bottom)
-                    end.linkTo(parent.end)
-                }
-                .padding(8.dp),
-            onClick = {
-                resetDefault()
-            }
-        ) {
-            Text(
-                fontWeight = FontWeight.Bold,
-                color = colorResource(R.color.darker_blue),
-                text = stringResource(R.string.reset_wallpaper)
-            )
-        }
+
+
         LazyVerticalGrid(
             modifier = Modifier
                 .fillMaxWidth()
@@ -186,9 +214,10 @@ fun ImageItem(imageUrl: String, modifier: Modifier) {
 
     Card(
         modifier = modifier
-            .fillMaxWidth().padding(4.dp),
-        elevation = CardDefaults.cardElevation(4.dp),
-        shape = RoundedCornerShape(8.dp),
+            .fillMaxWidth()
+            .padding(0.dp),
+        elevation = CardDefaults.cardElevation(0.dp),
+        shape = RoundedCornerShape(0.dp),
     ) {
         Box(
             modifier = modifier

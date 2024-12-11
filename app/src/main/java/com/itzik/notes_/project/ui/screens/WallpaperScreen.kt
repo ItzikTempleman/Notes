@@ -20,6 +20,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.ClearAll
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -182,7 +183,7 @@ fun WallpaperScreen(
                         resetDefault()
                     }
                 ) {
-                    Icon(imageVector = Icons.Default.ClearAll, contentDescription = null, tint = colorResource(R.color.darker_blue))
+                    Icon(imageVector = Icons.Default.Refresh, contentDescription = null)
                 }
             }
         }

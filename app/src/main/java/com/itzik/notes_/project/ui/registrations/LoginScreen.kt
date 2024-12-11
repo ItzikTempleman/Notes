@@ -58,6 +58,7 @@ import com.itzik.notes_.project.model.User
 
 import com.itzik.notes_.project.ui.composable_elements.CustomOutlinedTextField
 import com.itzik.notes_.project.ui.navigation.Screen
+import com.itzik.notes_.project.ui.screens.inner_screen_section.loginFunctionality
 import com.itzik.notes_.project.utils.getMockUser
 import com.itzik.notes_.project.utils.gradientBrush
 import com.itzik.notes_.project.viewmodels.UserViewModel
@@ -100,15 +101,14 @@ fun LoginScreen(
 
     val invalidEmail = stringResource(R.string.invalid_username_email_format)
 
-   val invalidPassword = stringResource(R.string.enter_symbols_of_type_format)
+    val invalidPassword = stringResource(R.string.enter_symbols_of_type_format)
+
 
 
     ConstraintLayout(
-        modifier = Modifier
-            .fillMaxSize()
-
+        modifier = Modifier.fillMaxSize()
     ) {
-        val (loginText, emailTF, passwordTF, loginBtn, orText, doNotHaveText, signUpBtn, loginAsGuest) = createRefs()
+        val (loginText, emailTF, passwordTF, loginBtn, signUpDivider, noAccount, signUpBtn, loginAsGuest) = createRefs()
 
 
         Text(
@@ -119,12 +119,9 @@ fun LoginScreen(
                     end.linkTo(parent.end)
                 }
                 .padding(80.dp),
-            fontSize = 54.sp,
-            fontWeight = FontWeight.ExtraBold,
-            fontFamily = FontFamily.Serif,
-            fontStyle = FontStyle.Italic,
+            fontSize = 50.sp,
             text = stringResource(id = R.string.hello),
-            color=Color.DarkGray
+            color = Color.DarkGray
         )
 
         CustomOutlinedTextField(
@@ -185,66 +182,25 @@ fun LoginScreen(
                 .padding(20.dp),
             onClick = {
                 if (userViewModel != null) {
-                    if (!userViewModel.validateEmail(email)) {
-                        isEmailError = true
-                        emailLabelMessage = invalidEmail
-                    } else {
-                        isEmailError = false
-                        emailLabelMessage = emailText
-                    }
-                }
-                if (userViewModel != null) {
-                    if (!userViewModel.validatePassword(password)) {
-                        isPasswordError = true
-                        passwordLabelMessage =
-                            invalidPassword
-                    } else {
-                        isPasswordError = false
-                        passwordLabelMessage = passwordText
-                    }
-                }
-                if (userViewModel != null) {
-                    if (userViewModel.validateEmail(email) && userViewModel.validatePassword(password
-                        )
-                    ) {
-                        coroutineScope.launch {
-                            userViewModel.getUserFromUserNameAndPasswordFromOnline(
-                                email,
-                                password
-                            ).collect { user ->
-                                user.isLoggedIn = true
-                                userViewModel.updateIsLoggedIn(user)
-                                userViewModel.postAUser(user)
-                                userViewModel.registerUser(user)
-                                rootNavController.popBackStack()
-                                rootNavController.navigate(Screen.Home.route)
-                            }
+                    loginFunctionality(
+                        coroutineScope = coroutineScope,
+                        userViewModel = userViewModel,
+                        email = email,
+                        password = password,
+                        rootNavController = rootNavController,
+                        onEmailValidationError = {
+                            isEmailError = true
+                            emailLabelMessage = invalidEmail
+                        },
+                        onPasswordValidationError = {
+                            isPasswordError = true
+                            passwordLabelMessage = invalidPassword
+                        },
+                        onSuccess = {
+                            isEmailError = false
+                            isPasswordError = false
                         }
-
-
-                        if (user != null) {
-                            coroutineScope.launch {
-                                userViewModel.getUserFromUserNameAndPassword(
-                                    email,
-                                    password
-                                ).collect { user ->
-                                    if (user != null) {
-                                        user.isLoggedIn = true
-                                        userViewModel.updateIsLoggedIn(user)
-                                        rootNavController.popBackStack()
-                                        rootNavController.navigate(Screen.Home.route)
-                                    } else {
-                                        Log.e(
-                                            "LoginScreen",
-                                            "Invalid credentials or user not found"
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                    } else {
-                        Log.e("TAG", "Invalid email or password format")
-                    }
+                    )
                 }
             }
         ) {
@@ -256,30 +212,39 @@ fun LoginScreen(
         }
 
 
+        HorizontalDivider(
+            modifier = Modifier
+                .constrainAs(signUpDivider) {
+                    top.linkTo(loginBtn.bottom)
+                }.padding(horizontal = 30.dp)
+        )
 
 
         Text(
             modifier = Modifier
-                .constrainAs(doNotHaveText) {
-                    bottom.linkTo(signUpBtn.top)
-                    end.linkTo(parent.end)
+                .constrainAs(noAccount) {
+                    top.linkTo(signUpDivider.bottom)
                     start.linkTo(parent.start)
-                },
-            fontSize = 22.sp,
-            color = Color.DarkGray,
-            text = stringResource(id = R.string.dont_have),
+                    end.linkTo(parent.end)
+                }.padding(20.dp),
+            text = stringResource(R.string.dont_have), fontSize = 16.sp
         )
 
-        TextButton(
+        Button(
+            shape = RoundedCornerShape(8.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = colorResource(R.color.muted_yellow)
+            ),
+            modifier = Modifier
+                .height(90.dp)
+                .constrainAs(signUpBtn) {
+                    top.linkTo(noAccount.bottom)
+                }
+                .fillMaxWidth()
+                .padding(20.dp),
             onClick = {
                 rootNavController.navigate(Screen.Registration.route)
-            },
-            modifier = Modifier
-                .constrainAs(signUpBtn) {
-                    bottom.linkTo(orText.top)
-                    end.linkTo(parent.end)
-                    start.linkTo(parent.start)
-                }
+            }
         ) {
             Text(
                 fontSize = 26.sp,
@@ -288,28 +253,22 @@ fun LoginScreen(
             )
         }
 
-        Text(
-            modifier = Modifier.constrainAs(orText) {
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-                bottom.linkTo(loginAsGuest.top)
-            },
-            text = stringResource(R.string.or),
-            fontSize = 22.sp,
-            color = Color.DarkGray
-        )
 
-        TextButton(
+        Button(
+            shape = RoundedCornerShape(8.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color.Gray
+            ),
             modifier = Modifier
+                .height(90.dp)
                 .constrainAs(loginAsGuest) {
                     bottom.linkTo(parent.bottom)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                }.padding(16.dp),
+                }
+                .padding(20.dp)
+                .fillMaxWidth(),
             onClick = {
                 coroutineScope.launch {
                     val existingAdminUser = userViewModel?.getAdminUserIfExists(tempUser.email)
-
                     if (existingAdminUser != null) {
                         existingAdminUser.isLoggedIn = true
                         userViewModel.updateIsLoggedIn(existingAdminUser)
@@ -322,10 +281,11 @@ fun LoginScreen(
             }
         ) {
             Text(
-                fontSize = 22.sp,
+                fontSize = 26.sp,
                 text = stringResource(R.string.login_as_guest),
-                color = Color.DarkGray
+                color = Color.White
             )
         }
     }
 }
+

@@ -41,6 +41,7 @@ import com.itzik.notes_.project.ui.composable_elements.EmptyStateMessage
 import com.itzik.notes_.project.ui.composable_elements.GenericFloatingActionButton
 import com.itzik.notes_.project.ui.composable_elements.SortDropDownMenu
 import com.itzik.notes_.project.ui.composable_elements.swipe_to_action.GenericLazyColumn
+import com.itzik.notes_.project.ui.composable_elements.swipe_to_action.isRTL
 import com.itzik.notes_.project.ui.navigation.Screen
 import com.itzik.notes_.project.ui.screen_sections.GridNoteCard
 import com.itzik.notes_.project.ui.screens.inner_screen_section.HomeScreenTopBar
@@ -91,6 +92,7 @@ fun HomeScreen(
     var isImageDefault by remember {
         mutableStateOf(true)
     }
+    val rtl = isRTL()
 
     val combinedList by remember(isChecked, pinnedNoteList, noteList) {
         mutableStateOf(
@@ -135,7 +137,7 @@ fun HomeScreen(
             .fillMaxSize()
             .background(Color.White)
     ) {
-        val (backgroundImage, topRow, noteLazyColumn, newNoteBtn, emptyStateMessage) = createRefs()
+        val (backgroundImage, topRow, sortNotesLayout, noteLazyColumn, newNoteBtn, emptyStateMessage) = createRefs()
 
 
         if (isImageDefault) {
@@ -171,7 +173,7 @@ fun HomeScreen(
                 .fillMaxWidth(),
             onOpenWallpaperSearch = {
                 isImagePickerOpen = !isImagePickerOpen
-                isImageDefault=false
+                isImageDefault = false
             },
             onSortButtonClick = {
                 isExpanded = !isExpanded
@@ -193,9 +195,22 @@ fun HomeScreen(
             }
         )
 
+
         SortDropDownMenu(
             isExpanded = isExpanded,
-            modifier = Modifier.wrapContentSize(),
+            modifier = if (!rtl) Modifier
+                .wrapContentSize()
+                .constrainAs(sortNotesLayout) {
+                    top.linkTo(topRow.bottom)
+                    start.linkTo(parent.start)
+                }
+                .padding(8.dp) else Modifier
+                .wrapContentSize()
+                .constrainAs(sortNotesLayout) {
+                    top.linkTo(topRow.bottom)
+                    end.linkTo(parent.end)
+                }
+                .padding(8.dp),
             coroutineScope = coroutineScope,
             noteViewModel = noteViewModel,
             onDismissRequest = {

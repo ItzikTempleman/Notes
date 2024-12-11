@@ -328,8 +328,6 @@ fun RegistrationScreen(
                 .padding(20.dp),
             onClick = {
                 if (userViewModel != null) {
-                    Log.d("TAG", "Gender selected: $isGenderSelected")
-                    Log.d("TAG", "Date selected: $isDateSelected")
 
                     if (!userViewModel.validateEmail(createEmail)) {
                         isNewEmailError = true

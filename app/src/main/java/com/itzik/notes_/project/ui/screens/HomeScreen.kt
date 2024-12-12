@@ -188,8 +188,8 @@ fun HomeScreen(
                 isChecked = it
                 coroutineScope.launch {
                     noteViewModel.fetchOnlineNotes(userId).collect {
-//                        onlineNotes.clear()
-//                        onlineNotes.addAll(it)
+                        onlineNotes.clear()
+                        onlineNotes.addAll(it)
                     }
                 }
             }

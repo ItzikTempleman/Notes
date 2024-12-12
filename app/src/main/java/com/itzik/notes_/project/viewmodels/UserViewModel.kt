@@ -64,11 +64,9 @@ class UserViewModel @Inject constructor(
     fun postAUser(user: User) {
         viewModelScope.launch {
             try {
-               repo.insertUserIntoBackEnd(user)
-                    Log.d("UserViewModel", "User posted successfully: $user")
-
-            } catch (e: Exception) {
-                Log.e("UserViewModel", "Exception: ${e.message}", e)
+                repo.insertUserIntoBackEnd(user)
+            } catch (_: Exception) {
+                null
             }
         }
     }

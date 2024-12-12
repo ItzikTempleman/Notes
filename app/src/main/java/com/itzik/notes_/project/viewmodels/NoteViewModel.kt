@@ -185,7 +185,6 @@ class NoteViewModel @Inject constructor(
                 if (responseBody != null) {
                     responseBody.forEach {
                         it.fontColor = Color.DarkGray.toArgb()
-                        Log.d("TAG", " Time: ${it.time}")
                     }
                     emit(responseBody)
                     Log.d("TAG", response.message())

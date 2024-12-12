@@ -1,10 +1,17 @@
 package com.itzik.notes_.project.ui.composable_elements
 
 import android.annotation.SuppressLint
+import android.graphics.drawable.Icon
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 //noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Female
+import androidx.compose.material.icons.filled.Male
+import androidx.compose.material.icons.filled.Man
+import androidx.compose.material.icons.filled.Transgender
+import androidx.compose.material.icons.filled.Woman
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.HorizontalDivider
 import com.itzik.notes_.R
@@ -12,7 +19,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import com.itzik.notes_.project.model.Gender
+import com.itzik.notes_.project.ui.composable_elements.GenderDropDownItem.Female
+import com.itzik.notes_.project.ui.composable_elements.GenderDropDownItem.Male
+import com.itzik.notes_.project.ui.composable_elements.GenderDropDownItem.Other
 import com.itzik.notes_.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -52,16 +64,32 @@ fun SortDropDownMenu(
     }
 }
 
+
+sealed class GenderDropDownItem(val gender: Gender, val icon: ImageVector) {
+    data object Male : GenderDropDownItem(Gender.MALE, Icons.Default.Male)
+    data object Female : GenderDropDownItem(Gender.FEMALE, Icons.Default.Female)
+    data object Other : GenderDropDownItem(Gender.OTHER, Icons.Default.Transgender)
+}
+
+
+fun getGenderIcon(gender: Gender): ImageVector {
+    return when(gender){
+        Gender.MALE -> Icons.Default.Man
+        Gender.FEMALE -> Icons.Default.Woman
+        Gender.OTHER -> Icons.Default.Transgender
+    }
+}
+
 @Composable
 fun GenderDropDownMenu(
-    updatedList: (String) -> Unit,
+    updatedList: (GenderDropDownItem) -> Unit,
     modifier: Modifier,
     coroutineScope: CoroutineScope,
     isExpanded: Boolean,
     onDismissRequest: () -> Unit
 ) {
 
-    val genderList: List<String> = listOf(stringResource(R.string.male), stringResource(R.string.female), stringResource(R.string.other))
+    val genderList = listOf(Male, Female, Other)
 
     DropdownMenu(
         modifier = modifier,
@@ -79,7 +107,7 @@ fun GenderDropDownMenu(
             ) {
                 Column {
                     Text(
-                        text = it,
+                        text = it.gender.toString(),
                         color = if (isSystemInDarkTheme()) Color.White else Color.Black
                     )
                     if (it.toString() != stringResource(R.string.other)) {

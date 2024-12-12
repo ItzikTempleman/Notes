@@ -50,8 +50,10 @@ import androidx.navigation.NavHostController
 import com.itzik.notes_.R
 import com.itzik.notes_.project.model.Gender
 import com.itzik.notes_.project.ui.composable_elements.CustomOutlinedTextField
+import com.itzik.notes_.project.ui.composable_elements.GenderDropDownItem
 import com.itzik.notes_.project.ui.composable_elements.GenderDropDownMenu
 import com.itzik.notes_.project.ui.composable_elements.GenericIconButton
+import com.itzik.notes_.project.ui.composable_elements.getGenderIcon
 import com.itzik.notes_.project.ui.screen_sections.DatePickerDialog
 import com.itzik.notes_.project.ui.navigation.Screen
 import com.itzik.notes_.project.viewmodels.UserViewModel
@@ -226,7 +228,7 @@ fun RegistrationScreen(
                 .padding(20.dp)
                 .border(
                     width = 0.4.dp,
-                    color = Color.Black,
+                    color = Color.Gray,
                     shape = RoundedCornerShape(8.dp)
                 ),
             colors = CardDefaults.cardColors(containerColor = Color.Transparent),
@@ -246,7 +248,7 @@ fun RegistrationScreen(
                         }
                         .padding(6.dp)
                         .size(32.dp),
-                    imageVector = Icons.Default.Man,
+                    imageVector = getGenderIcon(selectedGender),
                     contentDescription = null
                 )
 
@@ -259,9 +261,8 @@ fun RegistrationScreen(
                         }
                         .padding(8.dp),
                     text = dropDownMenuPlaceHolder,
-                    fontSize = 16.sp,
-                    color = Color.Black
-                )
+                    fontSize = 20.sp,
+                    color = Color(0xFF444444)                )
 
                 Box(
                     modifier = Modifier
@@ -283,13 +284,13 @@ fun RegistrationScreen(
                         isExpanded = isGenderExpanded,
                         updatedList = {
                             selectedGender = when (it) {
-                                "Male" -> Gender.MALE
-                                "Female" -> Gender.FEMALE
-                                "Other" -> Gender.OTHER
+                                GenderDropDownItem.Male-> Gender.MALE
+                                GenderDropDownItem.Female -> Gender.FEMALE
+                                GenderDropDownItem.Other -> Gender.OTHER
                                 else -> Gender.MALE
                             }
                             isGenderSelected = true
-                            dropDownMenuPlaceHolder = it
+                            dropDownMenuPlaceHolder = selectedGender.toString()
                         }
                     )
 

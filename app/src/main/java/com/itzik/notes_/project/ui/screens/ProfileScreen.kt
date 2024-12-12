@@ -17,7 +17,9 @@ import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Female
 import androidx.compose.material.icons.filled.Male
+import androidx.compose.material.icons.filled.Man
 import androidx.compose.material.icons.filled.Transgender
+import androidx.compose.material.icons.filled.Woman
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Phone
 import androidx.compose.material.icons.outlined.Save
@@ -171,10 +173,8 @@ fun ProfileScreen(
                         }
                         .padding(start = 16.dp, top = 160.dp),
                     color = Color.Black,
-                    fontSize = 28.sp,
+                    fontSize = 30.sp,
                     fontFamily = FontFamily.Monospace,
-                    fontStyle = FontStyle.Italic,
-                    fontWeight = FontWeight.Bold
                 )
                 Column(
                     modifier = Modifier.constrainAs(email) {
@@ -250,8 +250,8 @@ fun ProfileScreen(
                         }
                     }
                     val genderIcon: ImageVector = when (user?.gender) {
-                        Gender.MALE -> Icons.Default.Male
-                        Gender.FEMALE -> Icons.Default.Female
+                        Gender.MALE -> Icons.Default.Man
+                        Gender.FEMALE -> Icons.Default.Woman
                         Gender.OTHER -> Icons.Default.Transgender
                         else -> Icons.Default.Male
                     }
@@ -262,7 +262,8 @@ fun ProfileScreen(
                     )
 
                     user?.dateOfBirth?.let {
-                        ProfileFieldRow(profileField = ProfileField.DateOfBirth,
+                        ProfileFieldRow(
+                            profileField = ProfileField.DateOfBirth,
                             value = "${user?.dateOfBirth} (age ${
                                 user?.let {
                                     userViewModel.getAgeFromSDateString(

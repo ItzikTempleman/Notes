@@ -118,7 +118,7 @@ fun NoteScreen(
             },
 
             onSave = {
-                if (textFieldValue.text.isNotEmpty()) {
+                if (textFieldValue.text.trim().isNotEmpty()) {
                     coroutineScope.launch {
                         val updatedNote = note.copy(content = textFieldValue.text)
                         noteViewModel.saveNote(updatedNote)

@@ -32,6 +32,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -105,13 +106,15 @@ fun CustomOutlinedTextField(
             label = {
                 Text(
                     text = label,
-                    fontSize = 14.sp,
+                    fontSize = 18.sp,
                     color = Color.DarkGray,
                 )
             },
+            textStyle = LocalTextStyle.current.copy(fontSize = 20.sp, fontFamily = FontFamily.Monospace),
             readOnly=readOnly,
             leadingIcon = {
-                IconButton(onClick = {
+                IconButton(
+                    onClick = {
                     if (isPasswordIconShowing != null) {
                         isPasswordToggleClicked?.let {
                             isPasswordIconShowing(it)
@@ -120,7 +123,8 @@ fun CustomOutlinedTextField(
                         invokedFunction?.invoke()
                     }
                     else return@IconButton
-                }) {
+                }
+                ) {
                     Icon(
                         imageVector = leftImageVector,
                         contentDescription = null,

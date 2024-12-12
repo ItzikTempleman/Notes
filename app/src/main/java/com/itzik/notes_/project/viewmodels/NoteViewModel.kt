@@ -103,7 +103,7 @@ class NoteViewModel @Inject constructor(
             isPinned = isPinned,
             isStarred = isStarred,
             content = newChar,
-            time = getCurrentTime(),
+            time = if (noteId == 0) getCurrentTime() else privateNote.value.time ,
             fontWeight = fontWeight
         )
 
@@ -185,6 +185,7 @@ class NoteViewModel @Inject constructor(
                 if (responseBody != null) {
                     responseBody.forEach {
                         it.fontColor = Color.DarkGray.toArgb()
+                        Log.d("TAG", " Time: ${it.time}")
                     }
                     emit(responseBody)
                     Log.d("TAG", response.message())

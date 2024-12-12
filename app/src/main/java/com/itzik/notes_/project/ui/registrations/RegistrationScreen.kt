@@ -54,7 +54,6 @@ import com.itzik.notes_.project.ui.composable_elements.GenderDropDownMenu
 import com.itzik.notes_.project.ui.composable_elements.GenericIconButton
 import com.itzik.notes_.project.ui.screen_sections.DatePickerDialog
 import com.itzik.notes_.project.ui.navigation.Screen
-import com.itzik.notes_.project.utils.reverseDateFormat
 import com.itzik.notes_.project.viewmodels.UserViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch

@@ -120,8 +120,8 @@ fun NoteScreen(
             onSave = {
                 if (textFieldValue.text.isNotEmpty()) {
                     coroutineScope.launch {
-                        note.content = textFieldValue.text
-                        noteViewModel.saveNote(note)
+                        val updatedNote = note.copy(content = textFieldValue.text)
+                        noteViewModel.saveNote(updatedNote)
                     }
                 }
                 bottomBarNavController.popBackStack()

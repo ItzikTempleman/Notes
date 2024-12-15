@@ -375,11 +375,11 @@ fun RegistrationScreen(
             },
             shape = RoundedCornerShape(8.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = colorResource(R.color.intermediate_blue_10)
+                containerColor = colorResource(R.color.deep_purple_2)
             ),
         ) {
             Text(
-                color = Color.DarkGray,
+                color = Color.White,
                 fontSize = 22.sp,
                 text = stringResource(R.string.create_user)
             )

@@ -75,10 +75,10 @@ fun HomeScreenTopBar(
             color = colorResource(R.color.deep_ocean_blue),
             fontWeight = FontWeight.Bold,
             fontSize = 24.sp,
-            text = if (user?.userName == "Guest") "Guest" else ""
+            text = if (user?.userName == "Guest") stringResource(R.string.guest_account) else ""
         )
 
-        if (user?.userName != "Guest") {
+        if (user?.userName != stringResource(R.string.guest_account)) {
             offlineName
 
             Text(

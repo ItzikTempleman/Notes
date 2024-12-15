@@ -71,4 +71,5 @@
     <string name="Continue">Continue</string>
     <string name="sort_date">Sort by date modified</string>
     <string name="sort_alphabetically">Sort alphabetically</string>
+    <string name="guest_account">Guest</string>
 </resources>

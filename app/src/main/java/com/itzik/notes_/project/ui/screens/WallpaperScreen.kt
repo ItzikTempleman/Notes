@@ -183,7 +183,7 @@ fun WallpaperScreen(
                         resetDefault()
                     }
                 ) {
-                    Icon(imageVector = Icons.Default.Refresh, contentDescription = null)
+                    Icon(imageVector = Icons.Default.Refresh, contentDescription = null, tint = Color.DarkGray)
                 }
             }
         }

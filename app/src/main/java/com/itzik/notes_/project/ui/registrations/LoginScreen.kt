@@ -171,7 +171,7 @@ fun LoginScreen(
         Button(
             shape = RoundedCornerShape(8.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = colorResource(R.color.intermediate_blue_10)
+                containerColor = colorResource(R.color.deep_purple_2)
             ),
             modifier = Modifier
                 .constrainAs(loginBtn) {
@@ -205,7 +205,7 @@ fun LoginScreen(
             }
         ) {
             Text(
-                color = Color.DarkGray,
+                color = Color.White,
                 fontSize = 26.sp,
                 text = stringResource(id = R.string.log_in)
             )
@@ -216,7 +216,7 @@ fun LoginScreen(
             modifier = Modifier
                 .constrainAs(signUpDivider) {
                     top.linkTo(loginBtn.bottom)
-                }.padding(horizontal = 30.dp)
+                }.padding(horizontal = 20.dp)
         )
 
 
@@ -226,7 +226,7 @@ fun LoginScreen(
                     top.linkTo(signUpDivider.bottom)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
-                }.padding(20.dp),
+                }.padding(top=40.dp),
             text = stringResource(R.string.dont_have), fontSize = 16.sp
         )
 

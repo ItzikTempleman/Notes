@@ -203,14 +203,12 @@ fun HomeScreen(
                 .constrainAs(sortNotesLayout) {
                     top.linkTo(topRow.bottom)
                     start.linkTo(parent.start)
-                }
-                .padding(8.dp) else Modifier
+                }.padding(8.dp) else Modifier
                 .wrapContentSize()
                 .constrainAs(sortNotesLayout) {
                     top.linkTo(topRow.bottom)
                     end.linkTo(parent.end)
-                }
-                .padding(8.dp),
+                }.padding(8.dp),
             coroutineScope = coroutineScope,
             noteViewModel = noteViewModel,
             onDismissRequest = {
@@ -220,6 +218,7 @@ fun HomeScreen(
                 sortType = it
             }
         )
+
 
         if (!isViewGrid) {
             GenericLazyColumn(
@@ -283,7 +282,6 @@ fun HomeScreen(
                 }
             }
         }
-
 
 
         GenericFloatingActionButton(

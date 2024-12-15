@@ -3,6 +3,7 @@ package com.itzik.notes_.project.ui.composable_elements
 import android.annotation.SuppressLint
 import android.graphics.drawable.Icon
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 //noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.DropdownMenuItem
@@ -43,8 +44,11 @@ fun SortDropDownMenu(
 
     val sortOptions: List<String> = listOf(stringResource(R.string.sort_date), stringResource(R.string.sort_alphabetically))
 
-    DropdownMenu(
+    Box(
         modifier = modifier,
+    ){
+    DropdownMenu(
+        modifier = Modifier,
         expanded = isExpanded,
         onDismissRequest = onDismissRequest
     ) {
@@ -62,7 +66,7 @@ fun SortDropDownMenu(
             }
         }
     }
-}
+}}
 
 
 sealed class GenderDropDownItem(val gender: Gender, val icon: ImageVector) {

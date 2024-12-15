@@ -298,7 +298,7 @@ fun HomeScreen(
                 bottomBarNavController.navigate(Screen.NoteScreen.route)
             },
             imageVector = Icons.Default.Add,
-            containerColor = colorResource(R.color.muted_yellow),
+            containerColor = colorResource(R.color.deep_purple_2),
             iconTint = Color.White,
         )
 

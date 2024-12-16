@@ -140,15 +140,15 @@ fun HomeScreen(
         val (backgroundImage, topRow, sortNotesLayout, noteLazyColumn, newNoteBtn, emptyStateMessage) = createRefs()
 
 
-        if (isImageDefault) {
-            Image(
-                modifier = Modifier
-                    .fillMaxSize(),
-                painter = painterResource(R.drawable.android_material),
-                contentDescription = null,
-                contentScale = ContentScale.FillBounds
-            )
-        }
+//        if (isImageDefault) {
+//            Image(
+//                modifier = Modifier
+//                    .fillMaxSize(),
+//                painter = painterResource(R.drawable.android_material),
+//                contentDescription = null,
+//                contentScale = ContentScale.FillBounds
+//            )
+//        }
 
         Image(
             painter = rememberAsyncImagePainter(

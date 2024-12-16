@@ -6,21 +6,17 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
 import com.itzik.notes_.project.model.Note
-
 import com.itzik.notes_.project.model.Note.Companion.getCurrentTime
-import com.itzik.notes_.project.model.User
 import com.itzik.notes_.project.repositories.AppRepositoryInterface
-import com.itzik.notes_.project.utils.Constants.MY_BACKEND_BASE_URL
 import com.itzik.notes_.project.utils.Constants.NAX_PINNED_NOTES
+import com.itzik.notes_.project.utils.generateNoteId
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
 import javax.inject.Inject
 import kotlin.collections.mutableListOf
 
@@ -31,7 +27,7 @@ class NoteViewModel @Inject constructor(
 ) : ViewModel() {
     private var shouldUpdateNote = true
 
-    private val privateNote = MutableStateFlow(Note(content = "", userId = "", fontSize = 20))
+    private val privateNote = MutableStateFlow(Note(content = "", userId = "", fontSize = 20, noteId = 0))
     val publicNote: StateFlow<Note> get() = privateNote
 
     private val privateNoteList = MutableStateFlow<MutableList<Note>>(mutableListOf())
@@ -68,6 +64,7 @@ class NoteViewModel @Inject constructor(
         userId = loggedInUser?.userId ?: ""
     }
 
+
     fun initializeNewNote() {
         shouldUpdateNote = false
         privateNote.value = Note(
@@ -82,6 +79,8 @@ class NoteViewModel @Inject constructor(
             fontWeight = 400
         )
     }
+
+
 
     suspend fun updateNote(
         newChar: String,
@@ -103,7 +102,7 @@ class NoteViewModel @Inject constructor(
             isPinned = isPinned,
             isStarred = isStarred,
             content = newChar,
-            time = if (noteId == 0) getCurrentTime() else privateNote.value.time ,
+            time = if (noteId == 0) getCurrentTime() else privateNote.value.time,
             fontWeight = fontWeight
         )
 
@@ -115,42 +114,41 @@ class NoteViewModel @Inject constructor(
         if (userId.isEmpty()) {
             fetchCurrentLoggedInUserId()
         }
-        if (!shouldUpdateNote) {
-            if (note.noteId == 0) {
-                Log.d("POST", "Saving new note...")
+
+        // Generate noteId only if it's a new note (noteId == 0)
+        if (note.noteId == 0) {
+            val latestNote = try {
+                repo.fetchLatestNoteForUser(userId)
+            } catch (e: Exception) {
+                null
+            }
+
+            note.noteId = generateNoteId(userId, latestNote?.noteId)
+            Log.d("SAVE_NOTE", "Generated noteId: ${note.noteId}")
+        }
+
+        try {
+            if (!shouldUpdateNote) {
+                Log.d("SAVE_NOTE", "Saving new note with ID: ${note.noteId}")
                 repo.saveNote(note)
-                val insertedNote = repo.fetchLatestNoteForUser(userId)
-                note.noteId = insertedNote.noteId
-                Log.d("POST", "New note ID obtained: ${note.noteId}")
             } else {
-                Log.d("POST", "Updating existing note with ID: ${note.noteId}")
+                Log.d("SAVE_NOTE", "Updating existing note with ID: ${note.noteId}")
                 repo.updateNote(note)
             }
-            Log.d("POST", "Note id before posting: ${note.noteId}")
-            postNoteForUser(note, userId)
-        } else {
-            updateNote(
-                userId = note.userId,
-                newChar = note.content,
-                isPinned = note.isPinned,
-                isStarred = note.isStarred,
-                fontSize = note.fontSize,
-                fontColor = note.fontColor,
-                fontWeight = note.fontWeight,
-                noteId = note.noteId
-            )
-            Log.d("POST", "Note updated locally and ready to sync or already synced.")
-        }
-        shouldUpdateNote = false
-        fetchNotesForUser(userId)
-    }
 
+            postNoteForUser(note, userId)
+            fetchNotesForUser(userId)
+            shouldUpdateNote = false
+
+        } catch (e: Exception) {
+            Log.e("SAVE_NOTE", "Error saving note: ${e.message}", e)
+        }
+    }
     suspend fun postNoteForUser(note: Note, userId: String) {
         try {
-            Log.d("POST", "Attempting to post note with ID: ${note.noteId}")
             val response = repo.postNoteForUser(note, userId)
             response.body()?.let { savedNote ->
-                Log.d("POST", "Note posted successfully with ID: ${savedNote.noteId}")
+                Log.d("TAG", "Note posted successfully with ID: ${savedNote.noteId}")
             } ?: run {
                 Log.e("POST", "Failed to post note: ${response.errorBody()?.string()}")
             }

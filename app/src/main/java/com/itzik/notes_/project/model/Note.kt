@@ -27,8 +27,8 @@ import java.time.format.DateTimeFormatter
     indices = [Index(value = ["userId"])]
 )
 data class Note(
-    @PrimaryKey(autoGenerate = true)
-    var noteId: Int = 0,
+    @PrimaryKey
+    var noteId: Int,
     var content: String,
     var time: String = getCurrentTime(),
     var isInTrash: Boolean = false,
@@ -45,6 +45,7 @@ data class Note(
             return Instant.now().toString()
         }
     }
+
 
     fun getFormattedTime(): String {
         val instant = Instant.parse(time)

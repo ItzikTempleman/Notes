@@ -289,12 +289,9 @@ fun HomeScreen(
                 .constrainAs(newNoteBtn) {
                     bottom.linkTo(parent.bottom)
                     end.linkTo(parent.end)
-                }
-                .padding(12.dp),
+                }.padding(12.dp),
             onClick = {
-                coroutineScope.launch {
-                    noteViewModel.initializeNewNote()
-                }
+                noteViewModel.initializeNewNote()
                 bottomBarNavController.navigate(Screen.NoteScreen.route)
             },
             imageVector = Icons.Default.Add,

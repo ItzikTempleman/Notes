@@ -1,0 +1,1 @@
+package com.itzik.notes_.project.utilsfun generateNoteId(userId: String, latestNoteId: Int?): Int {    val numericPart = userId.filter { it.isDigit() }.take(6)    val baseNumber = numericPart.toIntOrNull() ?: 100000    return if (latestNoteId != null) latestNoteId + 1 else baseNumber + 1}

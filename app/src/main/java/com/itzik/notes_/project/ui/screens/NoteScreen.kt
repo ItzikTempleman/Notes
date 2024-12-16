@@ -36,6 +36,7 @@ import androidx.navigation.NavHostController
 import com.itzik.notes_.R
 import com.itzik.notes_.project.ui.composable_elements.ColorPickerDialog
 import com.itzik.notes_.project.ui.screens.inner_screen_section.NoteEditingTopBar
+import com.itzik.notes_.project.utils.generateNoteId
 import com.itzik.notes_.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch

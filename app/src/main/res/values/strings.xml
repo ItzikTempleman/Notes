@@ -72,4 +72,6 @@
     <string name="sort_date">Sort by date modified</string>
     <string name="sort_alphabetically">Sort alphabetically</string>
     <string name="guest_account">Guest</string>
+    <string name="no_date_selected">No date selected</string>
+    <string name="too_young_error">Too young. must be over 12</string>
 </resources>

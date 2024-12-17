@@ -9,7 +9,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
-
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -44,9 +43,9 @@ class MainActivity : ComponentActivity() {
                 }
             }
 
-
                 NotesTheme {
                     RootNavHost(
+                        activity = this,
                         userId = userId,
                         noteViewModel = noteViewModel,
                         userViewModel = userViewModel,

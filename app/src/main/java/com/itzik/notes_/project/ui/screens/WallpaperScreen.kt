@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -81,7 +82,9 @@ fun WallpaperScreen(
     ConstraintLayout(
         modifier = modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(Color.White).clickable{
+                onScreenExit(false)
+            }
     ) {
         val (searchBar, imageGallery) = createRefs()
 
@@ -102,7 +105,7 @@ fun WallpaperScreen(
                     .weight(1f)
                     .padding(horizontal = 4.dp),
                 shape = RoundedCornerShape(12.dp),
-                colors = CardDefaults.cardColors(colorResource(R.color.very_light_gray)),
+                colors = CardDefaults.cardColors(Color.Gray),
                 elevation = CardDefaults.cardElevation(4.dp)
             ) {
                 TextField(
@@ -111,7 +114,7 @@ fun WallpaperScreen(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Done
                     ),
-                    textStyle = LocalTextStyle.current.copy(fontSize = 16.sp, fontFamily = FontFamily.Monospace),
+                    textStyle = LocalTextStyle.current.copy(fontSize = 20.sp, fontFamily = FontFamily.Monospace, color = Color.White),
                     keyboardActions = KeyboardActions(
                         onDone = {
                             coroutineScope.launch {
@@ -132,20 +135,20 @@ fun WallpaperScreen(
                     onValueChange = {
                         searchParam = it
                     }, placeholder = {
-                        Text(text = stringResource(R.string.search_images), fontFamily = FontFamily.Monospace, color = Color.Black, fontSize = 16.sp)
+                        Text(text = stringResource(R.string.search_images), fontFamily = FontFamily.Monospace, color = Color.White, fontSize = 20.sp)
                     }
                 )
             }
 
             Card(
-                modifier = Modifier.height(54.dp)
+                modifier = Modifier
                     .padding(horizontal = 4.dp),
                 shape = RoundedCornerShape(12.dp),
-                colors = CardDefaults.cardColors(colorResource(R.color.very_light_gray)),
+                colors = CardDefaults.cardColors(colorResource(R.color.deep_purple_2)),
                 elevation = CardDefaults.cardElevation(4.dp)
             ) {
                 Row (
-                    modifier = Modifier,
+                    modifier = Modifier.height(56.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ){
                     IconButton(
@@ -157,21 +160,21 @@ fun WallpaperScreen(
                             }
                         }
                     ) {
-                        Icon(imageVector = Icons.Default.Search, contentDescription = null, tint = Color.DarkGray)
+                        Icon(imageVector = Icons.Default.Search, contentDescription = null, tint = Color.White, modifier = Modifier.size(28.dp))
                     }
                     IconButton(
                         onClick = {
                             onScreenExit(false)
                         }
                     ) {
-                        Icon(imageVector = Icons.Default.Cancel, contentDescription = null, tint = Color.DarkGray)
+                        Icon(imageVector = Icons.Default.Cancel, contentDescription = null, tint = Color.White, modifier = Modifier.size(28.dp))
                     }
                     IconButton(
                         onClick = {
                             resetDefault()
                         }
                     ) {
-                        Icon(imageVector = Icons.Default.Refresh, contentDescription = null, tint = Color.DarkGray)
+                        Icon(imageVector = Icons.Default.Refresh, contentDescription = null, tint = Color.White, modifier = Modifier.size(28.dp))
                     }
                 }
             }

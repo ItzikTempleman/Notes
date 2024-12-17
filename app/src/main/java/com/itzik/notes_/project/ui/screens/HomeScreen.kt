@@ -140,16 +140,6 @@ fun HomeScreen(
         val (backgroundImage, topRow, sortNotesLayout, noteLazyColumn, newNoteBtn, emptyStateMessage) = createRefs()
 
 
-//        if (isImageDefault) {
-//            Image(
-//                modifier = Modifier
-//                    .fillMaxSize(),
-//                painter = painterResource(R.drawable.android_material),
-//                contentDescription = null,
-//                contentScale = ContentScale.FillBounds
-//            )
-//        }
-
         Image(
             painter = rememberAsyncImagePainter(
                 imageSelected
@@ -219,6 +209,16 @@ fun HomeScreen(
             }
         )
 
+        if (combinedList.isEmpty()) {
+            EmptyStateMessage(
+                modifier = Modifier
+                    .constrainAs(emptyStateMessage) {
+                        start.linkTo(parent.start)
+                        top.linkTo(topRow.bottom)
+                    }
+                    .padding(start = 20.dp, top=30.dp)
+            )
+        }
 
         if (!isViewGrid) {
             GenericLazyColumn(
@@ -323,20 +323,8 @@ fun HomeScreen(
                         userViewModel.updateUserField(
                             selectedWallpaper = ""
                         )
-                        isImagePickerOpen = false
                     }
                 }
-            )
-        }
-
-        if (combinedList.isEmpty()) {
-            EmptyStateMessage(
-                modifier = Modifier
-                    .constrainAs(emptyStateMessage) {
-                        start.linkTo(parent.start)
-                        top.linkTo(topRow.bottom)
-                    }
-                    .padding(12.dp)
             )
         }
     }

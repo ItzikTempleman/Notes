@@ -4,9 +4,11 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -26,6 +28,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -42,15 +45,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import coil.compose.AsyncImage
 import com.itzik.notes_.R
 
 import com.itzik.notes_.project.model.WallpaperResponse
+import com.itzik.notes_.project.ui.composable_elements.CustomOutlinedTextField
 import com.itzik.notes_.project.utils.gradientBrush
 import com.itzik.notes_.project.viewmodels.UserViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -78,38 +85,33 @@ fun WallpaperScreen(
     ) {
         val (searchBar, imageGallery) = createRefs()
 
-        Card(
+
+        Row(
             modifier = Modifier
                 .constrainAs(searchBar) {
                     top.linkTo(parent.top)
                 }
                 .fillMaxWidth()
-                .height(70.dp)
-                .padding(8.dp)
-                .border(
-                    width = 0.4.dp,
-                    color = Color.Black,
-                    shape = RoundedCornerShape(8.dp)
-                ),
-            shape = RoundedCornerShape(8.dp),
-            colors = CardDefaults.cardColors(Color.White)
+                .height(80.dp)
+                .padding(4.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.End
         ) {
-            ConstraintLayout(
-                modifier = Modifier.fillMaxSize(),
+            Card(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(horizontal = 4.dp),
+                shape = RoundedCornerShape(12.dp),
+                colors = CardDefaults.cardColors(colorResource(R.color.very_light_gray)),
+                elevation = CardDefaults.cardElevation(4.dp)
             ) {
-                val (searchField,searchBtn, divider, cancelBtn, clearAllBtn) = createRefs()
-
                 TextField(
-                    modifier= Modifier.constrainAs(searchField){
-                        top.linkTo(parent.top)
-                        bottom.linkTo(parent.bottom)
-                        start.linkTo(parent.start)
-                        end.linkTo(searchBtn.start)
-                    },
+                    modifier = Modifier,
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Done
                     ),
+                    textStyle = LocalTextStyle.current.copy(fontSize = 16.sp, fontFamily = FontFamily.Monospace),
                     keyboardActions = KeyboardActions(
                         onDone = {
                             coroutineScope.launch {
@@ -119,10 +121,10 @@ fun WallpaperScreen(
                             }
                         }
                     ), colors = TextFieldDefaults.colors(
-                        focusedContainerColor = Color.White,
-                        unfocusedContainerColor = Color.White,
-                        focusedIndicatorColor = Color.White,
-                        unfocusedIndicatorColor = Color.White,
+                        focusedContainerColor = Color.Transparent,
+                        unfocusedContainerColor = Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
                         focusedTextColor = Color.Black,
                         unfocusedTextColor = Color.Black
                     ),
@@ -130,64 +132,50 @@ fun WallpaperScreen(
                     onValueChange = {
                         searchParam = it
                     }, placeholder = {
-                        Text(text = stringResource(R.string.search_images), color = Color.Black)
+                        Text(text = stringResource(R.string.search_images), fontFamily = FontFamily.Monospace, color = Color.Black, fontSize = 16.sp)
                     }
                 )
+            }
 
-                IconButton(
-                    modifier= Modifier.constrainAs(searchBtn){
-                        top.linkTo(parent.top)
-                        bottom.linkTo(parent.bottom)
-                        start.linkTo(searchField.end)
-                        end.linkTo(divider.start)
-                    },
-                    onClick = {
-                        coroutineScope.launch {
-                            userViewModel.getWallpaperList(searchParam).collect {
-                                imagesList = it
+            Card(
+                modifier = Modifier.height(54.dp)
+                    .padding(horizontal = 4.dp),
+                shape = RoundedCornerShape(12.dp),
+                colors = CardDefaults.cardColors(colorResource(R.color.very_light_gray)),
+                elevation = CardDefaults.cardElevation(4.dp)
+            ) {
+                Row (
+                    modifier = Modifier,
+                    verticalAlignment = Alignment.CenterVertically
+                ){
+                    IconButton(
+                        onClick = {
+                            coroutineScope.launch {
+                                userViewModel.getWallpaperList(searchParam).collect {
+                                    imagesList = it
+                                }
                             }
                         }
+                    ) {
+                        Icon(imageVector = Icons.Default.Search, contentDescription = null, tint = Color.DarkGray)
                     }
-                ) {
-                    Icon(imageVector = Icons.Default.Search, contentDescription = null, tint = Color.Black)
-                }
-
-                VerticalDivider(modifier = Modifier.padding(12.dp).constrainAs(divider){
-                    start.linkTo(searchBtn.end)
-                    end.linkTo(cancelBtn.start)
-                })
-
-                IconButton(
-                    modifier= Modifier.constrainAs(cancelBtn){
-                        top.linkTo(parent.top)
-                        bottom.linkTo(parent.bottom)
-                        start.linkTo(divider.end)
-                        end.linkTo(clearAllBtn.start)
-                    },
-                    onClick = {
-                        onScreenExit(false)
+                    IconButton(
+                        onClick = {
+                            onScreenExit(false)
+                        }
+                    ) {
+                        Icon(imageVector = Icons.Default.Cancel, contentDescription = null, tint = Color.DarkGray)
                     }
-
-                ) {
-                    Icon(imageVector = Icons.Default.Cancel, contentDescription = null, tint = Color.Black)
-                }
-
-
-                IconButton(
-                    modifier= Modifier.constrainAs(clearAllBtn){
-                        top.linkTo(parent.top)
-                        bottom.linkTo(parent.bottom)
-                        end.linkTo(parent.end)
-                    },
-                    onClick = {
-                        resetDefault()
+                    IconButton(
+                        onClick = {
+                            resetDefault()
+                        }
+                    ) {
+                        Icon(imageVector = Icons.Default.Refresh, contentDescription = null, tint = Color.DarkGray)
                     }
-                ) {
-                    Icon(imageVector = Icons.Default.Refresh, contentDescription = null, tint = Color.DarkGray)
                 }
             }
         }
-
 
 
         LazyVerticalGrid(

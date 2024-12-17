@@ -109,8 +109,8 @@ fun GridNoteCard(
                         top.linkTo(parent.top)
                     }.padding(end = 4.dp, top = 4.dp, start = 30.dp) ,
                     text = note.title,
-                    fontSize = 24.sp,
-                    color = Color.DarkGray,
+                    fontSize = 18.sp,
+                    color = Color.Black,
                     fontWeight = FontWeight.Bold
                 )
 

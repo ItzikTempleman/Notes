@@ -138,7 +138,7 @@ class NoteViewModel @Inject constructor(
                 repo.updateNote(note)
             }
 
-            //postNoteForUser(note, userId)
+            postNoteForUser(note, userId)
             fetchNotesForUser(userId)
             shouldUpdateNote = false
 

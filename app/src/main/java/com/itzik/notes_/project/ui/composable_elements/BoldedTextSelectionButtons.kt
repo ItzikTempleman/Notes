@@ -64,7 +64,8 @@ fun BoldedTextSelectionButtons(
                         fontSize = note.fontSize,
                         fontColor = note.fontColor,
                         userId = note.userId,
-                        fontWeight = noteViewModel.fontWeightToInt(if (isBolded) FontWeight.Bold else FontWeight.Normal)
+                        fontWeight = noteViewModel.fontWeightToInt(if (isBolded) FontWeight.Bold else FontWeight.Normal),
+                        noteImage = note.noteImage
                     )
                 }
             }

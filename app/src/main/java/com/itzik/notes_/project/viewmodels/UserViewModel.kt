@@ -200,7 +200,7 @@ class UserViewModel @Inject constructor(
         return isValid
     }
 
-    fun getAgeFromSDateString(date: String): String {
+    fun getAgeFromDateString(date: String): String {
         val dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
         val birthDate = LocalDate.parse(date, dateFormatter)
         val currentDate = LocalDate.now()

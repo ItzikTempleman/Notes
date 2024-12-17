@@ -84,6 +84,7 @@ class NoteViewModel @Inject constructor(
 
 
     suspend fun updateNote(
+        noteImage:String,
         newTitle:String,
         newContent: String,
         userId: String,
@@ -97,6 +98,7 @@ class NoteViewModel @Inject constructor(
     ) {
         shouldUpdateNote = isUpdate
         val updatedNote = privateNote.value.copy(
+            noteImage=noteImage,
             title =newTitle,
             fontSize = fontSize,
             userId = userId,
@@ -146,6 +148,7 @@ class NoteViewModel @Inject constructor(
             Log.e("SAVE_NOTE", "Error saving note: ${e.message}", e)
         }
     }
+
     suspend fun postNoteForUser(note: Note, userId: String) {
         try {
             val response = repo.postNoteForUser(note, userId)

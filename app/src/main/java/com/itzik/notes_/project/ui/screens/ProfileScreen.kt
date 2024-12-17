@@ -6,7 +6,6 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,7 +14,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Female
 import androidx.compose.material.icons.filled.Male
 import androidx.compose.material.icons.filled.Man
 import androidx.compose.material.icons.filled.Transgender
@@ -39,7 +37,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
@@ -58,8 +55,7 @@ import com.itzik.notes_.project.ui.screens.inner_screen_section.BottomOptionsPro
 import com.itzik.notes_.project.ui.screens.inner_screen_section.BottomScreenOption
 import com.itzik.notes_.project.ui.screens.inner_screen_section.ProfileField
 import com.itzik.notes_.project.ui.screens.inner_screen_section.ProfileFieldRow
-import com.itzik.notes_.project.ui.screens.inner_screen_section.ProfileImage
-import com.itzik.notes_.project.utils.gradientBrush
+import com.itzik.notes_.project.ui.screens.inner_screen_section.GenericImage
 import com.itzik.notes_.project.viewmodels.NoteViewModel
 import com.itzik.notes_.project.viewmodels.UserViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -96,13 +92,13 @@ fun ProfileScreen(
                     }
                 }
             }
+
         ConstraintLayout(
             modifier = Modifier.fillMaxSize().background(Color.White)
-
         ) {
             val (imageContainer, cancelIconModifier, editButton, editProfileOptionsList, name, email, bottomColumn) = createRefs()
 
-            ProfileImage(
+            GenericImage(
                 isGuestAccount = user!!.userName == "Guest",
                 imageBoxModifier = Modifier.constrainAs(imageContainer) {
                     top.linkTo(parent.top, margin = 8.dp)
@@ -120,7 +116,6 @@ fun ProfileScreen(
                     bottom.linkTo(imageContainer.bottom)
                 }
             )
-
 
             if (user!!.userName != "Guest") {
                 TextButton(modifier = Modifier
@@ -162,7 +157,6 @@ fun ProfileScreen(
                     isEditable = false
                 })
             }
-
             user?.let { currentUser ->
                 Text(
                     text = currentUser.userName,
@@ -197,7 +191,6 @@ fun ProfileScreen(
                                 visualTransformation = VisualTransformation.None,
                                 readOnly = false
                             )
-
                             IconButton(onClick = {
                                 coroutineScope.launch {
                                     userViewModel.updateUserField(newEmail = editedEmail)
@@ -214,6 +207,7 @@ fun ProfileScreen(
                             }
                         }
                     }
+
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.Start
@@ -266,7 +260,7 @@ fun ProfileScreen(
                             profileField = ProfileField.DateOfBirth,
                             value = "${user?.dateOfBirth} (age ${
                                 user?.let {
-                                    userViewModel.getAgeFromSDateString(
+                                    userViewModel.getAgeFromDateString(
                                         it.dateOfBirth
                                     )
                                 }

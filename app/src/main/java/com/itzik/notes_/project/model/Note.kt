@@ -38,6 +38,7 @@ data class Note(
     var fontColor: Int = Color.Black.toArgb(),
     var fontSize: Int = 20,
     var userId: String,
+    var noteImage: String = "",
     var fontWeight: Int = 400
 ) : Parcelable {
 

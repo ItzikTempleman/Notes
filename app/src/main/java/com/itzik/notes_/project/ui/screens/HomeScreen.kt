@@ -342,7 +342,8 @@ fun navigateToNoteScreenWithData(
             value = note.noteId
         )
         noteViewModel.updateNote(
-            newChar = note.content,
+            newTitle = note.title,
+            newContent = note.content,
             noteId = note.noteId,
             userId = note.userId,
             isPinned = note.isPinned,

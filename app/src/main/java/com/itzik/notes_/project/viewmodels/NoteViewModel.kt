@@ -27,7 +27,7 @@ class NoteViewModel @Inject constructor(
 ) : ViewModel() {
     private var shouldUpdateNote = true
 
-    private val privateNote = MutableStateFlow(Note(content = "", userId = "", fontSize = 20, noteId = 0))
+    private val privateNote = MutableStateFlow(Note(title = "", content = "", userId = "", fontSize = 20, noteId = 0))
     val publicNote: StateFlow<Note> get() = privateNote
 
     private val privateNoteList = MutableStateFlow<MutableList<Note>>(mutableListOf())
@@ -76,14 +76,16 @@ class NoteViewModel @Inject constructor(
             fontColor = Color.Black.toArgb(),
             isPinned = false,
             isStarred = false,
-            fontWeight = 400
+            fontWeight = 400,
+            title = ""
         )
     }
 
 
 
     suspend fun updateNote(
-        newChar: String,
+        newTitle:String,
+        newContent: String,
         userId: String,
         noteId: Int,
         isPinned: Boolean,
@@ -95,13 +97,14 @@ class NoteViewModel @Inject constructor(
     ) {
         shouldUpdateNote = isUpdate
         val updatedNote = privateNote.value.copy(
+            title =newTitle,
             fontSize = fontSize,
             userId = userId,
             noteId = noteId,
             fontColor = fontColor,
             isPinned = isPinned,
             isStarred = isStarred,
-            content = newChar,
+            content = newContent,
             time = if (noteId == 0) getCurrentTime() else privateNote.value.time,
             fontWeight = fontWeight
         )
@@ -115,7 +118,6 @@ class NoteViewModel @Inject constructor(
             fetchCurrentLoggedInUserId()
         }
 
-        // Generate noteId only if it's a new note (noteId == 0)
         if (note.noteId == 0) {
             val latestNote = try {
                 repo.fetchLatestNoteForUser(userId)
@@ -136,7 +138,7 @@ class NoteViewModel @Inject constructor(
                 repo.updateNote(note)
             }
 
-            postNoteForUser(note, userId)
+            //postNoteForUser(note, userId)
             fetchNotesForUser(userId)
             shouldUpdateNote = false
 

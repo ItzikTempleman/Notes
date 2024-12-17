@@ -29,6 +29,7 @@ import java.time.format.DateTimeFormatter
 data class Note(
     @PrimaryKey
     var noteId: Int,
+    var title:String,
     var content: String,
     var time: String = getCurrentTime(),
     var isInTrash: Boolean = false,

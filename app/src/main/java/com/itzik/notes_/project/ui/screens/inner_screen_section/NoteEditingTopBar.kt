@@ -49,7 +49,7 @@ fun NoteEditingTopBar(
             .fillMaxWidth()
             .height(50.dp)
     ) {
-        val (backIcon, decreaseFont, increaseFont, leftDivider, unBold, bold, midDivider, colorPicker, rightDivider, pin, star) = createRefs()
+        val (backIcon, decreaseFont, increaseFont, leftDivider, unBold, bold, midDivider, colorPicker, pin, star) = createRefs()
 
         GenericIconButton(
             modifier = Modifier
@@ -115,7 +115,7 @@ fun NoteEditingTopBar(
                 start.linkTo(leftDivider.end)
             },
             isBolded = false,
-            textFieldValue = textFieldValue,
+            contentTextFieldValue = textFieldValue,
             onValueChange = onValueChange,
             note = note,
             noteViewModel = noteViewModel,
@@ -129,7 +129,7 @@ fun NoteEditingTopBar(
                 start.linkTo(unBold.end)
             },
             isBolded = true,
-            textFieldValue = textFieldValue,
+            contentTextFieldValue = textFieldValue,
             onValueChange = onValueChange,
             note = note,
             noteViewModel = noteViewModel,

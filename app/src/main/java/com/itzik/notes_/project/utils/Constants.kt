@@ -1,10 +1,6 @@
 package com.itzik.notes_.project.utils
 
-import com.itzik.notes_.project.model.Note
-import java.time.Instant
-import java.time.LocalDate
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
+
 
 object Constants {
     const val NAX_PINNED_NOTES = 3

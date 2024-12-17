@@ -68,6 +68,7 @@ class NoteViewModel @Inject constructor(
     fun initializeNewNote() {
         shouldUpdateNote = false
         privateNote.value = Note(
+            noteImage = "",
             noteId = 0,
             content = "",
             time = getCurrentTime(),
@@ -141,6 +142,7 @@ class NoteViewModel @Inject constructor(
             }
 
             postNoteForUser(note, userId)
+            Log.d("TAGD", "Note saved: $note")
             fetchNotesForUser(userId)
             shouldUpdateNote = false
 

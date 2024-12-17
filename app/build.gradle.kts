@@ -17,8 +17,8 @@ android {
         applicationId = "com.itzik.notes_"
         minSdk = 29
         targetSdk = 34
-        versionCode = 31
-        versionName = "31.0"
+        versionCode = 32
+        versionName = "32.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

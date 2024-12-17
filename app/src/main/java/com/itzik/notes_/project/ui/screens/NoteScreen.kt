@@ -302,30 +302,34 @@ fun NoteScreen(
                     fontWeight = noteViewModel.intToFontWeight(note.fontWeight)
                 )
             )
-            IconButton(
-                modifier = Modifier.padding(top=30.dp),
-                onClick = {
-                    imagePickerLauncher.launch("image/*")
+            if (note.title!="") {
+                IconButton(
+                    modifier = Modifier.padding(top = 30.dp),
+                    onClick = {
+                        imagePickerLauncher.launch("image/*")
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = null,
+                        tint = colorResource(R.color.deep_purple_2),
+                        modifier = Modifier.size(30.dp)
+                    )
                 }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
+
+                Image(
+                    modifier = Modifier
+                        .padding(end = 20.dp, top = 20.dp)
+                        .height(90.dp)
+                        .width(70.dp)
+                        .rotate(10f)
+                        .background(color = Color.White)
+                        .border(width = 1.dp, color = Color.Black),
+                    contentScale = ContentScale.FillBounds,
+                    painter = rememberAsyncImagePainter(note.noteImage),
                     contentDescription = null,
-                    tint = colorResource(R.color.deep_purple_2),
-                    modifier = Modifier.size(30.dp)
                 )
             }
-
-            Image(
-                modifier = Modifier
-                    .padding(end = 20.dp, top = 20.dp)
-                    .height(90.dp)
-                    .width(70.dp).rotate(10f)
-                    .background(color = Color.White).border(width = 1.dp, color = Color.Black),
-                contentScale = ContentScale.FillBounds,
-                painter = rememberAsyncImagePainter(note.noteImage),
-                contentDescription = null,
-            )
         }
 
 

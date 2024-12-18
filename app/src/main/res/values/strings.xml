@@ -75,4 +75,5 @@
     <string name="no_date_selected">No date selected</string>
     <string name="too_young_error">Too young. must be over 12</string>
     <string name="content">"Content "</string>
+    <string name="future_date_error">Date cannot be in the future</string>
 </resources>

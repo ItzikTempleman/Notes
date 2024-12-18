@@ -62,6 +62,7 @@ class NoteViewModel @Inject constructor(
         val users = repo.fetchLoggedInUsers()
         val loggedInUser = users.firstOrNull { it.isLoggedIn }
         userId = loggedInUser?.userId ?: ""
+        fetchNotesForUser(userId)
     }
 
 
@@ -170,7 +171,7 @@ class NoteViewModel @Inject constructor(
             val sortedNotes = notes.sortedWith(compareByDescending { it.isPinned })
 
             privateNoteList.value = sortedNotes.toMutableList()
-
+            privateNoteList.value = notes.toMutableList()
             val pinMap = sortedNotes.associate { it.noteId to it.isPinned }
             val starMap = sortedNotes.associate { it.noteId to it.isStarred }
             privatePinStateMap.value = pinMap

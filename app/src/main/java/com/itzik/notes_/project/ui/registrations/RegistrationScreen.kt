@@ -2,6 +2,7 @@ package com.itzik.notes_.project.ui.registrations
 
 import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -119,18 +120,12 @@ fun RegistrationScreen(
 
     ConstraintLayout(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxSize().background(Color.White)
             .verticalScroll(rememberScrollState())
     ) {
         val (nameTF, emailTF, passwordTF, phoneNumberTF, genderRow, birthDate, signUpBtn) = createRefs()
 
-        Image(
-            modifier = Modifier
-                .fillMaxSize(),
-            painter = painterResource(R.drawable.white),
-            contentDescription = null,
-            contentScale = ContentScale.FillBounds
-        )
+
 
         CustomOutlinedTextField(
             fieldNumber = 0,

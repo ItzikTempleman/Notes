@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -320,11 +321,14 @@ fun NoteScreen(
                 Image(
                     modifier = Modifier
                         .padding(end = 20.dp, top = 20.dp)
-                        .height(90.dp)
-                        .width(70.dp)
-                        .rotate(10f)
+                        .height(130.dp)
+                        .width(90.dp)
+                        .rotate(10f).clip(RoundedCornerShape(4.dp))
                         .background(color = Color.White)
-                        .border(width = 1.dp, color = Color.Black),
+                        .border(
+                            border = BorderStroke(0.7.dp, Color.Black),
+                            shape = RoundedCornerShape(4.dp)
+                        ),
                     contentScale = ContentScale.FillBounds,
                     painter = rememberAsyncImagePainter(note.noteImage),
                     contentDescription = null,

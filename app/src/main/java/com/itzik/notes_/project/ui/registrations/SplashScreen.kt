@@ -58,7 +58,7 @@ fun SplashScreen(
         Image(
             modifier = Modifier
                 .fillMaxSize(),
-            painter = painterResource(R.drawable.android_material),
+            painter = painterResource(R.drawable.white),
             contentDescription = null,
             contentScale = ContentScale.FillBounds
         )

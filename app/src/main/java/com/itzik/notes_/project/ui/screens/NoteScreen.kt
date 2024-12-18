@@ -51,6 +51,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -154,7 +155,7 @@ fun NoteScreen(
             .fillMaxSize()
             .background(Color.White),
     ) {
-        val (topRow, colorPickerScreen, titleTF, dividerLine, contentTF) = createRefs()
+        val (topRow, colorPickerScreen, titleTF, dividerLine, backgroundImage, contentTF) = createRefs()
 
         NoteEditingTopBar(
             modifier = Modifier
@@ -247,7 +248,7 @@ fun NoteScreen(
                     top.linkTo(titleTF.bottom)
                 }
                 .fillMaxWidth()
-                .height(20.dp),
+                .wrapContentHeight(),
             verticalAlignment = Alignment.CenterVertically
         ) {
             HorizontalDivider(
@@ -268,9 +269,23 @@ fun NoteScreen(
             )
         }
 
+        Image(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp)
+                .clip(RoundedCornerShape(0.dp))
+                .constrainAs(backgroundImage) {
+                    top.linkTo(dividerLine.bottom)
+                    bottom.linkTo(parent.bottom)
+                    height = Dimension.fillToConstraints
+                },
+            contentDescription = null,
+            painter = painterResource(R.drawable.white),
+            contentScale = ContentScale.FillBounds
+        )
+
         Row(
             modifier = Modifier
-                .background(Color.White)
                 .fillMaxWidth()
                 .padding(top = 8.dp)
                 .clip(RoundedCornerShape(0.dp))
@@ -292,10 +307,10 @@ fun NoteScreen(
                     }
                 },
                 colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color.White,
-                    unfocusedContainerColor = Color.White,
-                    focusedIndicatorColor = Color.White,
-                    unfocusedIndicatorColor = Color.White
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent
                 ),
                 textStyle = TextStyle.Default.copy(
                     fontSize = fontSize.sp,
@@ -303,9 +318,9 @@ fun NoteScreen(
                     fontWeight = noteViewModel.intToFontWeight(note.fontWeight)
                 )
             )
-            if (note.title!="") {
+            if (note.title != "") {
                 IconButton(
-                    modifier = Modifier.padding(top = 30.dp),
+                    modifier = Modifier.padding(top = 50.dp),
                     onClick = {
                         imagePickerLauncher.launch("image/*")
                     }
@@ -321,9 +336,10 @@ fun NoteScreen(
                 Image(
                     modifier = Modifier
                         .padding(end = 20.dp, top = 20.dp)
-                        .height(130.dp)
-                        .width(90.dp)
-                        .rotate(10f).clip(RoundedCornerShape(4.dp))
+                        .height(150.dp)
+                        .width(100.dp)
+                        .rotate(10f)
+                        .clip(RoundedCornerShape(4.dp))
                         .background(color = Color.White)
                         .border(
                             border = BorderStroke(0.7.dp, Color.Black),
@@ -335,7 +351,6 @@ fun NoteScreen(
                 )
             }
         }
-
 
         if (isColorPickerOpen) {
             ColorPickerDialog(

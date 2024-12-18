@@ -6,6 +6,8 @@ import android.app.Activity
 import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -25,6 +27,10 @@ import com.itzik.notes_.project.viewmodels.UserViewModel
 import kotlinx.coroutines.CoroutineScope
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import com.itzik.notes_.R
 import com.itzik.notes_.project.main.NoteApp
 
 @SuppressLint("MutableCollectionMutableState")

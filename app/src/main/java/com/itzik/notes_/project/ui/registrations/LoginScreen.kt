@@ -110,6 +110,13 @@ fun LoginScreen(
     ) {
         val (loginText, emailTF, passwordTF, loginBtn, signUpDivider, noAccount, signUpBtn, loginAsGuest) = createRefs()
 
+        Image(
+            modifier = Modifier
+                .fillMaxSize(),
+            painter = painterResource(R.drawable.white),
+            contentDescription = null,
+            contentScale = ContentScale.FillBounds
+        )
 
         Text(
             modifier = Modifier

@@ -1,6 +1,7 @@
 package com.itzik.notes_.project.ui.screens
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -23,7 +24,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -64,7 +67,7 @@ fun DeletedNotesScreen(
         modifier = Modifier.fillMaxSize()
     ) {
         ConstraintLayout(
-            modifier = modifier.background(Color.White)
+            modifier = modifier
                 .clickable {
                     isDeleteAllDialogOpen = false
                     isDialogOpen = false
@@ -75,6 +78,13 @@ fun DeletedNotesScreen(
             ) {
             val (returnIcon, trashBtn, deleteAllDialog, emptyStateMessage, lazyColumn) = createRefs()
 
+            Image(
+                modifier = Modifier
+                    .fillMaxSize(),
+                painter = painterResource(R.drawable.white),
+                contentDescription = null,
+                contentScale = ContentScale.FillBounds
+            )
 
             GenericIconButton(
                 modifier = Modifier

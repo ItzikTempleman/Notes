@@ -135,10 +135,19 @@ fun HomeScreen(
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+
     ) {
         val (backgroundImage, topRow, sortNotesLayout, noteLazyColumn, newNoteBtn, emptyStateMessage) = createRefs()
 
+        if (imageSelected == "") {
+            Image(
+                modifier = Modifier
+                    .fillMaxSize(),
+                painter = painterResource(R.drawable.white),
+                contentDescription = null,
+                contentScale = ContentScale.FillBounds
+            )
+        }
 
         Image(
             painter = rememberAsyncImagePainter(
@@ -193,12 +202,14 @@ fun HomeScreen(
                 .constrainAs(sortNotesLayout) {
                     top.linkTo(topRow.bottom)
                     start.linkTo(parent.start)
-                }.padding(8.dp) else Modifier
+                }
+                .padding(8.dp) else Modifier
                 .wrapContentSize()
                 .constrainAs(sortNotesLayout) {
                     top.linkTo(topRow.bottom)
                     end.linkTo(parent.end)
-                }.padding(8.dp),
+                }
+                .padding(8.dp),
             coroutineScope = coroutineScope,
             noteViewModel = noteViewModel,
             onDismissRequest = {
@@ -216,7 +227,7 @@ fun HomeScreen(
                         start.linkTo(parent.start)
                         top.linkTo(topRow.bottom)
                     }
-                    .padding(start = 20.dp, top=30.dp)
+                    .padding(start = 20.dp, top = 30.dp)
             )
         }
 
@@ -289,7 +300,8 @@ fun HomeScreen(
                 .constrainAs(newNoteBtn) {
                     bottom.linkTo(parent.bottom)
                     end.linkTo(parent.end)
-                }.padding(12.dp),
+                }
+                .padding(12.dp),
             onClick = {
                 noteViewModel.initializeNewNote()
                 bottomBarNavController.navigate(Screen.NoteScreen.route)

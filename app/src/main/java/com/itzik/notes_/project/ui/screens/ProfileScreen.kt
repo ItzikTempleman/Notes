@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -34,7 +35,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -94,9 +97,17 @@ fun ProfileScreen(
             }
 
         ConstraintLayout(
-            modifier = Modifier.fillMaxSize().background(Color.White)
+            modifier = Modifier.fillMaxSize()
         ) {
             val (imageContainer, cancelIconModifier, editButton, editProfileOptionsList, name, email, bottomColumn) = createRefs()
+
+            Image(
+                modifier = Modifier
+                    .fillMaxSize(),
+                painter = painterResource(R.drawable.white),
+                contentDescription = null,
+                contentScale = ContentScale.FillBounds
+            )
 
             GenericImage(
                 isGuestAccount = user!!.userName == "Guest",

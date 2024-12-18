@@ -124,7 +124,13 @@ fun RegistrationScreen(
     ) {
         val (nameTF, emailTF, passwordTF, phoneNumberTF, genderRow, birthDate, signUpBtn) = createRefs()
 
-
+        Image(
+            modifier = Modifier
+                .fillMaxSize(),
+            painter = painterResource(R.drawable.white),
+            contentDescription = null,
+            contentScale = ContentScale.FillBounds
+        )
 
         CustomOutlinedTextField(
             fieldNumber = 0,

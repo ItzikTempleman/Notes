@@ -1,15 +1,21 @@
 package com.itzik.notes_.project.ui.screens.inner_screen_section
 
+import android.widget.RadioGroup
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.CompareArrows
 import androidx.compose.material.icons.filled.GridView
 import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.Place
+import androidx.compose.material.icons.filled.Public
+import androidx.compose.material.icons.filled.Storage
 import androidx.compose.material.icons.rounded.ImageSearch
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Switch
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -44,13 +50,14 @@ fun HomeScreenTopBar(
     var isChecked by remember {
         mutableStateOf(false)
     }
+    var selectedOption by remember { mutableStateOf("Local") }
 
     ConstraintLayout(
         modifier = modifier
             .fillMaxWidth()
             .height(50.dp)
     ) {
-        val (searchWallpaperIcon, guestAccountText, offlineName, dataSourceSwitch,onlineName, sortNotesIcon, noteViewTypeIcon) = createRefs()
+        val (searchWallpaperIcon, guestAccountText, localRadioBtn,onlineRadioBtn,sortNotesIcon, noteViewTypeIcon) = createRefs()
 
         GenericIconButton(
             modifier = Modifier
@@ -79,35 +86,34 @@ fun HomeScreenTopBar(
         )
 
         if (user?.userName != stringResource(R.string.guest_account)) {
-            offlineName
 
-            Text(
-                modifier= Modifier.constrainAs(offlineName){
+
+            RadioButton(
+                modifier = Modifier.constrainAs(localRadioBtn) {
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)
-                    end.linkTo(dataSourceSwitch.start)
-                }.padding(8.dp),
-                text = stringResource(R.string.local_notes)
-            )
-            Switch(
-                modifier = Modifier.constrainAs(dataSourceSwitch) {
-                    top.linkTo(parent.top)
-                    bottom.linkTo(parent.bottom)
-                    end.linkTo(onlineName.start)
+                    start.linkTo(searchWallpaperIcon.end)
                 },
-                checked = isChecked,
-                onCheckedChange = {
-                    isChecked=it
-                    onChecked(it)
+                selected = selectedOption == "Local",
+                onClick = {
+                    selectedOption = "Local"
+                    isChecked = false
+                    onChecked(false)
                 }
             )
-            Text(
-                modifier= Modifier.constrainAs(onlineName){
+
+            RadioButton(
+                modifier = Modifier.constrainAs(onlineRadioBtn) {
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)
-                    end.linkTo(sortNotesIcon.start)
-                }.padding(8.dp),
-                text = stringResource(R.string.online_notes)
+                    start.linkTo(localRadioBtn.end)
+                },
+                selected = selectedOption == "Online",
+                onClick = {
+                    selectedOption = "Online"
+                    isChecked = true
+                    onChecked(true)
+                }
             )
         }
 

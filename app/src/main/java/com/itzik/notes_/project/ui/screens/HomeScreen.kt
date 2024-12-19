@@ -25,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
@@ -134,18 +135,10 @@ fun HomeScreen(
 
     ConstraintLayout(
         modifier = Modifier
-            .fillMaxSize()
-
+            .fillMaxSize().background(Color.White)
     ) {
         val (backgroundImage, topRow, sortNotesLayout, noteLazyColumn, newNoteBtn, emptyStateMessage) = createRefs()
 
-        Image(
-            modifier = Modifier
-                .fillMaxSize(),
-            painter = painterResource(R.drawable.white),
-            contentDescription = null,
-            contentScale = ContentScale.FillBounds
-        )
 
         Image(
             painter = rememberAsyncImagePainter(
@@ -157,10 +150,14 @@ fun HomeScreen(
                     top.linkTo(topRow.bottom)
                     bottom.linkTo(parent.bottom)
                     height = Dimension.fillToConstraints
-                }
-                .fillMaxWidth(),
+                }.padding(24.dp)
+                .fillMaxWidth() .graphicsLayer {
+                    alpha = 0.5f
+                },
             contentScale = ContentScale.Crop
         )
+
+
 
         HomeScreenTopBar(
             modifier = Modifier
@@ -302,7 +299,7 @@ fun HomeScreen(
                 bottomBarNavController.navigate(Screen.NoteScreen.route)
             },
             imageVector = Icons.Default.Add,
-            containerColor = colorResource(R.color.deep_purple_2),
+            containerColor = colorResource(R.color.navy_blue_2),
             iconTint = Color.White,
         )
 

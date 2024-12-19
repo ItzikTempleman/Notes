@@ -1,6 +1,7 @@
 package com.itzik.notes_.project.ui.screen_sections
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.GenericShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PushPin
@@ -37,6 +39,8 @@ import com.itzik.notes_.project.model.Note
 
 import com.itzik.notes_.project.viewmodels.NoteViewModel
 import java.nio.file.WatchEvent
+import kotlin.io.path.Path
+import kotlin.math.sqrt
 
 @SuppressLint("SuspiciousIndentation")
 @Composable
@@ -61,44 +65,32 @@ fun NoteListItem(
     ConstraintLayout(
         modifier = modifier
             .fillMaxWidth()
-            .height(50.dp)
+            .height(60.dp)
     ) {
-        val (timeStamp, content, pinnedNoteIcon, likedNoteIcon) = createRefs()
+        val (indicator, content, pinnedNoteIcon, likedNoteIcon) = createRefs()
 
-        Box(
+        TriangleBox(
             modifier = Modifier
-                .background(Color.White, shape = RoundedCornerShape(4.dp))
-                .constrainAs(timeStamp) {
+                .constrainAs(indicator) {
                     start.linkTo(parent.start, margin = 8.dp)
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)
-                }
-                .border(0.5.dp, Color.Gray, shape = RoundedCornerShape(4.dp))
-                .padding(horizontal = 6.dp),
-
-            ) {
-            Text(
-                note.getFormattedTime(),
-                fontSize = 10.sp,
-                color = Color.Black
-            )
-        }
+                }.padding(horizontal = 6.dp)
+        )
 
 
         Text(
             maxLines = 1,
             modifier = Modifier
                 .constrainAs(content) {
-                    start.linkTo(timeStamp.end)
+                    start.linkTo(indicator.end)
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)
                     width = Dimension.percent(2f / 3f)
                 }
                 .padding(start = 8.dp),
             text = note.title,
-            fontSize = 24.sp,
-            color = Color.Black,
-            fontWeight = FontWeight.Bold
+            fontSize = 20.sp,
         )
 
         if (isStarred) {
@@ -109,7 +101,7 @@ fun NoteListItem(
                         top.linkTo(parent.top)
                         bottom.linkTo(parent.bottom)
                     }
-                    .size(20.dp),
+                    .size(26.dp),
                 imageVector = Icons.Default.Star,
                 contentDescription = null,
                 tint = colorResource(R.color.muted_yellow)
@@ -120,13 +112,13 @@ fun NoteListItem(
                 imageVector = Icons.Default.PushPin,
                 modifier = Modifier
                     .constrainAs(pinnedNoteIcon) {
-                        end.linkTo(parent.end, margin = 12.dp)
+                        end.linkTo(parent.end, margin = 14.dp)
                         top.linkTo(parent.top)
                         bottom.linkTo(parent.bottom)
                     }
-                    .size(20.dp)
+                    .size(26.dp)
                     .rotate(45f),
-                tint = colorResource(R.color.deep_ocean_blue),
+                tint = Color.DarkGray,
                 contentDescription = null
             )
         }
@@ -134,3 +126,24 @@ fun NoteListItem(
 }
 
 
+
+val TriangleShape = GenericShape { size, _ ->
+   val sideLength=size.width
+    val height = (sqrt(3.0) / 2 * sideLength).toFloat()
+    moveTo(size.width / 2, 0f)
+    lineTo(0f, height)
+    lineTo(size.width, height)
+    close()
+}
+
+
+@Composable
+fun TriangleBox(
+    modifier: Modifier
+) {
+    Box(
+        modifier = modifier
+            .size(12.dp).rotate(90f)
+            .background(colorResource(R.color.navy_blue_2), shape = TriangleShape)
+    )
+}

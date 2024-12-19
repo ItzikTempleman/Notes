@@ -178,7 +178,7 @@ fun LoginScreen(
         Button(
             shape = RoundedCornerShape(8.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = colorResource(R.color.deep_purple_2)
+                containerColor = colorResource(R.color.navy_blue_2)
             ),
             modifier = Modifier
                 .constrainAs(loginBtn) {

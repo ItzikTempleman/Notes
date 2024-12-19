@@ -57,13 +57,6 @@ fun LikedNotesScreen(
         ) {
         val (title, emptyStateMessage, likedNotesLazyColumn) = createRefs()
 
-        Image(
-            modifier = Modifier
-                .fillMaxSize(),
-            painter = painterResource(R.drawable.white),
-            contentDescription = null,
-            contentScale = ContentScale.FillBounds
-        )
 
 
         Icon(

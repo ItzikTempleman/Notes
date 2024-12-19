@@ -125,7 +125,7 @@ fun SwipeToOptions(
                 Box(
                     modifier = Modifier
                         .height(boxSizeDp).width(boxSizeDp)
-                        .background(colorResource(id = R.color.deep_ocean_blue))
+                        .background(colorResource(id = R.color.navy_blue_2))
                         .clickable(
                             indication = null,
                             interactionSource = interactionSource
@@ -192,8 +192,8 @@ fun SwipeToOptions(
             }
             HorizontalDivider(
                 modifier = Modifier.padding(start = 16.dp),
-                thickness = 0.5.dp,
-                color = Color.Black
+                thickness = 0.1.dp,
+                color = Color.Transparent
             )
         }
     }

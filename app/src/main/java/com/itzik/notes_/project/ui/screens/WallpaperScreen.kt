@@ -6,6 +6,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -27,6 +28,7 @@ import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
@@ -59,6 +61,7 @@ import com.itzik.notes_.R
 
 import com.itzik.notes_.project.model.WallpaperResponse
 import com.itzik.notes_.project.ui.composable_elements.CustomOutlinedTextField
+import com.itzik.notes_.project.ui.screen_sections.TriangleBox
 import com.itzik.notes_.project.utils.gradientBrush
 import com.itzik.notes_.project.viewmodels.UserViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -82,39 +85,39 @@ fun WallpaperScreen(
     ConstraintLayout(
         modifier = modifier
             .fillMaxSize()
-            .background(Color.White).clickable{
+            .background(Color.White)
+            .clickable {
                 onScreenExit(false)
             }
     ) {
         val (searchBar, imageGallery) = createRefs()
 
-
-        Row(
+        Column(
             modifier = Modifier
                 .constrainAs(searchBar) {
                     top.linkTo(parent.top)
                 }
                 .fillMaxWidth()
-                .height(80.dp)
+                .height(70.dp)
                 .padding(4.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.End
         ) {
-            Card(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(horizontal = 4.dp),
-                shape = RoundedCornerShape(12.dp),
-                colors = CardDefaults.cardColors(Color.Gray),
-                elevation = CardDefaults.cardElevation(4.dp)
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.End
             ) {
+                TriangleBox(
+                    modifier= Modifier.padding(start = 4.dp)
+                )
+
                 TextField(
-                    modifier = Modifier,
+                    modifier = Modifier.weight(1f),
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Done
                     ),
-                    textStyle = LocalTextStyle.current.copy(fontSize = 20.sp, fontFamily = FontFamily.Monospace, color = Color.White),
+                    textStyle = LocalTextStyle.current.copy(fontSize = 20.sp),
                     keyboardActions = KeyboardActions(
                         onDone = {
                             coroutineScope.launch {
@@ -135,49 +138,37 @@ fun WallpaperScreen(
                     onValueChange = {
                         searchParam = it
                     }, placeholder = {
-                        Text(text = stringResource(R.string.search_images), fontFamily = FontFamily.Monospace, color = Color.White, fontSize = 20.sp)
+                        Text(text = stringResource(R.string.search_images),fontSize = 20.sp)
                     }
                 )
-            }
 
-            Card(
-                modifier = Modifier
-                    .padding(horizontal = 4.dp),
-                shape = RoundedCornerShape(12.dp),
-                colors = CardDefaults.cardColors(colorResource(R.color.deep_purple_2)),
-                elevation = CardDefaults.cardElevation(4.dp)
-            ) {
-                Row (
-                    modifier = Modifier.height(56.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ){
-                    IconButton(
-                        onClick = {
-                            coroutineScope.launch {
-                                userViewModel.getWallpaperList(searchParam).collect {
-                                    imagesList = it
-                                }
+                IconButton(
+                    onClick = {
+                        coroutineScope.launch {
+                            userViewModel.getWallpaperList(searchParam).collect {
+                                imagesList = it
                             }
                         }
-                    ) {
-                        Icon(imageVector = Icons.Default.Search, contentDescription = null, tint = Color.White, modifier = Modifier.size(28.dp))
                     }
-                    IconButton(
-                        onClick = {
-                            onScreenExit(false)
-                        }
-                    ) {
-                        Icon(imageVector = Icons.Default.Cancel, contentDescription = null, tint = Color.White, modifier = Modifier.size(28.dp))
+                ) {
+                    Icon(imageVector = Icons.Default.Search, contentDescription = null, modifier = Modifier.size(28.dp))
+                }
+                IconButton(
+                    onClick = {
+                        resetDefault()
                     }
-                    IconButton(
-                        onClick = {
-                            resetDefault()
-                        }
-                    ) {
-                        Icon(imageVector = Icons.Default.Refresh, contentDescription = null, tint = Color.White, modifier = Modifier.size(28.dp))
+                ) {
+                    Icon(imageVector = Icons.Default.Refresh, contentDescription = null, modifier = Modifier.size(28.dp))
+                }
+                IconButton(
+                    onClick = {
+                        onScreenExit(false)
                     }
+                ) {
+                    Icon(imageVector = Icons.Default.Cancel, contentDescription = null, modifier = Modifier.size(28.dp))
                 }
             }
+            HorizontalDivider()
         }
 
 
@@ -200,6 +191,10 @@ fun WallpaperScreen(
         }
     }
 }
+
+
+
+
 
 @Composable
 fun ImageItem(imageUrl: String, modifier: Modifier) {

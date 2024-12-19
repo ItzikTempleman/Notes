@@ -1,11 +1,15 @@
 package com.itzik.notes_.project.ui.screens.inner_screen_section
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.BorderColor
@@ -51,7 +55,7 @@ fun NoteEditingTopBar(
             .fillMaxWidth()
             .height(50.dp)
     ) {
-        val (backIcon, decreaseFont, increaseFont, leftDivider, unBold, bold, midDivider, colorPicker, pin, star) = createRefs()
+        val (backIcon, decreaseFont, increaseFont, leftDivider, unBold, bold, midDivider, colorPicker,timeStamp, pin, star) = createRefs()
 
         GenericIconButton(
             modifier = Modifier
@@ -163,6 +167,28 @@ fun NoteEditingTopBar(
                 tint = colorResource(R.color.vibrant_orange)
             )
         }
+
+        if(note.noteId!=0) {
+            Box(
+                modifier = Modifier
+                    .background(Color.White, shape = RoundedCornerShape(4.dp))
+                    .constrainAs(timeStamp) {
+                        start.linkTo(colorPicker.end)
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                    }
+                    .border(2.dp, Color.Green, shape = RoundedCornerShape(8.dp))
+                    .padding(horizontal = 8.dp),
+
+                ) {
+                Text(
+                    note.getFormattedTime(),
+                    fontSize = 10.sp,
+                    color = Color.Black
+                )
+            }
+        }
+
 
         if (isPinned) {
             Icon(

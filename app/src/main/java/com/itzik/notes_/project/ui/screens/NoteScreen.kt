@@ -362,7 +362,7 @@ fun NoteScreen(
                     }
                     .fillMaxWidth()
                     .wrapContentHeight()
-                    .padding(horizontal = 16.dp, vertical = 60.dp),
+                    .padding(8.dp),
                 onColorSelected = { color ->
                     coroutineScope.launch {
                         selectedColor = color.toArgb()

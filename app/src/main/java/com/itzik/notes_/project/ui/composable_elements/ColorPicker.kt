@@ -10,18 +10,24 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import com.itzik.notes_.project.utils.provideColorList
+import com.itzik.notes_.R
 
 @Composable
 fun ColorPickerDialog(
@@ -29,55 +35,39 @@ fun ColorPickerDialog(
     onColorSelected: (Color) -> Unit,
     onDismiss: () -> Unit
 ) {
-    val colorList = provideColorList()
-    val outerPadding = 16.dp
-    val borderWidth = 0.75.dp
-    val roundedCornerSize = 12.dp
-    val configuration = LocalConfiguration.current
-    val screenWidth = configuration.screenWidthDp.dp
-    val totalPadding = outerPadding * 2
-    val availableWidth = screenWidth - totalPadding
-    val numberOfColumns = 13
-    val boxSize = availableWidth / numberOfColumns
-    val numberOfRows = (colorList.size + numberOfColumns - 1) / numberOfColumns
+    val colorList = listOf(
+        colorResource(R.color.deep_blue),
+        colorResource(R.color.muted_yellow),
+        colorResource(R.color.dark_purple),
+        colorResource(R.color.intermediate_green_2),
+        colorResource(R.color.red),
+        colorResource(R.color.sunset_orange),
+        colorResource(R.color.black),
+    )
 
-    Box(
+
+    Card(
         modifier = modifier
-            .padding(outerPadding)
-            .clip(RoundedCornerShape(roundedCornerSize))
-            .background(Color.White, shape = RoundedCornerShape(roundedCornerSize))
-            .border(BorderStroke(borderWidth, Color.Black), shape = RoundedCornerShape(roundedCornerSize))
             .fillMaxWidth()
-            .wrapContentHeight()
+            .height(300.dp),
+        colors = CardDefaults.cardColors(Color(0xff191c26)),
+        shape = RoundedCornerShape(30.dp)
     ) {
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(0.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(16.dp),
+            verticalAlignment = Alignment.Top,
+            horizontalArrangement = Arrangement.SpaceAround
         ) {
-            for (rowIndex in 0 until numberOfRows) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(0.dp)
-                ) {
-                    for (columnIndex in 0 until numberOfColumns) {
-                        val itemIndex = rowIndex * numberOfColumns + columnIndex
-                        if (itemIndex < colorList.size) {
-                            val color = colorList[itemIndex]
-                            Box(
-                                modifier = Modifier
-                                    .size(boxSize)
-                                    .background(color)
-                                    .clickable {
-                                        onColorSelected(color)
-                                        onDismiss()
-                                    }
-                            )
-                        } else {
-                            Spacer(modifier = Modifier.size(boxSize))
-                        }
-                    }
-                }
+            for(color in colorList){
+                Box(
+                    modifier = Modifier.size(38.dp)
+                        .background(color, shape = CircleShape)
+                        .clickable {
+                            onColorSelected(color)
+                            onDismiss()
+                        }.padding(8.dp),
+
+                )
             }
         }
     }

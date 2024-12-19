@@ -135,10 +135,17 @@ fun HomeScreen(
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+
     ) {
         val (backgroundImage, topRow, sortNotesLayout, noteLazyColumn, newNoteBtn, emptyStateMessage) = createRefs()
 
+        Image(
+            modifier = Modifier
+                .fillMaxSize(),
+            painter = painterResource(R.drawable.white),
+            contentDescription = null,
+            contentScale = ContentScale.FillBounds
+        )
 
         Image(
             painter = rememberAsyncImagePainter(

@@ -120,12 +120,18 @@ fun RegistrationScreen(
 
     ConstraintLayout(
         modifier = Modifier
-            .fillMaxSize().background(Color.White)
+            .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {
         val (nameTF, emailTF, passwordTF, phoneNumberTF, genderRow, birthDate, signUpBtn) = createRefs()
 
-
+        Image(
+            modifier = Modifier
+                .fillMaxSize(),
+            painter = painterResource(R.drawable.white),
+            contentDescription = null,
+            contentScale = ContentScale.FillWidth
+        )
 
         CustomOutlinedTextField(
             fieldNumber = 0,

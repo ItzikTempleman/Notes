@@ -58,10 +58,10 @@ class NoteViewModelTest {
             val userId = "10000001"
             val sampleNoteListResponse = mutableListOf(
                 Note(
-                    userId = userId, content = "Hello"
+                    userId = userId, content = "Hello", title = "wergqerh", noteId = 0
                 ),
                 Note(
-                    userId = userId, content = "Itzik",
+                    userId = userId, content = "Itzik",title = "wer", noteId = 1
                 )
             )
             `when`(mockRepository.fetchNotes(userId)).thenReturn(sampleNoteListResponse)

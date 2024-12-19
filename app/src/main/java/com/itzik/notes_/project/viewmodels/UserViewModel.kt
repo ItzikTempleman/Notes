@@ -188,7 +188,7 @@ class UserViewModel @Inject constructor(
 
     fun validatePassword(password: String): Boolean {
         val isValid = password.matches(
-            Regex("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{4,}$")
+            Regex("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{4,}$")
         )
         Log.d("Validation", "Password valid: $isValid")
         return isValid

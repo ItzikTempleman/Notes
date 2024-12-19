@@ -45,15 +45,13 @@ object AppModule {
 
     @Provides
     @Named("user_dao")
-    fun provideUserDao(database: AppDatabase): UserDao {
-        return database.getUserDao()
-    }
+    fun provideUserDao(database: AppDatabase): UserDao =database.getUserDao()
+
 
     @Provides
     @Named("note_dao")
-    fun provideNoteDao(database: AppDatabase): NoteDao {
-        return database.getNoteDao()
-    }
+    fun provideNoteDao(database: AppDatabase): NoteDao =database.getNoteDao()
+
 
     @Provides
     fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase {
@@ -61,7 +59,7 @@ object AppModule {
             context,
             AppDatabase::class.java,
             "app_database"
-        ).build()
+        ).fallbackToDestructiveMigration().build()
     }
 
     @Provides
